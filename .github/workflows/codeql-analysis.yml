@@ -83,4 +83,4 @@ jobs:
       uses: StephaneBour/actions-php-security-checker@1.1
       with:
         # Path to composer.lock
-    composer-lock: # optional, default is ./composer.lock
+        composer-lock: # optional, default is ./composer.lock
