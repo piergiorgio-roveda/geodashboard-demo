@@ -73,3 +73,14 @@ jobs:
       # You may pin to the exact commit or the version.
       # uses: AlicanAkkus/pinder-action@c488da46c0e9ec52e84811f897fd4a5aaf0b89a6
       uses: AlicanAkkus/pinder-action@1.0.0 
+    - name: Nightfall DLP Action
+      # You may pin to the exact commit or the version.
+      # uses: nightfallai/nightfall_dlp_action@98e8a4f8bc318cf81fcebf31cd6d589800a27e93
+      uses: nightfallai/nightfall_dlp_action@v1.1.1      
+    - name: PHP Security Checker
+      # You may pin to the exact commit or the version.
+      # uses: StephaneBour/actions-php-security-checker@7f98a3edeb22cd897f900592481157b4248355d5
+      uses: StephaneBour/actions-php-security-checker@1.1
+      with:
+        # Path to composer.lock
+    composer-lock: # optional, default is ./composer.lock
