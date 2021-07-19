@@ -111,7 +111,7 @@ elseif($o['ds']['action'] == 'view-geodata-city-new'){
       'params' => '{
         "geouser":"test",
         "api_lyr":"view_geodata_city",
-        "mydb":"geosystem14dev",
+        "mydb":"watchdog14dev",
         "t":"w"
       }'
     )
@@ -187,7 +187,7 @@ elseif($o['ds']['action'] == 'view-geodata-city-hash'){
       'params' => '{
         "geouser":"test",
         "api_lyr":"view_geodata_city_hash",
-        "mydb":"geosystem14dev",
+        "mydb":"watchdog14dev",
         "hash_lv":"'.$hash_lv.'"
       }'
     )

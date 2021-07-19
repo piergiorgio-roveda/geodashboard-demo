@@ -456,7 +456,7 @@
     console.log('load wms');
 
     geo_lyr.addLayer(L.tileLayer.wms(
-      'https://geoserver/geosystem/wms?',
+      'https://geoserver/watchdog/wms?',
       opt
     ));
 

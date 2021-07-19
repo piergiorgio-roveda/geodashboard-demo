@@ -5,7 +5,7 @@ Plugin URI: https://watchdog.cloud/
 Description: Libraries plugin for GEO-System
 Version: 0.1
 Author: PRoveda
-Author URI: https://watchdog.cloud/proveda
+Author URI: https://watchdog.cloud/pjhooker
 License: GPL
 */
 

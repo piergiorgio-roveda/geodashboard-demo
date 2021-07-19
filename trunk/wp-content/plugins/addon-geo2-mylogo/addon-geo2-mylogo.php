@@ -5,7 +5,7 @@ Plugin URI: https://watchdog.cloud/
 Description: watchdog WP Plugin for change Login page
 Version: 1.0
 Author: PRoveda
-Author URI: https://watchdog.cloud/proveda
+Author URI: https://watchdog.cloud/pjhooker
 License: GPL
 */
 

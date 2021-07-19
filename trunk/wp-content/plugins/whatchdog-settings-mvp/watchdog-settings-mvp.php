@@ -34,7 +34,7 @@ class watchdog_settings_Constants {
     //'app_autoloader',
     'watchdog-settings-define',
     'ext-wpconfig_setting',//with define inside
-    'ext-install_geosystem',
+    'ext-install_watchdog',
     'ext-security_core',
     //'ext-postgres',
     'ext-applications',
