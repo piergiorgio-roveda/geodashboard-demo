@@ -1,0 +1,11 @@
+#Forbidden
+#Options -Indexes
+
+#show folder but ignore file with these extension
+IndexIgnore *.log
+
+#other configuration
+#<Files *.log>
+#   Order allow,deny
+#   Deny from all
+#</Files>
