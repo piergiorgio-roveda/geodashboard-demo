@@ -1,0 +1,1 @@
+<script src="<?php echo HOME_PROJECT.'source/';?>jquery/3.5.1/jquery-3.5.1.js" type="text/javascript"></script>

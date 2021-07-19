@@ -1,0 +1,1 @@
+<link href="<?php echo get_stylesheet_directory_uri();?>/style.css?ver=<?php echo GEOLIB_VER;?>" rel="stylesheet">

@@ -1,0 +1,1 @@
+<script src="<?php echo HOME_PROJECT.'source/';?>gistips_bassemaps.js"></script>

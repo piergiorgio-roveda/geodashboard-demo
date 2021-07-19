@@ -1,0 +1,1 @@
+<script src="https://cdn.jsdelivr.net/npm/autonumeric@1.9.46/autoNumeric.min.js"></script>
