@@ -1,7 +1,7 @@
 # What is WATCHDOG?
 
 <p>
-<img src="https://img.shields.io/badge/wordpress-5.7-green"/>
+<img src="https://img.shields.io/badge/wordpress-5.7-red"/>
 </p>
 
 watchdog is a framework to develop rich WebGIS platform that integrates online map, analytics and transactions
@@ -10,7 +10,14 @@ watchdog is a framework to develop rich WebGIS platform that integrates online m
 
 ![screen shot of the map](https://www.cityplanner.biz/wp-content/uploads/2021/07/webgis-cover-2021.jpg)
 
-[More>>](https://www.cityplanner.biz/webgis/)
+[LIVE DEMO>>](https://www.cityplanner.biz/webgis/)
+
+## Ecosystem
+
+|  Module | Status | Description | 
+|  :------ | :------: | :------ |
+|  [leafletjs](https://leafletjs.com/) | <img src="https://img.shields.io/badge/leafletjs-1.7.1-green"/> | Leaflet is an open-source JavaScript library for mobile-friendly interactive maps | 
+|  [jquery](https://jquery.com/) | <img src="https://img.shields.io/badge/jquery-3.6.0-blue" /> | jQuery is a fast, small, and feature-rich JavaScript library | 
 
 ## Copyright
 
