@@ -4,11 +4,20 @@
 <img src="https://img.shields.io/badge/wordpress-5.7-red"/>
 </p>
 
-**watchdog** is a framework to develop rich WebGIS platform that integrates online map, analytics and transactions
+**watchdog** is a framework to develop rich WebGIS platform that integrates online map, analytics and transactions.
 
-# Join the community!
+**watchdog** is a part of GISTIPS project, founded by Pjhooker and hosted on cityplanner.biz servers.
 
-**watchdog** is in continuous development, and it’s supported by an active community which produces new
+# What is GISTIPS project?
+
+**GISTIPS** project, which has evolved over the last 10 years, is currently focused on the following 3 aspects:
+- an open-source webgis platform, completely customizable called **watchdog**
+- geohash and openstreetmap integration (proof-of-location)
+- arrangement of **geospatial-data-catalog**
+
+# Join the Gistips community!
+
+**watchdog** is in continuous development, and it’s supported by an active community (Gistipster) which produces new
 content for everyone to enjoy. New features are constantly added.
 
 Join us on our [Official Discord Server](https://discord.gg/ccgwq7Y8E8)!
