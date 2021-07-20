@@ -4,7 +4,14 @@
 <img src="https://img.shields.io/badge/wordpress-5.7-red"/>
 </p>
 
-watchdog is a framework to develop rich WebGIS platform that integrates online map, analytics and transactions
+**watchdog** is a framework to develop rich WebGIS platform that integrates online map, analytics and transactions
+
+# Join the community!
+
+**watchdog** is in continuous development, and it’s supported by an active community which produces new
+content for everyone to enjoy. New features are constantly added.
+
+Join us on our [Official Discord Server](https://discord.gg/ccgwq7Y8E8)!
 
 ## Demo
 
