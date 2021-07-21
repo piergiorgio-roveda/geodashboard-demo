@@ -6,7 +6,7 @@
 
 **watchdog** is a framework to develop rich WebGIS platform that integrates online map, analytics and transactions.
 
-**watchdog** is a part of GISTIPS project, founded by Pjhooker and hosted on cityplanner.biz servers.
+**watchdog** is a part of [GISTIPS project](https://github.com/piergiorgio-roveda/gis-tips/README.md), founded by Pjhooker and hosted on cityplanner.biz servers.
 
 # What is GISTIPS project?
 
@@ -15,11 +15,13 @@
 - geohash and openstreetmap integration (proof-of-location)
 - arrangement of **geospatial-data-catalog**
 
+More about >> [GISTIPS project](https://github.com/piergiorgio-roveda/gis-tips/README.md)
+
 ## basemap
 
 - gistips_bassemaps.js
 
-# Join the Gistips community!
+# Join the Gistipsters community!
 
 **watchdog** is in continuous development, and it’s supported by an active community (Gistipster) which produces new
 content for everyone to enjoy. New features are constantly added.
@@ -48,14 +50,6 @@ Connect to multiple data sources:
 - Google Big Query
 - GoogleDrive as Spreadsheets
 
-# Cityplanner.biz servers
-
-Simplify your cloud with (Digitlocean)[https://m.do.co/t/68428e7f2b34]
-
-- Server 1: web
-- Server 2: geodatabase/api
-- Server 3: Geoserver/Tiles
-
 # Copyright
 
 ```warning
@@ -77,59 +71,3 @@ We reserve the right of final interpretation of this copyright information.
 </p>
 
 # Thanks
-
-# Libraries
-
-- [davetroy/geohash-js](https://github.com/davetroy/geohash-js)
-- bootstrap@4.5.2
-- Leaflet.markercluster-master-1.3.0
-- alertifyjs@1.13.1
-- font-awesome@4.7.0
-- autonumeric@1.9.46
-- chroma.js
-- Leaflet.TileLayer.NoGap
-- latlon-geohash@1.1.0
-- Leaflet.GeometryUtil
-- html2canvas.min-html2canvas 1.0.0-rc.7.js
-- chartjs
-- coachmarkJS-master
-- creative-tim-material-dashboard-v1.2.0
-- datatables-1.10.16
-- heremaps-flexible-polyline
-- php-tcpdf
-- PHPExcel-1.8
-- php geohash
-- leaflet.gridlayer.googlemutant
-- Leaflet.heat-gh-pages-0.2.0
-- Leaflet.AnimatedMarker-master
-- Leaflet.MovingMarker-master
-- moment.js
-- php PDFObject-master
-- geoext3-master
-- Geolib-master
-- geolocator-master
-- geoPHP-master
-- sheetsee.js-master
-- simplehtmldom (php)
-
-# Master project
-
-- [CartoDB/cartodb](https://github.com/CartoDB/cartodb)
-- [Esri/esri-leaflet](https://github.com/Esri/esri-leaflet)
-- [googlemaps/google-maps-services-js](https://github.com/googlemaps/google-maps-services-js)
-- openlayers-master
-- https://umap.openstreetmap.fr/it/
-- http://geojson.io/#map=2/0.2/0.0
-
-# Interesting projects
-
-- qgis2web
-- https://github.com/bmcbride/bootleaf
-- https://github.com/gislite/maplet
-- https://github.com/dvgis/dc-sdk
-- https://github.com/rickyginting/webgisci4
-- https://github.com/iag-geo/bootleaf
-- https://github.com/mlevans/leaflet-hash
-- http://ieldran.matrix.msu.edu/#9/52.4384/-1.0986
-- https://sifsuska.github.io/bootleaf-faste/
-- https://twitter.github.io/typeahead.js/
