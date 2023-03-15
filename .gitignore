@@ -50,8 +50,6 @@ trunk/wp-content/themes/geodashboard/
 
 trunk/wp-config-original.php
 
-trunk/env-*
-
 trunk-geodashboard/*
 
 trunk/style/
