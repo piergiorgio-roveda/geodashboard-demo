@@ -1,23 +1,78 @@
-# ignore everything in the root except the "wp-content" directory.
-!wp-content/
+trunk/webgis/src/js/config204-labels.js
 
-# ignore everything in the "wp-content" directory, except:
-# "mu-plugins", "plugins", "themes" directory
-wp-content/*
-!wp-content/mu-plugins/
-!wp-content/plugins/
-!wp-content/themes/
+trunk/webgis/src/js/config206-lyrs.js
 
-# ignore these plugins
-wp-content/plugins/hello.php
+trunk/webgis/src/js/config207-vlyrs.js
 
-# ignore specific themes
-wp-content/themes/twenty*/
+trunk/webgis/src/js/config208-tbs.js
 
-# ignore node dependency directories
-node_modules/
+trunk/webgis/src/js/config201.js
 
-# ignore log files and databases
-*.log
-*.sql
-*.sqlite
+trunk/webgis/src/js/config202-client.js
+
+trunk/webgis/src/js/config203-style.js
+
+trunk/webgis/src/js/config205-map.js
+
+
+trunk/webgis/map015/env.js
+
+*.docx
+*.zip
+*.pdf
+*.png
+*.jpg
+*.xlsx
+*.csv
+*.geojson
+*.gif
+*.txt
+*.png
+*.json
+*.ico
+*.svg
+
+assets/
+
+data/
+
+trunk/wp-content/plugins/watchdog-libraries/php-tcpdf/
+
+trunk/wp-content/plugins/watchdog-libraries/PHPExcel-1.8/
+
+trunk/wp-content/plugins/watchdog-settings/PHPExcel-1.8/
+
+trunk/log/
+
+trunk/tmp/
+
+trunk/wp-content/themes/geodashboard/
+
+trunk/wp-config-original.php
+
+trunk/env-*
+
+trunk-geodashboard/*
+
+trunk/style/
+
+trunk/meta/*.json
+
+trunk/meta/*
+
+trunk/sql/
+
+trunk/superquery/
+find-difference/env-*.php
+find-difference/env-h3.php
+
+trunk/wp-content/themes/geodashboard-child/src/js/_trash/*
+trunk/_wp-config/*
+trunk/_env-h3hk/*
+trunk/_htaccess/*
+trunk/_sitemap/*
+trunk-gta/*
+trunk-php-suite/*
+trunk-map/*
+trunk/_test/*
+_trash/*
