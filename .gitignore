@@ -58,11 +58,7 @@ trunk/meta/*.json
 
 trunk/meta/*
 
-trunk/sql/
-
 trunk/superquery/
-find-difference/env-*.php
-find-difference/env-h3.php
 
 trunk/wp-content/themes/geodashboard-child/src/js/_trash/*
 trunk/_wp-config/*
