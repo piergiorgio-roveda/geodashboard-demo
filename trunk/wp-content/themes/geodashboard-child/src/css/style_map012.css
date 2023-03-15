@@ -1,0 +1,16 @@
+#mapid{
+  border-bottom: 1px solid #dee2e6;
+  border-left: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+}
+
+#box-info1 {
+  /*position: relative;*/
+  position: absolute;
+  bottom: 5px;
+  /* right: 5px; */
+  z-index: 500;
+  /*width: 30px;*/
+  margin-left: 10px;
+  background-color: #000;
+}
