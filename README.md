@@ -1,8 +1,8 @@
 # GEO::DASHBOARD
 
 GEO Dashboard is a web application that enables the creation of visualizations for maps, tables, graphs
-and generic web pages using a Postgres database with a geographical extension PostGIS 
-and Geoserver to generate map tiles. 
+and generic web pages using a Postgres database with a geographical extension PostGIS and Geoserver to generate map tiles.
+
 It can solve several problems related to data management and visualization, such as:
 
 1. Data exploration: The web application can help users explore geospatial data in a visual and interactive way, allowing them to identify patterns, trends, and relationships that might not be evident from a simple table or chart.
@@ -17,3 +17,5 @@ It can solve several problems related to data management and visualization, such
 ![GEO::DASHBOARD example](https://lh3.googleusercontent.com/pw/AMWts8CeuhA8Nsl2b385O8ey21U8w574f8XHSM6cmi1WUbdmpk1DigOROT16eB8XwvT_geN3Zgp0tW4eU-Xb1xg2xHPjRQnW0ktU6otkRtxatqGAORT-cBKFsgVl8NlEmzNrMAewJzinFbpvqqVe4OVNU7kq8Q=w1182-h822-no?authuser=1)
 
 `GEO::DASHBOARD example`
+
+1. [Install](./docs/install.md)
