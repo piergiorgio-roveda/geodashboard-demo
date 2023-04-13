@@ -5,8 +5,11 @@
 1. System requirements and installation
 2. Configuration and setup
 3. Basic functionality and navigation
+4. Notes
 
 ## System requirements and installation
+
+### System requirements
 
 * Apache
 * Php
@@ -14,7 +17,8 @@
 * Mysql
 * Geoserver
 
------
+### Installation
+
 In order to use this app you can either:
 
 * install Wordpress
@@ -25,10 +29,16 @@ In order to use this app you can either:
   * wp-config-extends.php
   * wp-config.php
 
+### Basic functionality and navigation
+
+...
+
+### Notes
+
 I wanted to provide an update regarding the installation guide for the GEO::DASHBOARD platform. As some of you may be aware, we have been working on a guide to help users install and set up the platform on their own systems.
 
 However, I regret to inform you that the guide is not yet completed. Our team is still in the process of testing and refining the installation process, and we want to ensure that the guide is comprehensive and easy to follow before we release it.
 
-We apologize for any inconvenience this may cause, and we understand that some of you may be eager to start using the Geodashboard platform on your own systems. Rest assured that we are working diligently to complete the installation guide as soon as possible, and we will update the group once it is ready.
+We apologize for any inconvenience this may cause, and we understand that some of you may be eager to start using the GEO::DASHBOARD platform on your own systems. Rest assured that we are working diligently to complete the installation guide as soon as possible, and we will update the group once it is ready.
 
-In the meantime, please feel free to reach out to us with any questions or concerns you may have. We appreciate your patience and understanding as we continue to improve the Geodashboard platform and make it more accessible to users.
+In the meantime, please feel free to reach out to us with any questions or concerns you may have. We appreciate your patience and understanding as we continue to improve the GEO::DASHBOARD platform and make it more accessible to users.

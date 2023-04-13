@@ -1,5 +1,12 @@
 # GEO::DASHBOARD
 
+## Official Link
+
+1. [🤝 Community Support Invite](https://discord.gg/m4kfD795Af) - Discord
+2. [🧑‍💻 codepen.io example](https://codepen.io/acid_gis/pens/public)
+3. [🐺 LinkedIn group](https://www.linkedin.com/groups/9108801/)
+4. [🧝🏻 @pj_go_2020](https://twitter.com/pj_go_2020)
+
 ## Table of contents
 
 1. [GEO::DASHBOARD](./docs/geodashboard.md)
