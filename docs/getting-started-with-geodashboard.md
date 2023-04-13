@@ -1,6 +1,12 @@
-# Install
+# Getting Started with GEO::DASHBOARD
 
-## Requirement
+## Table of contents
+
+1. System requirements and installation
+2. Configuration and setup
+3. Basic functionality and navigation
+
+## System requirements and installation
 
 * Apache
 * Php
