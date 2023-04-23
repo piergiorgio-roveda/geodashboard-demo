@@ -1,54 +1,42 @@
 //--
 var a225_mapReady = 0;
-// var addon225_slug='infolus_test';
-// var a225_sheet=[];
-// var a225_block=[];
+//--
+const a225_slug='infoplus';
+//--
 var a225_lyrs=[];
-//var wiki_array_custom_js=[];
-//var wiki_sub_last_r=new Array();
-//--
-const addon225_slug='infoplus';
-//--
-
 var a225_coords=[];
 var a225_coords_p=[];
 var a225_coords_p2=[];
 var a225_coords_last=[];
 var a225_coords_tmp=[];
 var a225_coords_start=[];
+// var a225_slug=a225_slug+'_test';
+// var a225_sheet=[];
+// var a225_block=[];
 
 //--
+
 dyn_functions['addon225-infoplus'+'_ready'] = function(){
 
   $('.box-usrprofile').css('display','block');
 
   $('.box-usrprofile').append('<div '
-    +'class="box-btn_infolus box-info-2-btn d-grid gap-2" '
+    +'class="box-btn_'+a225_slug+' box-info-2-btn d-grid gap-2" '
     +'style="margin-top:5px;"></div>');
 
   a225_mapReady = 1;
 
-  list_mapclick.push(addon225_slug);
+  list_mapclick.push(a225_slug);
 
-  addon225_ready();
+  prepare_a225();
 
 }
 
-function addon225_ready(){
-  if (f_wait.geovar_button==0) {
-    // _onsole.log('wait')
-    setTimeout(function(){addon225_ready()},1000);
-    return;
-  } else {
-    prepare_addon225();
-  };
-}
-
-function prepare_addon225(){
+function prepare_a225(){
 
   g_meta.geovar_addon.features.push({
     "properties": {
-      "g_slug" : addon225_slug,
+      "g_slug" : a225_slug,
       "addon_status" : "enabled",
       "mapclick_status" : "disabled",
       "point_miner" : "disabled",
@@ -56,38 +44,110 @@ function prepare_addon225(){
     }
   });
 
-  let item_btn = 'btn_infolus';
-  let obj_btn=g_meta.geovar_button.features.filter(({properties}) => properties.g_slug === item_btn);
-  //let g_group = '';
-  if(obj_btn.length>0){
-    //g_group = obj_btn[0].properties.g_group[0];
-    obj_btn[0].status = 'disabled';
-  }
-  else{
-    console.log('BTN without properties!');
-    return;
-  }
+  let itemBtn = 'btn_'+a225_slug;
 
-  create_button(item_btn);
+  //--
+
+  let gLang_slug="label_"+itemBtn;
+  let gLang_label="<i class=\"fa fa-info\" aria-hidden=\"true\"></i>";
+
+  gLang[gLang_slug]=gLang_label;
+
+  //--
+
+  let GroupStyleBtn = 'btn-main-sidebar btn-on-map btn-map-click';
+  let btnMeta = {
+    'properties':{
+      "g_slug": itemBtn,
+      "g_label": "label_"+itemBtn,
+      "g_group": ["public"],
+      "g_description": "...",
+      "g_template": "v2",
+      "g_faw": null,
+      "g_callback": null,
+      "g_responsive": "both",
+      "g_style": "btn-sm btn-outline-dark " + GroupStyleBtn
+    }
+  }
+  g_meta.geovar_button.features.push(btnMeta);
+
+  create_button(itemBtn);
 
 }
 
-f_btn['btn_infolus']=function(slug){
+f_btn['btn_'+a225_slug]=function(slug){
+
+  let myButton = document.getElementById('btn_'+a225_slug);
+  disableMapClicksExcept(myButton);
+
+  return;
+
+}
+
+dyn_functions['enable_'+a225_slug]=function(){
+
+  $('.box-editing2').css('display','block');
+  $('.box-editing2').css('justify-content','center');
+  $('.box-editing2').html(''
+    +'<div class="col-auto ct-editing2-info" '
+      +'style="text-align:center;">'
+      +'<div class="box card" '
+        +'style="width:200px;margin:auto;display:block;" '
+      +'></div>'
+    +'</div>'
+    +'<div class="col-auto ct-editing2" style="padding: 5px 0px;">'
+      +'<span '
+        +'class="box-btn_addon225_by_point"></span>'
+      +'<span '
+        +'class="box-btn_addon225_by_polyline" '
+        +'style="margin-left:5px;"></span>'
+      +'<span '
+        +'class="box-btn_addon225_by_polygon" '
+        +'style="margin-left:5px;margin-right:5px;"></span>'
+      +'<span '
+        +'class="box-btn_addon225_by_close"></span>'
+    +'</div>'
+  +'');
+
+  create_button('btn_addon225_by_point');
+  create_button('btn_addon225_by_polyline');
+  create_button('btn_addon225_by_polygon');
+  create_button('btn_addon225_by_close');
+
+  //on start
+  let item_addon = 'infoplus';
+  let obj_fileterd=g_meta.geovar_addon.features.filter(({properties}) => properties.g_slug === item_addon);
+  let obj_addon = obj_fileterd[0];
+
+  obj_addon.properties.point_miner='enabled';
+  $('#btn_addon225_by_point').css('background-color','yellow');
+
+}
+
+dyn_functions['disable_'+a225_slug]=function(){
+
+  $('.box-editing2').css('display','none');
+  $('.box-editing2').html('');
 
   let item_addon = 'infoplus';
   let obj_fileterd=g_meta.geovar_addon.features.filter(({properties}) => properties.g_slug === item_addon);
   let obj_addon = obj_fileterd[0];
 
-  if(obj_addon.properties.mapclick_status=='disabled'){
-    enable_addon225();
-  }
-  else{
-    disable_addon225();
-  }
-  //_onsole.log(obj_addon.properties);
-  return;
+  obj_addon.properties.point_miner='disabled';
+  obj_addon.properties.polygon_miner='disabled';
+
+  mymap.removeLayer(geo_lyr['vlyrsit003']);
+  geo_lyr['vlyrsit003'].clearLayers();
+  mymap.removeLayer(geo_lyr['vlyrsit004']);
+  geo_lyr['vlyrsit004'].clearLayers();
+  mymap.removeLayer(geo_lyr['vlyrsit005']);
+  geo_lyr['vlyrsit005'].clearLayers();
+  mymap.removeLayer(geo_lyr['vlyrsit006']);
+  geo_lyr['vlyrsit006'].clearLayers();
 
 }
+
+//--
 
 f_btn['btn_addon225_by_point']=function(slug){
 
@@ -191,79 +251,7 @@ f_btn['btn_addon225_by_close']=function(slug){
 
 //--
 
-function enable_addon225(){
-
-  $('#btn_infolus').css('background-color','yellow');
-
-  $('.box-editing2').css('display','block');
-  $('.box-editing2').css('justify-content','center');
-  $('.box-editing2').html(''
-    +'<div class="col-auto ct-editing2-info" style="text-align:center;">'
-      +'<div class="box card" '
-        +'style="width:200px;margin:auto;display:block;" '
-      +'></div>'
-    +'</div>'
-    +'<div class="col-auto ct-editing2" style="padding: 5px 0px;">'
-      +'<span '
-        +'class="box-btn_addon225_by_point"></span>'
-      +'<span '
-        +'class="box-btn_addon225_by_polyline" '
-        +'style="margin-left:5px;"></span>'
-      +'<span '
-        +'class="box-btn_addon225_by_polygon" '
-        +'style="margin-left:5px;margin-right:5px;"></span>'
-      +'<span '
-        +'class="box-btn_addon225_by_close"></span>'
-    +'</div>'
-  +'');
-
-  create_button('btn_addon225_by_point');
-  create_button('btn_addon225_by_polyline');
-  create_button('btn_addon225_by_polygon');
-  create_button('btn_addon225_by_close');
-
-  //on start
-  let item_addon = 'infoplus';
-  let obj_fileterd=g_meta.geovar_addon.features.filter(({properties}) => properties.g_slug === item_addon);
-  let obj_addon = obj_fileterd[0];
-
-  obj_addon.properties.mapclick_status='enabled';
-
-  obj_addon.properties.point_miner='enabled';
-  $('#btn_addon225_by_point').css('background-color','yellow');
-
-}
-
-function disable_addon225(){
-
-  $('#btn_infolus').css('background-color','white');
-
-  $('.box-editing2').css('display','none');
-  $('.box-editing2').html('');
-
-  let item_addon = 'infoplus';
-  let obj_fileterd=g_meta.geovar_addon.features.filter(({properties}) => properties.g_slug === item_addon);
-  let obj_addon = obj_fileterd[0];
-
-  obj_addon.properties.mapclick_status='disabled';
-
-  obj_addon.properties.point_miner='disabled';
-  obj_addon.properties.polygon_miner='disabled';
-
-  mymap.removeLayer(geo_lyr['vlyrsit003']);
-  geo_lyr['vlyrsit003'].clearLayers();
-  mymap.removeLayer(geo_lyr['vlyrsit004']);
-  geo_lyr['vlyrsit004'].clearLayers();
-  mymap.removeLayer(geo_lyr['vlyrsit005']);
-  geo_lyr['vlyrsit005'].clearLayers();
-  mymap.removeLayer(geo_lyr['vlyrsit006']);
-  geo_lyr['vlyrsit006'].clearLayers();
-
-  $('.ct-editing2-info > .box').html('');
-
-}
-
-dyn_mapclick[addon225_slug] = function(e){
+dyn_mapclick[a225_slug] = function(e){
   let firstPoint = e.latlng;
   let item_addon = 'infoplus';
   let obj_fileterd=g_meta.geovar_addon.features.filter(({properties}) => properties.g_slug === item_addon);

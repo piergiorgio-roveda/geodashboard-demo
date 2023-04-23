@@ -46,12 +46,12 @@ dyn_functions['a228_creditExtend'] =  function(){
     },
     {
       'title':'AREE INDUSTRIALI - COMMERCIALI - ARTIGIANALI',
-      'owner':'cityplanner SA',
+      'owner':'StudioSit SA',
       'descr':'Livello geografico visibile in mappa come polilinea chiusa il cui contorno sia GRIGIO per le aree industriali, ROSSO per le aree commerciali e GIALLO CARICO QUASI ARANCIONE per le aree artigianali)'
     },
     {
       'title':  'NUMERAZIONE CIVICA',
-      'owner':'cityplanner SA',
+      'owner':'StudioSit SA',
       'descr':  'Livello geografico visibile in mappa come punto con etichetta corrispondente al numero; se possibile, un tooltip tipo quello dell\'altro geoportale, che mostri il dato attributo completo come da colonna successiva'
     },
     {
@@ -61,17 +61,17 @@ dyn_functions['a228_creditExtend'] =  function(){
     },
     {
       'title':  'PARCHEGGI PUBBLICI IN STRUTTURA',
-      'owner':'cityplanner SA',
+      'owner':'StudioSit SA',
       'descr':  'Livello visibile in mappa tramite il suo simbolo consegnato'
     },
     {
       'title':  'CASELLI AUTOSTRADALI ED USCITE TANGENZIALI',
-      'owner':'cityplanner SA',
+      'owner':'StudioSit SA',
       'descr':  'Livello visibile in mappa tramite il suo simbolo consegnato'
     },
     {
       'title':  'AUTOGRILL E AREE DI SERVIZIO',
-      'owner':'cityplanner SA',
+      'owner':'StudioSit SA',
       'descr':  'Livello visibile in mappa tramite il suo simbolo consegnato'
     },
     {
@@ -81,7 +81,7 @@ dyn_functions['a228_creditExtend'] =  function(){
     },
     {
       'title':  'GIARDINI PUBBLICI',
-      'owner':'cityplanner SA',
+      'owner':'StudioSit SA',
       'descr':  'Livello geografico visibile in mappa come polilinea chiusa il cui contorno sia VERDE'
     },
     {
@@ -91,12 +91,12 @@ dyn_functions['a228_creditExtend'] =  function(){
     },
     {
       'title':  'ORIENTAMENTO INGRESSO EDIFICI',
-      'owner':'cityplanner SA',
+      'owner':'StudioSit SA',
       'descr':  'Livello visibile nell\'ambito del tooltip dedicato al numero civico'
     },
     {
       'title':  'PARCHEGGI TRUCKS AUTOSTRADALI',
-      'owner':'cityplanner SA',
+      'owner':'StudioSit SA',
       'descr':  ''
     }
   ];
@@ -121,7 +121,7 @@ dyn_functions['a228_creditExtend'] =  function(){
       +'<tr>'
         +'<th style="text-align:center;width:50%;">Category (unit price)'
         +'</th>'
-        +'<th style="text-align:center;width:50%;">cityplanner SA proprietary data'
+        +'<th style="text-align:center;width:50%;">StudioSit SA proprietary data'
         +'</th>'
         +'<th style="text-align:center;width:50%;">Integrated Opendata'
         +'</th>'
@@ -134,7 +134,7 @@ dyn_functions['a228_creditExtend'] =  function(){
       +'<tr>'
         +'<th style="text-align:center;width:50%;">Category (flat rate)'
         +'</th>'
-        +'<th style="text-align:center;width:25%;">cityplanner SA proprietary data'
+        +'<th style="text-align:center;width:25%;">StudioSit SA proprietary data'
         +'</th>'
         +'<th style="text-align:center;width:25%;">'
         +'</th>'

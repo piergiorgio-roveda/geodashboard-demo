@@ -364,22 +364,6 @@ function add_tmp_meta(){
 
   var meta = {
     'properties':{
-      "g_slug": "label_btn_infolus",
-      "g_label": "<i class=\"fa fa-info\" aria-hidden=\"true\"></i>"
-    }
-  }
-  gLang[meta.properties.g_slug]=meta.properties.g_label;
-
-  var meta = {
-    'properties':{
-      "g_slug": "label_btn_print",
-      "g_label": "<i class=\"fa fa-print\" aria-hidden=\"true\"></i>"
-    }
-  }
-  gLang[meta.properties.g_slug]=meta.properties.g_label;
-
-  var meta = {
-    'properties':{
       "g_slug": "label_btn_graphics",
       "g_label": "<i class=\"fa fa-map-pin\" aria-hidden=\"true\"></i>"
     }
@@ -769,36 +753,6 @@ function add_tmp_meta(){
     'properties':{
       "g_slug": "btn_housenumber",
       "g_label": "label_btn_housenumber",
-      "g_group": ["public"],
-      "g_description": "...",
-      "g_template": "v2",
-      "g_faw": null,
-      "g_callback": null,
-      "g_responsive": "both",
-      "g_style": "btn-sm btn-outline-dark btn-main-sidebar"
-    }
-  }
-  g_meta.geovar_button.features.push(meta);
-
-  var meta = {
-    'properties':{
-      "g_slug": "btn_infolus",
-      "g_label": "label_btn_infolus",
-      "g_group": ["public"],
-      "g_description": "...",
-      "g_template": "v2",
-      "g_faw": null,
-      "g_callback": null,
-      "g_responsive": "both",
-      "g_style": "btn-sm btn-outline-dark btn-main-sidebar"
-    }
-  }
-  g_meta.geovar_button.features.push(meta);
-
-  var meta = {
-    'properties':{
-      "g_slug": "btn_print",
-      "g_label": "label_btn_print",
       "g_group": ["public"],
       "g_description": "...",
       "g_template": "v2",

@@ -270,23 +270,27 @@ function a250_buildingColor(mycategory){
     color = [255,0,0];
   }else if(mycategory=='school'){
     color = [0,255,0];
-  }else if(mycategory=='industrial'
-    ||mycategory=='industriale'){
-    color = [0,0,255];
   }else if(mycategory=='public'){
     color = [255,255,0];
-  }else if(mycategory=='other'){
-    color = [255,0,255];
-  }else if(mycategory=='mixed'){
-    color = [0,255,255];
-  }else if(mycategory=='commerciale'){
-    color = [255,255,0];
-  }else if(mycategory=='artigianale'){
-    color = [0,255,0];
-  }else if(mycategory=='building-yes'){
-    color = [0,255,0];
+  }else if(mycategory=='building-commercial'
+    ||mycategory=='commerciale'){
+    //rgb color of #b6498a
+    color = [182,73,138];
+  }else if(mycategory=='building-artigianal'
+    ||mycategory=='artigianale'){
+    //rgb color of #ce9550
+    color = [206,149,80];
+  }else if(mycategory=='building-industrial'
+    ||mycategory=='industrial'
+    ||mycategory=='industriale'){
+    //rgb color of #c8cad5
+    color = [200,202,213];
   }else if(mycategory=='building-residential'){
-    color = [218,156,103];
+    //rgb color of #0d4088
+    color = [13,64,136];
+  }
+  else{
+    color = [13,64,136];
   }
 
   return color;
@@ -359,7 +363,7 @@ dyn_functions['succ_fill_deckGL'] = function(r){
     // material: true,
     //mesh: new CubeGeometry(),
     //mesh: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/humanoid_quad.obj',
-    mesh: 'https://geoweb.cityplanner.ch/wp-content/themes/geodashboard-child/src/_tmp/humanoid_quad.obj',
+    mesh: 'https://geoweb.studiositsa.ch/wp-content/themes/geodashboard-child/src/_tmp/humanoid_quad.obj',
     sizeScale: 0.5,
     // texture: null,
     // wireframe: false,
@@ -456,7 +460,7 @@ dyn_functions['succ_fill_deckGL'] = function(r){
     container: "deck-gl-view",
     views: [new MapView()],
     //mapStyle: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-    mapStyle: 'https://geoweb.cityplanner.ch/wp-content/themes/geodashboard-child/src/_tmp/positron-gl-style.json',
+    mapStyle: 'https://geoweb.studiositsa.ch/wp-content/themes/geodashboard-child/src/_tmp/positron-gl-style.json',
     initialViewState: {
       latitude: r.ds.lat,
       longitude:  r.ds.lng,

@@ -2,7 +2,7 @@
 var addon223_data=[
   {
     "MAPSLUG":"mapsit001",
-    "municipality":"cityplanner",
+    "municipality":"albissolamarina",
     "example":"CDU_2021122072010",
     "input_text":[
       'DATA_CERT',
@@ -23,7 +23,7 @@ var addon223_data=[
   },
   {
     "MAPSLUG":"mapsit002",
-    "municipality":"cityplanner",
+    "municipality":"cervo",
     "example":"CDU_20215581985",
     "input_text":[
       'DATA_CERT',
@@ -47,7 +47,7 @@ var addon223_data=[
   },
   {
     "MAPSLUG":"mapsit003",
-    "municipality":"cityplanner",
+    "municipality":"fontainemore",
     "example":"CDU_201872711806",
     "input_text":[
       'DATA_CERT',
@@ -68,7 +68,7 @@ var addon223_data=[
   },
   {
     "MAPSLUG":"mapsit004",
-    "municipality":"cityplanner",
+    "municipality":"garlenda",
     "example":"CDU_20181031846436",
     "input_text":[
       'TITOLO',
@@ -83,7 +83,7 @@ var addon223_data=[
   },
   {
     "MAPSLUG":"mapsit005",
-    "municipality":"cityplanner",
+    "municipality":"luni",
     "example":"CDU_2018830963963",
     "input_text":[
       'DATA_RICH',
@@ -99,7 +99,7 @@ var addon223_data=[
   },
   {
     "MAPSLUG":"mapsit006",
-    "municipality":"cityplanner",
+    "municipality":"rezzoaglio",
     "example":"CDU_20198781020916",
     "input_text":[
       'TITOLO',
@@ -118,7 +118,7 @@ var addon223_data=[
   },
   {
     "MAPSLUG":"mapsit007",
-    "municipality":"cityplanner",
+    "municipality":"vezziportio",
     "example":"CDU_2021115164353785",
     "input_text":[
       'TITOLO',
@@ -563,7 +563,8 @@ dyn_functions['succ_a223_inspect_data1'] = function(r){
   let p = r.features[0].properties;
 
   let c = ''
-    +'Superfcie totale: <span class="numberM" value="'+p.area_tot+'">'+p.area_tot+'</span> m<sup>2</sup>'
+    +'Superfcie totale: <span class="numberM" value="'+p.area_tot+'">'+
+      p.area_tot+'</span> m<sup>2</sup>'
     +'';
   $(r.ds.box).html(c);
   //format_autoNumeric();

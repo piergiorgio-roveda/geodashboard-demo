@@ -264,7 +264,7 @@ function box_addon216_add_part(tab1_part_element){
       +'&FORMAT=image/png'
       +'&WIDTH=45'
       +'&HEIGHT=23'
-      +'&LAYER=cityplanner:'+p.geoserver_name+''
+      +'&LAYER='+WORKSPACE+':'+p.geoserver_name+''
       +'&SLD='+'https:'+DOMAIN_PROJECT+'/tmp/'+p.geoserver_style_name+'_'+p.item_lyr+'.sld'
       +'&LEGEND_OPTIONS=forceLabels:off;'
 

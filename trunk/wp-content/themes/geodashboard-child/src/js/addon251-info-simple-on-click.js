@@ -1,7 +1,8 @@
 //--
 var a251_mapReady = 0;
 //--
-const a251_slug='InfoSimple';
+const a251_slug='a251_InfoSimple';
+
 //--
 
 dyn_functions['addon251-info-simple-on-click'+'_ready'] = function(){
@@ -32,72 +33,53 @@ function prepare_a251(){
 
   //--
 
-  let item_btn = 'btn_'+a251_slug;
+  let itemBtn = 'btn_'+a251_slug;
 
-  var meta = {
-    'properties':{
-      "g_slug": "label_"+item_btn,
-      "g_label": "<i class=\"bi bi-geo\"></i>"
-    }
-  }
-  gLang[meta.properties.g_slug]=meta.properties.g_label;
+  //--
+  
+  let gLang_slug="label_"+itemBtn;
+  let gLang_label="<i class=\"bi bi-geo\"></i>";
 
-  var meta = {
+  gLang[gLang_slug]=gLang_label;
+
+  //--
+
+  let GroupStyleBtn = 'btn-main-sidebar btn-on-map btn-map-click';
+  let btnMeta = {
     'properties':{
-      "g_slug": item_btn,
-      "g_label": "label_"+item_btn,
+      "g_slug": itemBtn,
+      "g_label": "label_"+itemBtn,
       "g_group": ["public"],
       "g_description": "...",
       "g_template": "v2",
       "g_faw": null,
       "g_callback": null,
       "g_responsive": "both",
-      "g_style": "btn-sm btn-outline-dark btn-main-sidebar"
+      "g_style": "btn-sm btn-outline-dark " + GroupStyleBtn
     }
   }
-  g_meta.geovar_button.features.push(meta);
+  g_meta.geovar_button.features.push(btnMeta);
 
-  create_button(item_btn);
+  create_button(itemBtn);
 
 }
 
-f_btn['btn_InfoSimple']=function(slug){
+f_btn['btn_'+a251_slug]=function(slug){
 
-  let item_addon = a251_slug;
-  let obj_fileterd=g_meta.geovar_addon.features.filter(({properties}) => properties.g_slug === item_addon);
-  let obj_addon = obj_fileterd[0];
+  let myButton = document.getElementById('btn_'+a251_slug);
+  disableMapClicksExcept(myButton);
 
-  if(obj_addon.properties.mapclick_status=='disabled'){
-    enable_a251();
-  }
-  else{
-    disable_a251();
-  }
-  console.log(obj_addon.properties);
   return;
 
 }
 
-
-function enable_a251(){
-
-  //on start
-  let item_addon = a251_slug;
-  let obj_fileterd=g_meta.geovar_addon.features.filter(({properties}) => properties.g_slug === item_addon);
-  let obj_addon = obj_fileterd[0];
-  obj_addon.properties.mapclick_status='enabled';
-
-  //--
-  
-  $('#btn_'+a251_slug).css('background-color','yellow');
-  $('#mapid').css('cursor','crosshair');
-
-  //--
+dyn_functions['enable_'+a251_slug]=function(){
 
   $('.box-editing2').css('display','block');
   $('.box-editing2').css('justify-content','center');
   $('.box-editing2').html(''
-    +'<div class="col-auto ct-editing2-info" style="text-align:center;">'
+    +'<div class="col-auto ct-editing2-info" '
+      +'style="text-align:center;">'
       +'<div class="box card" '
         +'style="width:200px;margin:auto;display:block;" '
       +'>'
@@ -110,21 +92,8 @@ function enable_a251(){
 
 }
 
-function disable_a251(){
+dyn_functions['disable_'+a251_slug]=function(){
 
-  let item_addon = a251_slug;
-  let obj_fileterd=g_meta.geovar_addon.features.filter(({properties}) => properties.g_slug === item_addon);
-  let obj_addon = obj_fileterd[0];
-
-  obj_addon.properties.mapclick_status='disabled';
-
-  //--
-  
-  $('#btn_'+a251_slug).css('background-color','white');
-  $('#mapid').css('cursor','default');
-
-  //--
-  
   $('.box-editing2').css('display','none');
   $('.box-editing2').html('');
 
@@ -132,42 +101,27 @@ function disable_a251(){
 
 }
 
+//--
+
 dyn_mapclick[a251_slug] = function(e){
 
   let item_addon = a251_slug;
-  let g = g_meta.geovar_addon.features;
-  let a = 'g_slug';
-  let b = item_addon;
-  let obj=g.filter(({properties}) => properties[a] === b);
-  let objAddon = obj[0];
-  //_onsole.log(objAddon)
-  if(objAddon.properties.mapclick_status=='enabled'){
+  let item_dlg = 'dlg_'+item_addon;
 
-    sessionStorage.mapclick_lat=e.latlng.lat;
-    sessionStorage.mapclick_lng=e.latlng.lng;
-
-    //let latlng = [e.latlng.lng,e.latlng.lat];
-
-    //--
-
-    let item_dlg = 'dlg_'+a251_slug;
-
-    var meta = {
-      'properties':{
-        'g_slug': item_dlg+'_single',
-        'g_label': 'Information',
-        'g_template': 'template_by_slug',
-        'g_description': null
-      }
+  var meta = {
+    'properties':{
+      'g_slug': item_dlg+'_single',
+      'g_label': 'Information',
+      'g_template': 'template_by_slug',
+      'g_description': null
     }
-    g_meta.geovar_dialog.features.push(meta);
-  
-    sessionStorage.this_dialog_lyr=item_dlg;
-    sessionStorage.this_dialog_slug=item_dlg+'_single';
-
-    create_dialog2(sessionStorage.this_dialog_slug);
-
   }
+  g_meta.geovar_dialog.features.push(meta);
+
+  sessionStorage.this_dialog_lyr=item_dlg;
+  sessionStorage.this_dialog_slug=item_dlg+'_single';
+
+  create_dialog2(sessionStorage.this_dialog_slug);
 
   return
 
@@ -277,7 +231,7 @@ dyn_functions['succ_fill_a251_AllActiveLyrByXY'] = function(r){
       let o = g_meta.geovar_lyr.features
       let this_obj=o.filter(({properties}) => properties.g_slug === itemLyr);
       let obj_lyr=this_obj[0].properties;
-    
+      console.log(obj_lyr);
       let t = g_meta.geovar_tb;
       let this_t_obj=t.filter((x) => x.name === obj_lyr.g_tables[0]);
       let fTb=this_t_obj[0].features;
@@ -316,6 +270,7 @@ dyn_functions['succ_fill_a251_AllActiveLyrByXY'] = function(r){
       r.cols[itemLyr].forEach(col => {
 
         let o2 = fTb;
+        
         let this_obj2=o2.filter(({properties}) => properties.g_slug === col);
         let pCol=this_obj2[0].properties;
 

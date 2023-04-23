@@ -1,43 +1,43 @@
-function generic_api(dataString,successFn){
+function generic_api(datastring,successFn){
   
   // _onsole.log(successFn);
   var call_silent = false;
   var postdata = false;
-  if(dataString['call_type'] === undefined){
+  if(datastring['call_type'] === undefined){
   }
   else{
-    if(dataString['call_type'] == 'silent'){
+    if(datastring['call_type'] == 'silent'){
       call_silent = true;
     }
   }
-  dataString['call_silent']=call_silent;
+  datastring['call_silent']=call_silent;
   if(call_silent === false){
     show_loading();
   }
 
-  if(dataString['postdata'] === undefined){
+  if(datastring['postdata'] === undefined){
     postdata=false;
   }
   else{
-    postdata=dataString['postdata'];
+    postdata=datastring['postdata'];
   }
 
-  if(dataString.lyr!=undefined){
-    var string = 'f='+successFn+'-'+dataString.lyr;
-    var mylyr = dataString.lyr;
+  if(datastring.lyr!=undefined){
+    var string = 'f='+successFn+'-'+datastring.lyr;
+    var mylyr = datastring.lyr;
   }
   else{
     var string = 'f='+successFn;
     var mylyr = 'nd';
   }
 
-  dataString['USER_LICENSE']=USER_LICENSE;
-  dataString['MAPSLUG']=MAPSLUG;
-  if(dataString['settings_json'] === true){
+  datastring['USER_LICENSE']=USER_LICENSE;
+  datastring['MAPSLUG']=MAPSLUG;
+  if(datastring['settings_json'] === true){
 
-    //var slugAPI = dataString.slugAPI;
-    var baseUrl=HOME_PROJECT+dataString['settings_url'];
-    dataString['call_type'] = 'silent';
+    //var slugAPI = datastring.slugAPI;
+    var baseUrl=HOME_PROJECT+datastring['settings_url'];
+    datastring['call_type'] = 'silent';
     call_silent = true;
 
     var toAjax={
@@ -50,19 +50,19 @@ function generic_api(dataString,successFn){
       cache:    false,
       successFn: successFn,
       call_silent:call_silent,
-      ds:dataString
+      ds:datastring
     }
   }
   else{
 
-    //var slugAPI = dataString.slugAPI;
+    //var slugAPI = datastring.slugAPI;
     var baseUrl=HOME_PROJECT+'/geodata/?'+string;
 
     if(postdata === false){
       var toAjax={
         type: "POST",
         url: baseUrl,  
-        data:dataString,
+        data:datastring,
         tryCount : 0,
         retryLimit : 3,
         dataType: 'json',
@@ -76,7 +76,7 @@ function generic_api(dataString,successFn){
       var toAjax={
         type: "POST",
         url: baseUrl,  
-        data:dataString,
+        data:datastring,
         tryCount : 0,
         retryLimit : 3,
         cache:    false,
@@ -121,7 +121,7 @@ function generic_api(dataString,successFn){
       r.ds=this.ds;
     }
     hide_loading();
-    console.log(this.successFn)
+    // _onsole.log(this.successFn)
     dyn_functions['succ_'+this.successFn](r);
     return;
     //return response;
@@ -129,4 +129,96 @@ function generic_api(dataString,successFn){
 
   $.ajax(toAjax); //ajax
 
+}
+
+async function generic_api_v2(datastring,myFunction) {
+
+  let call_silent = false;
+  let postdata = false;
+  let baseUrl = '';
+  let methodType =  "POST";
+  
+  if(datastring['call_type'] === undefined){
+  }
+  else{
+    if(datastring['call_type'] == 'silent'){
+      call_silent = true;
+    }
+  }
+  datastring['call_silent']=call_silent;
+  if(call_silent === false){
+    //show_loading();
+  }
+
+  if(datastring['postdata'] === undefined){
+    postdata=false;
+  }
+  else{
+    postdata=datastring['postdata'];
+  }
+
+  if(datastring.lyr!=undefined){
+    var string = 'f='+myFunction+'-'+datastring.lyr;
+    var mylyr = datastring.lyr;
+  }
+  else{
+    var string = 'f='+myFunction;
+    var mylyr = 'nd';
+  }
+
+  datastring['USER_LICENSE']=USER_LICENSE;
+  datastring['MAPSLUG']=MAPSLUG;
+  if(datastring['settings_json'] === true){
+
+    //var slugAPI = datastring.slugAPI;
+    baseUrl=HOME_PROJECT+datastring['settings_url'];
+    datastring['call_type'] = 'silent';
+    call_silent = true;
+
+    var toAjax={
+      type: "GET",
+      url: baseUrl,  
+      tryCount : 0,
+      retryLimit : 3,
+      dataType: 'json',
+      async:    true,
+      cache:    false,
+      successFn: myFunction,
+      call_silent:call_silent,
+      ds:datastring
+    }
+  }
+  else{
+
+    //var slugAPI = datastring.slugAPI;
+    baseUrl=HOME_PROJECT+'/geodata/?'+string;
+
+    methodType =  "POST";
+    //let url =  baseUrl;  
+    // let data = datastring;
+    // let tryCount  =  0;
+    // let retryLimit  =  3;
+    // let dataType  =  'json'; // ????
+    // let async =     false;
+    // let cache =     false;
+    // let contentType =  false;
+    // let processData =  false;
+    // let successFn =  myFunction;
+    // let lyr = mylyr;
+
+    if(postdata === false){
+      async = true;
+    }
+
+  }
+
+  const response = await fetch(baseUrl, {
+    method: methodType,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(datastring)
+  });
+  const responseData = await response.json();
+  return responseData;
 }

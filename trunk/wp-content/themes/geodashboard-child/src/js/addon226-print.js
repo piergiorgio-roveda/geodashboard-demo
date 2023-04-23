@@ -1,9 +1,13 @@
 var a226_mapReady = 0;
 //--
-// var a226_slug='print_test';
+const a226_slug='print';
+
+//--
+var a226_canvasURL='';
 // var a226_sheet=[];
 // var a226_block=[];
-// var a226_lyrs=[];
+var a226_lyrs_lgnd=[];
+var a226_optPdf=new Array();
 //var wiki_array_custom_js=[];
 //var wiki_sub_last_r=new Array();
 //--
@@ -13,39 +17,55 @@ dyn_functions['addon226-print'+'_ready'] = function(){
   $('.box-usrprofile').css('display','block');
 
   $('.box-usrprofile').append('<div '
-    +'class="box-btn_print box-info-2-btn d-grid gap-2" '
+    +'class="box-btn_'+a226_slug+' box-info-2-btn d-grid gap-2" '
     +'style="margin-top:5px;"></div>');
   
   a226_mapReady = 1;
-  a226_ready();
-
-}
-
-function a226_ready(){
   prepare_a226();
+
 }
 
 function prepare_a226(){
 
-  let item_btn = 'btn_print';
-  let obj_btn=g_meta.geovar_button.features.filter(({properties}) => properties.g_slug === item_btn);
-  //let g_group = '';
-  /* if(obj_btn.length>0){
-    //g_group = obj_btn[0].properties.g_group[0];
-    obj_btn[0].status = 'disabled';
-  }
-  else{
-    console.log('BTN without properties!');
-    return;
-  } */
+  let itemBtn = 'btn_'+a226_slug;
 
-  create_button(item_btn);
+  //--
+  
+  let gLang_slug="label_"+itemBtn;
+  let gLang_label="<i class=\"fa fa-print\" aria-hidden=\"true\"></i>";
+
+  gLang[gLang_slug]=gLang_label;
+
+  //--
+
+  let GroupStyleBtn = 'btn-main-sidebar btn-on-map';
+  let btnMeta = {
+    'properties':{
+      "g_slug": itemBtn,
+      "g_label": "label_"+itemBtn,
+      "g_group": ["public"],
+      "g_description": "...",
+      "g_template": "v2",
+      "g_faw": null,
+      "g_callback": null,
+      "g_responsive": "both",
+      "g_style": "btn-sm btn-outline-dark " + GroupStyleBtn
+    }
+  }
+  g_meta.geovar_button.features.push(btnMeta);
+
+  create_button(itemBtn);
 
 }
 
-f_btn['btn_print']=function(slug){
+f_btn['btn_'+a226_slug]=function(slug){
+
+  a226_lyrs_lgnd = [];
+
+  a226_optPdf = new Array();
 
   sessionStorage.this_dialog_slug='a226_single';
+
   create_dialog2('a226_single');
 
 }
@@ -59,7 +79,7 @@ dyn_functions['template_by_slug_a226_single'] = function(){
   let dlg_body = '.dlg_'+dlg_slug+''+'_body';
 
   c = '<div class="mainboxItem" style="margin-top:5px;"></div>';
-  $('.dlg_'+dlg_slug+''+'_body').append('<div class="mainboxItem" style="margin-top:5px;"></div>');
+  $('.dlg_'+dlg_slug+''+'_body').append(c);
 
   c = '<!--box button tab-->'
     +'<div class="ajs_body_head" '
@@ -123,6 +143,7 @@ dlg_close_functions['a226_inspect_single'] = function(){
 //--
 
 function dlg_a226_add_part(tab1_part_element){
+
   let p = tab1_part_element;
 
   let  c = ''
@@ -138,7 +159,12 @@ function dlg_a226_add_part(tab1_part_element){
   if(p.g_type=='map'){
     c = ''
       +'<div '
-        +'class="box" style="overflow:hidden;max-height:500px;" '
+        +'class="box" style="'
+          +'overflow:hidden;'
+          +'width: 100%;'
+          +'max-height:500px;'
+          +'position: relative;'
+          +'" '
         +'></div>';
     $('.panel-tab1 .'+p.g_slug+'').append(c);
 
@@ -177,7 +203,13 @@ function a226_map_init(box){
   //A5 148 x 210 mm
   c = ''
     +'<div '
-      +'id="a226_map" style="width: 29.7cm;height: 21cm;display:none;" '
+      +'id="a226_map" style="'
+      +'width: 29.7cm;'
+      +'height: 21cm;'
+      +'position: relative;'
+      +'left: -9cm;'
+      +'top: -3cm;'
+      +'" '
       +'></div>';
   $(box).append(c);
 
@@ -187,7 +219,9 @@ function a226_map_init(box){
     zoomControl: false,
     zoomSnap: 0.5,
     zoomDelta: 0.5,
-    wheelPxPerZoomLevel: 100
+    //wheelPxPerZoomLevel: 100,
+    scrollWheelZoom: false,
+    doubleClickZoom: false
   })
 
   maps.a226_map.setView([
@@ -202,8 +236,8 @@ function a226_map_init(box){
   let this_obj=o.filter(({properties}) => properties.g_slug === lyr);
   let obj_lyr=this_obj[0].properties;
 
-  maps.a226_map.createPane(lyr+'_pane');
-  maps.a226_map.getPane(lyr+'_pane').style.zIndex = lyr.zIndex;
+  maps.a226_map.createPane('print_'+lyr+'_pane');
+  maps.a226_map.getPane('print_'+lyr+'_pane').style.zIndex = lyr.zIndex;
   // _onsole.log(lyr)
   // _onsole.log(lyr.indexOf("pointerEvents"))
 
@@ -211,7 +245,7 @@ function a226_map_init(box){
     && obj_lyr.pointerEvents===false){
     // Layers in this pane are non-interactive and 
     //do not obscure mouse/touch events
-    maps.a226_map.getPane(lyr+'_pane').style.pointerEvents = 'none';
+    maps.a226_map.getPane('print_'+lyr+'_pane').style.pointerEvents = 'none';
   }
 
   /* geo_lyr[lyr] = L.tileLayer(
@@ -248,7 +282,8 @@ function a226_sayHi2() {
     let obj_lyr=this_obj[0].properties;
 
     if(obj_lyr.visible!=undefined && obj_lyr.visible==true){
-      console.log('visible',obj_lyr);
+      
+      // _onsole.log('visible',obj_lyr);
 
       if(obj_lyr.lyr_type=='group'){
 
@@ -261,6 +296,11 @@ function a226_sayHi2() {
 
           a226_add_lyr(child_obj_lyr);
           
+          if(child_obj_lyr.lyr_legend=='sld'){
+
+            a226_lyrs_lgnd.push(child_obj_lyr);
+          
+          }
 
         });
       }
@@ -268,6 +308,11 @@ function a226_sayHi2() {
 
         a226_add_lyr(obj_lyr);
 
+        if(obj_lyr.lyr_legend=='sld'){
+
+          a226_lyrs_lgnd.push(obj_lyr);
+        
+        }
 
       }
 
@@ -285,15 +330,19 @@ function a226_sayHi2() {
   geo_lyr[lyr] = L.tileLayer(
     obj_lyr.tile_url,
     {
+      maxNativeZoom: 22,
+      maxZoom: 22,
       attribution: obj_lyr.attribution,
-      pane: lyr+'_pane'
+      pane: 'print_'+lyr+'_pane'
     }
   ).addTo(maps.a226_map);
 
 }
 
 function a226_add_lyr(obj_lyr){
+
   let lyr = obj_lyr.g_slug;
+
   if(obj_lyr.lyr_type=='wms'){
 
     geo_lyr['print_'+lyr] = new L.featureGroup();
@@ -409,6 +458,9 @@ function a226_scalecontrol(){
     $('.box-scaleselect > .form-control').on('change', function() {
 
       sessionStorage.scaleratio = $(this).find('option:selected').val();
+
+      a226_optPdf.scale = sessionStorage.scaleratio;
+
       dyn_zoomend['get_scale_dimension'](maps.a226_map);
 
     });
@@ -417,18 +469,22 @@ function a226_scalecontrol(){
 }
 
 function a226_reset(){
+
   maps.a226_map.options.zoomSnap=0.5;
   maps.a226_map.options.zoomDelta=0.5;
   maps.a226_map.setZoom(maps.a226_map.getZoom());
   $('.box-scaleselect').remove();
+
 }
 
 f_btn['btn_a226_print']=function(slug){
+
   $('#a226_map').css('display','block');
   maps.a226_map.invalidateSize();
   $('.box-scaleselect').html('Attendere il render della mappa.');
   $('#btn_a226_print').prop('disabled',true);
   create_pdf=1;
+
   setInterval(
     function() {
       if(create_pdf==1){
@@ -459,14 +515,291 @@ function a226_prepara_immagine_per_pdf(){
       imageTimeout:100000,
     }).then(function(canvas) {
 
-    var dataURL = canvas.toDataURL("image/png");//.replace("image/png", "image/octet-stream");
+    a226_canvasURL = canvas.toDataURL("image/png");//.replace("image/png", "image/octet-stream");
 
-    a226_invia_image_data(dataURL);
+    a226_chooseTemplate();
+
   });
 
 
 } // a226_prepara_immagine_per_pdf
 
+function a226_chooseTemplate(){
+
+  $('.panel-tab1').html('');
+
+  let itemBtn = 'btn_a226_template';
+
+  //-- DLG FOOTER
+  $('.ajs-footer-btn2').html(''
+    +'<span class="box-btn_a226_template"></span>'
+  +'');
+
+  //-- DLG BODY
+
+  // let dlg_slug = 'a226_single';
+
+  let p = { 
+    'g_slug': 'part_4',
+    'g_type': 'template',
+    //'title': 'Ispeziona Particelle'
+  }
+
+  let  c = ''
+    +'<div class="row row_a226_image" >'
+      +'<div class="col-12 a226_template_A">'
+        +'<div class="'+p.g_slug+'_A">'
+          +'<img class="a226_image" style="width:100%;" />'
+        +'</div>'
+      +'</div>'     
+    +'</div>'
+    +'';
+  $('.panel-tab1').append(c);
+
+  const img = new Image(); // Create new img element
+  img.src = a226_canvasURL; // Set source path
+
+  $('.a226_image').attr('src',a226_canvasURL);
+
+  //-- BTN
+  let gLang_slug="label_"+itemBtn;
+  let gLang_label="CREA PDF";
+
+  gLang[gLang_slug]=gLang_label;
+
+  let GroupStyleBtn = 'btn-main-sidebar btn-on-dlg';
+  let btnMeta = {
+    'properties':{
+      "g_slug": itemBtn,
+      "g_label": "label_"+itemBtn,
+      "g_group": ["public"],
+      "g_description": "...",
+      "g_template": "v2",
+      "g_faw": null,
+      "g_callback": null,
+      "g_responsive": "both",
+      "g_style": "btn-sm btn-outline-dark " + GroupStyleBtn
+    }
+  }
+  g_meta.geovar_button.features.push(btnMeta);
+
+  create_button(itemBtn);
+
+  a226_optPdf.lgnd = 'none';
+
+  if(a226_lyrs_lgnd.length>0){
+
+    c = ''
+    +'<div class="row">'
+      +'<div class="col-12" style="text-align:center;padding:10px;">'
+        +'<span class="box-btn_a226_template_lgnd_sx"></span>'
+        +'&nbsp;'
+        +'<span class="box-btn_a226_template_no_lgnd"></span>'
+        +'&nbsp;'
+        +'<span class="box-btn_a226_template_lgnd_dx"></span>'
+      +'</div>'     
+    +'</div>'
+    +'';
+    $('.panel-tab1').append(c);
+
+    //-- BTN no lgnd
+    itemBtn = 'btn_a226_template_no_lgnd';
+    gLang_slug="label_"+itemBtn;
+    gLang_label="<i class=\"bi bi-aspect-ratio\"></i>";
+
+    gLang[gLang_slug]=gLang_label;
+
+    GroupStyleBtn = 'btn-main-sidebar btn-on-dlg';
+    btnMeta = {
+      'properties':{
+        "g_slug": itemBtn,
+        "g_label": "label_"+itemBtn,
+        "g_group": ["public"],
+        "g_description": "...",
+        "g_template": "v2",
+        "g_faw": null,
+        "g_callback": null,
+        "g_responsive": "both",
+        "g_style": "btn-sm btn-outline-dark " + GroupStyleBtn
+      }
+    }
+    g_meta.geovar_button.features.push(btnMeta);
+
+    create_button(itemBtn);
+
+    //-- BTN lgnd dx
+    itemBtn = 'btn_a226_template_lgnd_dx';
+    gLang_slug="label_"+itemBtn;
+    gLang_label="<i class=\"bi bi-layout-sidebar-inset-reverse\"></i>";
+
+    gLang[gLang_slug]=gLang_label;
+
+    GroupStyleBtn = 'btn-main-sidebar btn-on-dlg';
+    btnMeta = {
+      'properties':{
+        "g_slug": itemBtn,
+        "g_label": "label_"+itemBtn,
+        "g_group": ["public"],
+        "g_description": "...",
+        "g_template": "v2",
+        "g_faw": null,
+        "g_callback": null,
+        "g_responsive": "both",
+        "g_style": "btn-sm btn-outline-dark " + GroupStyleBtn
+      }
+    }
+    g_meta.geovar_button.features.push(btnMeta);
+
+    create_button(itemBtn);
+
+    //-- BTN lgnd sx
+    itemBtn = 'btn_a226_template_lgnd_sx';
+    gLang_slug="label_"+itemBtn;
+    gLang_label="<i class=\"bi bi-layout-sidebar-inset\"></i>";
+
+    gLang[gLang_slug]=gLang_label;
+
+    GroupStyleBtn = 'btn-main-sidebar btn-on-dlg';
+    btnMeta = {
+      'properties':{
+        "g_slug": itemBtn,
+        "g_label": "label_"+itemBtn,
+        "g_group": ["public"],
+        "g_description": "...",
+        "g_template": "v2",
+        "g_faw": null,
+        "g_callback": null,
+        "g_responsive": "both",
+        "g_style": "btn-sm btn-outline-dark " + GroupStyleBtn
+      }
+    }
+    g_meta.geovar_button.features.push(btnMeta);
+
+    create_button(itemBtn);
+
+  }
+  else{
+    c = ''
+    +'<div class="row">'
+      +'<div class="col-12" style="text-align:center;padding:10px;">'
+        +'Nessuna Legenda disponibile per i layer visualizzati'
+      +'</div>'     
+    +'</div>'
+    +'';
+    $('.panel-tab1').append(c);
+  }
+
+}
+
+f_btn['btn_a226_template']=function(slug){
+
+  a226_invia_image_data(a226_canvasURL);
+
+}
+
+f_btn['btn_a226_template_no_lgnd']=function(slug){
+  let p = { 
+    'g_slug': 'part_4',
+    'g_type': 'template',
+    //'title': 'Ispeziona Particelle'
+  }
+  let  c = ''
+    +'<div class="row row_a226_image" >'
+      +'<div class="col-12 a226_template_A">'
+        +'<div class="'+p.g_slug+'_A">'
+          +'<img class="a226_image" style="width:100%;" />'
+        +'</div>'
+      +'</div>'    
+    +'</div>'
+    +'';
+  $('.row_a226_image').html(c);
+  $('.a226_image').attr('src',a226_canvasURL);
+  a226_optPdf.lgnd = 'none';
+}
+
+f_btn['btn_a226_template_lgnd_dx']=function(slug){
+  let p = { 
+    'g_slug': 'part_4',
+    'g_type': 'template',
+    //'title': 'Ispeziona Particelle'
+  }
+  let  c = ''
+    +'<div class="row row_a226_image" >'
+      +'<div class="col-8 a226_template_A">'
+        +'<div class="'+p.g_slug+'_A">'
+          +'<img class="a226_image" style="width:100%;" />'
+        +'</div>'
+      +'</div>'
+      +'<div class="col-4 a226_template_B">'
+        +'<div class="'+p.g_slug+'_B">'
+          +'LEGENDA'
+          +'<div class="a226_lgnd_list" style="width:100%;"></div>'
+        +'</div>'
+      +'</div>'      
+    +'</div>'
+    +'';
+  $('.row_a226_image').html(c);
+  $('.a226_image').attr('src',a226_canvasURL);
+  
+  a226_add_lgnd_list();
+  a226_optPdf.lgnd = 'dx';
+}
+
+f_btn['btn_a226_template_lgnd_sx']=function(slug){
+  let p = { 
+    'g_slug': 'part_4',
+    'g_type': 'template',
+    //'title': 'Ispeziona Particelle'
+  }
+  let  c = ''
+    +'<div class="row row_a226_image" >'
+      +'<div class="col-4 a226_template_A">'
+        +'<div class="'+p.g_slug+'_A">'
+          +'LEGENDA'
+          +'<div class="a226_lgnd_list" style="width:100%;"></div>'
+        +'</div>'      
+      +'</div>'
+      +'<div class="col-8 a226_template_B">'
+        +'<div class="'+p.g_slug+'_B">'
+          +'<img class="a226_image" style="width:100%;" />'
+        +'</div>'
+      +'</div>'      
+    +'</div>'
+    +'';
+  $('.row_a226_image').html(c);
+  $('.a226_image').attr('src',a226_canvasURL);
+
+  a226_add_lgnd_list();
+  a226_optPdf.lgnd = 'sx';
+}
+
+function a226_add_lgnd_list(){
+
+  a226_lyrs_lgnd.forEach(element => {
+
+    $('.a226_lgnd_list').append(''
+      +'<div class="form-check">'
+        +'<input class="form-check-input a226-lgnd-lyr-input" g_slug="'+element.g_slug+'" '
+          +'type="radio" name="flexRadioDefault" '
+          +'id="radio_'+element.g_slug+'">'
+        +'<label class="form-check-label" for="flexRadioDefault1">'
+          +element.g_label
+        +'</label>'
+      +'</div>'
+    );
+    
+  });
+
+  $(".a226-lgnd-lyr-input").click(function(){
+    var radioValue = $(".a226-lgnd-lyr-input:checked").attr('g_slug');
+    if(radioValue){
+      // _onsole.log("Your are a - " + radioValue);
+      a226_optPdf.lgnd_lyr = radioValue;
+    }
+  });  
+
+
+}
 
 function a226_invia_image_data(imgdata){
 
@@ -494,7 +827,7 @@ function a226_invia_image_data(imgdata){
     lyr:'slug',//'lyr035',
     geom:false,
     item_token:'_token', //lyr035_token
-    photo : imgdata,
+    photo : imgdata
   }
   generic_api(dataString,'a226_invia_image_data');
   return;
@@ -502,6 +835,7 @@ function a226_invia_image_data(imgdata){
 }
 
 dyn_functions['succ_a226_invia_image_data'] = function(r){    
+
   console.log(r);
   console.log(HOME_PROJECT+'/'+r.file);
   localStorage.pdf_img = r.file;
@@ -510,10 +844,11 @@ dyn_functions['succ_a226_invia_image_data'] = function(r){
   $('.box-scaleselect').html('La mappa è stata aperta in una nuova scheda, pronta per essere salvata.');
   $('#btn_a226_print').prop('disabled',true);
   a226_crea_pdf_con_immagine();
+
 }
 
 /* function startDownload() {
-  let imageURL = "https://geoserver.cityplanner.ch:8443/geoserver/cityplanner/wms?&service=WMS&request=GetMap&styles=&format=image%2Fpng&transparent=true&version=1.3.0&tiled=false&antialiasing=on&sld=https%3A%2F%2Fgeoweb.cityplanner.ch%2Fsit%2Fcityplanner%2Fscript%2Fsld%2F%3Fg_master%3Dlyrsit046&width=256&height=256&crs=EPSG%3A3857&bbox=946596.1582836229,5515695.96105832,947819.1507361857,5516918.953510881";
+  let imageURL = "https://geoserver.studiositsa.ch:8443/geoserver/studiosit/wms?&service=WMS&request=GetMap&styles=&format=image%2Fpng&transparent=true&version=1.3.0&tiled=false&antialiasing=on&sld=https%3A%2F%2Fgeoweb.studiositsa.ch%2Fsit%2Falbissolamarina%2Fscript%2Fsld%2F%3Fg_master%3Dlyrsit046&width=256&height=256&crs=EPSG%3A3857&bbox=946596.1582836229,5515695.96105832,947819.1507361857,5516918.953510881";
   let imageDescription = "The Mozilla logo";
 
   downloadedImg = new Image();
@@ -554,7 +889,7 @@ function a226_crea_pdf_con_immagine(){
 
   // var f = r.features[0];
   // var p = f.properties;
-
+  // _onsole.log('optPdf',a226_optPdf);
   dataString={
     //slugAPI:'watchdog-data',
     fn_group:'geodata',
@@ -566,6 +901,12 @@ function a226_crea_pdf_con_immagine(){
     mydata_u : '0000',// localStorage.pdf_date,//'dMap.transaction.mydata_u'
     img : localStorage.pdf_img,
     model : 'A002',
+    pdf_lgnd : a226_optPdf.lgnd,
+    pdf_lgnd_lyr : a226_optPdf.lgnd_lyr,
+    pdf_scale : a226_optPdf.scale,
+    pdf_WORKSPACE:WORKSPACE,
+    pdf_DOMAIN_PROJECT:DOMAIN_PROJECT,
+    pdf_GEOSERVER_URL:GEOSERVER_URL
     //properties : p//,
     //centro_token:CENTRO_TOKEN,
     //type :MANDATO_TYPE,// dMap.apiInfo.user_token,

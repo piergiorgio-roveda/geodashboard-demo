@@ -1,0 +1,19 @@
+geovar.home_url = 'https://www.cityplanner.biz';
+geovar.environment = 'development';
+geovar.home_project = 'https://www.cityplanner.biz/';
+
+geovar.language_webapp.it_IT.doc_credit='-';
+geovar.language_webapp.it_IT.doc_credit_text='-';
+geovar.language_webapp.en_GB.doc_credit_text='-';
+geovar.language_webapp.it_IT.geoinfo_azienda='GISTIPS Academy';
+geovar.language_webapp.en_GB.geoinfo_azienda='GISTIPS Academy';
+geovar.language_webapp.it_IT.logo_webmaster_pro='logo21-cp.png';
+geovar.language_webapp.en_GB.logo_webmaster_pro='logo21-cp.png';
+geovar.language_webapp.it_IT.logo_webmaster_dev='business_2021/logo21-cp.png';
+geovar.language_webapp.en_GB.logo_webmaster_dev='business_2021/logo21-cp.png';
+geovar.language_webapp.it_IT.logo_client_generic='client1_logo_demo01.png';
+geovar.language_webapp.en_GB.logo_client_generic='client1_logo_demo01.png';
+geovar.language_webapp.it_IT.logo_client_mars='client1_logo_mars01.png';
+geovar.language_webapp.en_GB.logo_client_mars='client1_logo_mars01.png';
+geovar.language_webapp.it_IT.client_pdf='output-client';
+geovar.language_webapp.en_GB.client_pdf='output-client';

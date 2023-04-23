@@ -355,7 +355,7 @@ dyn_functions['succ_fill_deckGL'] = function(r){
     // material: true,
     //mesh: new CubeGeometry(),
     //mesh: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/humanoid_quad.obj',
-    mesh: 'https://geoweb.cityplanner.ch/wp-content/themes/geodashboard-child/src/_tmp/humanoid_quad.obj',
+    mesh: 'https://geoweb.studiositsa.ch/wp-content/themes/geodashboard-child/src/_tmp/humanoid_quad.obj',
     sizeScale: 0.5,
     // texture: null,
     // wireframe: false,
@@ -452,7 +452,7 @@ dyn_functions['succ_fill_deckGL'] = function(r){
     container: "deck-gl-view",
     views: [new MapView()],
     //mapStyle: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-    mapStyle: 'https://geoweb.cityplanner.ch/wp-content/themes/geodashboard-child/src/_tmp/positron-gl-style.json',
+    mapStyle: 'https://geoweb.studiositsa.ch/wp-content/themes/geodashboard-child/src/_tmp/positron-gl-style.json',
     initialViewState: {
       latitude: r.ds.lat,
       longitude:  r.ds.lng,

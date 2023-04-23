@@ -93,7 +93,7 @@ dyn_functions['addon249-geoaesthetic1'+'_ready'] = function(){
   geo_lyr['istat'] = new L.featureGroup();
 
   ///civici pallini
-  var civicilabels = L.tileLayer('https://api.mapbox.com/styles/v1/admincityplanner/clbp1tuuc000e14oe5qjqopb7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWRtaW5zdHVkaW9zaXQiLCJhIjoiY2xieXRxdHZvMDh6cDNvbXptMWY0ZHF2ZCJ9.tfhfTuRe-3-STkYzpuhxJg', {
+  var civicilabels = L.tileLayer('https://api.mapbox.com/styles/v1/adminstudiosit/clbp1tuuc000e14oe5qjqopb7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWRtaW5zdHVkaW9zaXQiLCJhIjoiY2xieXRxdHZvMDh6cDNvbXptMWY0ZHF2ZCJ9.tfhfTuRe-3-STkYzpuhxJg', {
     tileSize: 512,
     zoomOffset: -1,
     pane: 'edifici3d',
@@ -102,7 +102,7 @@ dyn_functions['addon249-geoaesthetic1'+'_ready'] = function(){
 
 
   ///Edifici con colore diverso
-  // var edificilabels = L.tileLayer('https://api.mapbox.com/styles/v1/admincityplanner/clboya8pl000d14lobr1lhbyv/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWRtaW5zdHVkaW9zaXQiLCJhIjoiY2xieXRxdHZvMDh6cDNvbXptMWY0ZHF2ZCJ9.tfhfTuRe-3-STkYzpuhxJg', {
+  // var edificilabels = L.tileLayer('https://api.mapbox.com/styles/v1/adminstudiosit/clboya8pl000d14lobr1lhbyv/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWRtaW5zdHVkaW9zaXQiLCJhIjoiY2xieXRxdHZvMDh6cDNvbXptMWY0ZHF2ZCJ9.tfhfTuRe-3-STkYzpuhxJg', {
   //   tileSize: 512,
   //   zoomOffset: -1,
   //   pane: 'edifici3d',
