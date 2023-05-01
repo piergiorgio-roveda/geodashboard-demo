@@ -39,7 +39,8 @@ var a240_subScript = [
   'addon240sub-manlyrs-3',
   'addon240sub-RegisterLyr',
   'addon240sub-UpdateLyr',
-  'addon240sub-UpdateLyrStyle'
+  'addon240sub-UpdateLyrStyle',
+  'addon240sub-UpdateAddons'
 ];
 
 //--

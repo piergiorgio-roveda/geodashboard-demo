@@ -70,3 +70,4 @@ trunk-php-suite/*
 trunk-map/*
 trunk/_test/*
 _trash/*
+*.obj

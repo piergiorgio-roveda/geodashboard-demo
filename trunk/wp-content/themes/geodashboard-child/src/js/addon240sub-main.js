@@ -29,6 +29,7 @@ dyn_functions['a240_DlgExt_Main'] =  function(){
     {"val":"main-add-map","text":"Add new map"},
     {"val":"main-register-lyr","text":"Register new Layer"},
     {"val":"main-update-lyr","text":"Modify Layer"},
+    {"val":"main-update-addons","text":"Select Addons"},
     {"val":"main-advanced","text":"Advanced"},
   ];
 
@@ -75,6 +76,11 @@ function a240_DlgExt_Main_ui(slug){
   else if(slug=='main-advanced'){
   
     dyn_functions['a240_MainAdvanced']();
+
+  }
+  else if(slug=='main-update-addons'){
+  
+    dyn_functions['a240_UpdateAddons']();
 
   }
 

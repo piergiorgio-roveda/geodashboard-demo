@@ -108,13 +108,12 @@ var list_zoomstart=[];
 
 // 'map203-google-initialize',
 
-var pin_address = new L.featureGroup();
+var pin_address = new Array();
 
-var locationIcon1 = L.icon({
-  iconUrl: HOME_PROJECT+'/source/icon/'+	gLang.locationIcon1_img,
-  iconSize: [25, 25], // size of the icon
-  iconAnchor: [12.5,12.5] // point of the icon which will correspond to marker's location
-});
+var locationIcon1 = new Array();
+
+var m211_rotation = 'disabled';
+var m211_mapLibrary = 'leafletjs';
 
 function initialize() {
   //aggiungi_box_ricerca();
@@ -147,6 +146,13 @@ function initAutoComplete() {
 // [START region_fillform]
 function setAddressOnMap() {
   //_onsole.log('setAddressOnMap')
+  pin_address = new L.featureGroup();
+  locationIcon1 = L.icon({
+    iconUrl: HOME_PROJECT+'/source/icon/'+	gLang.locationIcon1_img,
+    iconSize: [25, 25], // size of the icon
+    iconAnchor: [12.5,12.5] // point of the icon which will correspond to marker's location
+  });
+
   var place = autocomplete.getPlace();
 
   dMap.place.lat = place.geometry.location.lat();
@@ -1112,7 +1118,7 @@ dyn_functions['succ_load_geovar'] = function(r){
     //});
 
     //bar_geovar_label.then(() => {
-      //console.log('All done!');
+      // onsole.log('All done!');
       //f_wait['geovar_label']=1;
     //});
     g_meta[slug+'_full']=f;
@@ -1319,7 +1325,7 @@ function get_geovar_obj(ds){
     o = ds.geovar
   } 
   else {
-    //_console.log('Not an array');
+    //_onsole.log('Not an array');
     if(ds.type=='table_schema'){
 
       let objCols = g_meta[ds.geovar].filter(
@@ -1422,11 +1428,11 @@ function get_geovar_obj(ds){
         this_obj=o.filter(({properties}) => properties[filter_field] === ds.slug);
       }
       else{
-        // console.log(filter_field)
-        // console.log(ds.slug)
-        // console.log(o)
+        // onsole.log(filter_field)
+        // onsole.log(ds.slug)
+        // onsole.log(o)
         this_obj=o.filter((x) => x[filter_field] === ds.slug);
-        // console.log(this_obj)
+        // onsole.log(this_obj)
       }
 
       
@@ -1598,6 +1604,7 @@ function create_toc_box_style1(name){
 // 'map209-user-position',
 function register_user_position(){
 
+  console.log('register_user_position');
   localStorage.map_lat=dMap.map.stop_lat;
   localStorage.map_lng=dMap.map.stop_lng;
   localStorage.map_zoom=dMap.map.stop_zoom;
@@ -1636,58 +1643,203 @@ function m211_ready(){
 
 }
 
+function m211_ready_2(opt){
+
+  if(opt.mapLibrary=='leafletjs'){
+
+    if(opt.mapRotation=='disabled'){
+
+      mymap = L.map('mapid',{
+        minZoom: 1,
+        maxZoom: 20,
+        zoomControl: false,
+        zoomSnap: 0.5,
+        zoomDelta: 0.5,
+        wheelPxPerZoomLevel: 100,
+        cursor: true
+      });
+    
+      add_mymap();
+
+    }
+    else if(opt.mapRotation=='enabled'){
+
+      mymap = L.map('mapid',{
+        // center: [51.505, -0.09],
+        // zoom: 13,
+        // layers: [esri],
+        // worldCopyJump: true,
+        // preferCanvas: false,
+        zoomControl: false,
+        rotate: true,
+        rotateControl: {
+          closeOnZeroBearing: false,
+          // position: 'bottomleft',
+        },
+        bearing: 0,
+        // attributionControl: false,
+        // zoomControl: false,
+        // compassBearing: false,
+        // trackContainerMutation: false,
+        // shiftKeyRotate: false,
+        // touchGestures: true,
+        touchRotate: true,
+        // touchZoom: true    
+      })
+
+      add_mymap();      
+
+    }
+    else{
+      console.log('m211_ready_2','mapRotation not supported');
+      return
+    }
+
+  }
+  else if(opt.mapLibrary=='mapbox'){
+    mapboxgl.accessToken = MAPBOXGL_KEY;
+    mymap = new mapboxgl.Map({
+      container: 'mapid', // container ID
+      // Choose from Mapbox's core styles, 
+      // or make your own style with Mapbox Studio
+      // style: 'mapbox://styles/mapbox/streets-v12', // style URL
+      // center: [-74.5, 40], // starting position [lng, lat]
+      // zoom: 9 // starting zoom
+    });
+    add_mymap();
+  }
+  else{
+    console.log('m211_ready_2','mapLibrary not supported');
+    return
+  }
+
+
+}
+
+function m211_testroutingrotate_ready(){
+
+  mymap = L.map('mapid',{
+    center: [51.505, -0.09],
+    zoom: 13,
+    // layers: [esri],
+    // worldCopyJump: true,
+    // preferCanvas: false,
+    rotate: true,
+    rotateControl: {
+      closeOnZeroBearing: false,
+      // position: 'bottomleft',
+    },
+    bearing: 30,
+    // attributionControl: false,
+    // zoomControl: false,
+    // compassBearing: false,
+    // trackContainerMutation: false,
+    // shiftKeyRotate: false,
+    // touchGestures: true,
+    touchRotate: true,
+    // touchZoom: true
+  }); // .setView([51.505, -0.09], 13);
+
+}
+
+function m211_mapbox1_ready(){
+
+  mapboxgl.accessToken = MAPBOXGL_KEY;
+  mymap = new mapboxgl.Map({
+    container: 'mapid', // container ID
+    // Choose from Mapbox's core styles, 
+    // or make your own style with Mapbox Studio
+    // style: 'mapbox://styles/mapbox/streets-v12', // style URL
+    // center: [-74.5, 40], // starting position [lng, lat]
+    // zoom: 9 // starting zoom
+  });
+  add_mymap();
+
+}
+
 function add_mymap(){
 
-  if (localStorage.map_lat==undefined) {
-
+  if(localStorage.map_lat==undefined
+    || localStorage.map_lng==undefined
+    || localStorage.map_zoom==undefined
+    || localStorage.map_lat=='NaN'
+    || localStorage.map_lng=='NaN'
+    || localStorage.map_zoom=='NaN') {
     localStorage.map_lat=gLang['lat_start'];
     localStorage.map_lng=gLang['lng_start'];
     localStorage.map_zoom=gLang['zoom_start'];
 
   }
 
-  if(localStorage.map_zoom>18){
+  let item = 'map_lat';
+  if(localStorage[item]>179.5
+    ||localStorage[item]<-179.5){
+    localStorage[item]=gLang['lat_start'];
+  }
 
-    localStorage.map_zoom=18;
+  item = 'map_lng';
+  if(localStorage[item]>89.5
+    ||localStorage[item]<-89.5){
+    localStorage[item]=gLang['lng_start'];
+  }
+
+  item = 'map_zoom';
+  if(localStorage[item]>18){
+    localStorage[item]=18;
+  }
+  else if(localStorage[item]<1){
+    localStorage[item]=1;
+  }
+
+  if(m211_mapLibrary=='leafletjs'){
+    // Caricamento della mappa base
+    mymap.setView([
+      localStorage.map_lat,
+      localStorage.map_lng
+    ],
+      localStorage.map_zoom
+    );
+    
+    f_wait.mymap=1;
+
+    //--
+    sessionStorage.zoomend_status = 'true';
+
+    mymap.on('zoomend', function() {
+      if(sessionStorage.zoomend_status=='true'){
+        list_zoomend.forEach(element => {
+          dyn_zoomend[element]();
+        });
+      }
+    });
+    //---
+
+    //--
+    sessionStorage.zoomstart_status = 'true';
+
+    mymap.on('zoomstart', function(e) {
+      if(sessionStorage.zoomstart_status=='true'){
+        list_zoomstart.forEach(element => {
+          dyn_zoomstart[element]();
+        });
+      }
+    });
+    //---
+  }
+  else if(m211_mapLibrary=='mapbox'){
+
+    mymap.setCenter([localStorage.map_lng,localStorage.map_lat]);
+    mymap.setZoom(localStorage.map_zoom);
+  
+    //--
+    sessionStorage.zoomend_status = 'true';
+    
+    //--
+    sessionStorage.zoomstart_status = 'true';
 
   }
 
-  // Caricamento della mappa base
-  mymap.setView([
-    localStorage.map_lat,
-    localStorage.map_lng
-  ],
-    localStorage.map_zoom
-  );
-  
-  f_wait.mymap=1;
-
-  //--
-  sessionStorage.zoomend_status = 'true';
-
-  mymap.on('zoomend', function() {
-    if(sessionStorage.zoomend_status=='true'){
-      list_zoomend.forEach(element => {
-        dyn_zoomend[element]();
-      });
-    }
-  });
-  //---
-
-  //--
-  sessionStorage.zoomstart_status = 'true';
-
-  mymap.on('zoomstart', function(e) {
-    if(sessionStorage.zoomstart_status=='true'){
-      list_zoomstart.forEach(element => {
-        dyn_zoomstart[element]();
-      });
-    }
-  });
-  //---
-
 }
-
 
 // 'map215-mobile-footer',
 $(document).ready(function() {
@@ -1770,11 +1922,6 @@ class pages_mobile {
     }
   }
 }
-
-
-
-
-
 
 // 'map217-dialog',
 
@@ -1915,26 +2062,44 @@ function create_dialog2(slug,dlg_type='b',single_content='',title=''){
           //$('.ajs-dialog').css('margin','10px auto');
         }
 
-        $('.ajs-footer').html(''
-          +'<!--SUBMIT-->'
-          +'<div class="row row2 align-items-center" style="margin:0px;height: 50px;">'
-            //+'<div class="col-3 ajs-footer-btn2" style=" text-align: center;">'
-            //+'</div>'
-            +'<div class="col-2 d-grid gap-2 d-flex justify-content-start">'
-              +'<div class="ajs-footer-btn3"></div>'
-            +'</div>'
-            +'<div class="col-8 d-grid gap-2 d-flex justify-content-end" '
-              +'style="text-align: center;">'
-              +'<div class="ajs-footer-btn2" '
-                +'style="display:inline;padding-right: 5px;width: 100%;"></div>'
-            +'</div>'
-            +'<div class="col-2 d-grid gap-2 d-flex justify-content-end">'
-              +'<div class="ajs-footer-btn1" '
-                +'style="display:inline;">'
-                +'<div class="box-btn_closedlg"></div>'
-              +'</div>'
-            +'</div>'
-          +'</div>');
+        // $('.ajs-footer').html(''
+        //   +'<!--SUBMIT-->'
+        //   +'<div class="row row2 align-items-center" style="margin:0px;height: 50px;">'
+        //     //+'<div class="col-3 ajs-footer-btn2" style=" text-align: center;">'
+        //     //+'</div>'
+        //     +'<div class="col-2 d-grid gap-2 d-flex justify-content-start">'
+        //       +'<div class="ajs-footer-btn3"></div>'
+        //     +'</div>'
+        //     +'<div class="col-8 d-grid gap-2 d-flex justify-content-end" '
+        //       +'style="text-align: center;">'
+        //       +'<div class="ajs-footer-btn2" '
+        //         +'style="display:inline;padding-right: 5px;width: 100%;"></div>'
+        //     +'</div>'
+        //     +'<div class="col-2 d-grid gap-2 d-flex justify-content-end">'
+        //       +'<div class="ajs-footer-btn1" '
+        //         +'style="display:inline;">'
+        //         +'<div class="box-btn_closedlg"></div>'
+        //       +'</div>'
+        //     +'</div>'
+        //   +'</div>');
+        $('.ajs-footer').css('padding','0px');
+        let c = ''+
+          '<div class="display-table" style="width: 100%;">'+
+            '<div style="height: 50px;">'+
+              '<div class="tb-box-left ajs-footer-btn3" '+
+                'style="width:25%;">'+
+              '</div>'+
+              '<div class="tb-box-center ajs-footer-btn2" '+
+                'style="width:50%;">'+
+              '</div>'+
+              '<div class="tb-box-right ajs-footer-btn1" '+
+                'style="width:25%;text-align:right;">'+
+                '<div class="box-btn_closedlg"></div>'+
+              '</div>'+
+            '</div>'+
+          '</div>'+        
+        '';
+        $('.ajs-footer').html(c);
         create_button('btn_closedlg');
 
         if(dlg_type=='a'){//old
@@ -2330,14 +2495,12 @@ dlg_template['tab_x6'] = function(g_slug){
 
 // ADDON DLG TEMPLATE
 
-/*
-dlg_template['explorer_simple'] = function(g_slug){
+// dlg_template['explorer_simple'] = function(g_slug){
 
-  // _onsole.log('dlg_template:explorer_simple > '+g_slug);
-  $('.dlg_'+g_slug+'_body').html('Aaa');
+//   // _onsole.log('dlg_template:explorer_simple > '+g_slug);
+//   $('.dlg_'+g_slug+'_body').html('Aaa');
 
-}
-*/
+// }
 
 // 'map227-dialog-body',
 
@@ -2796,7 +2959,8 @@ function objField_omnivore(optIn){
   let objItem = optIn.objItem;
   //_onsole.log('objField_omnivore')
 
-  if(pCol.g_callback!=null){
+  if(pCol.g_callback!=null
+    && pCol.g_callback!='none'){
 
 
     //-- CREATE FORM GROUP AND LABEL
@@ -3557,8 +3721,6 @@ function fill_labels(){
   //dMap.map_attribution=ERP_OWNER_GEOINFO_AZIENDA+' Leaflet - © OpenStreetMap';
 
 }
-
-
 
 // 'map238-geovar_lyr_table_schema',//!!!must be an await
 
@@ -4685,12 +4847,30 @@ function add_tmp_access(){
 
 }
 
-
 // 'map232-basemaps',
 
 function map232_ready(){
 
   exe_map232();
+
+}
+
+function map232_ready_2(opt){
+  // console.log('map232_ready_2',opt);
+  if(opt.mapLibrary=='leafletjs'){
+    if(opt==undefined){
+      exe_map232();
+    }
+    else if(opt.mapRotation=='disabled'){
+      exe_map232();
+    }
+    else if(opt.mapRotation=='enabled'){
+      exe_map232_BaseRotate();
+    }
+  }
+  else if(opt.mapLibrary=='mapbox'){
+    exe_map232_mapbox();
+  }
 
 }
 
@@ -4735,6 +4915,60 @@ function exe_map232(){
 
 }
 
+function map232_testroutingrotate_ready(){
+
+  exe_map232_BaseRotate();
+
+}
+
+function exe_map232_BaseRotate(){
+
+  // let tileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+  let tileUrl = 'https://{s}.basemaps.cartocdn.com/{style}/{z}/{x}/{y}{scale}.png'
+  L.tileLayer(
+    tileUrl, 
+    {
+      style:'light_all',
+      scale:(L.Browser.retina ? '@2x' : ''),
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }
+  ).addTo(mymap);
+
+}
+
+function exe_map232_mapbox(){
+
+  // onsole.log('exe_map232_mapbox')
+  let layerId = 'streets-v12';
+  // let layerId = 'dark-v11';
+  mymap.setStyle('mapbox://styles/mapbox/' + layerId);
+  // let customTile = {
+  //   'version': 8,
+  //   'sources': {
+  //     'raster-tiles': {
+  //       'type': 'raster',
+  //       'tiles': [
+  //         'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg'
+  //       ],
+  //       'tileSize': 256,
+  //       'attribution':
+  //       'Map tiles by <a target="_top" rel="noopener" href="http://stamen.com">Stamen Design</a>, under <a target="_top" rel="noopener" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_top" rel="noopener" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_top" rel="noopener" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>'
+  //     }
+  //   },
+  //   'layers': [
+  //     {
+  //       'id': 'simple-tiles',
+  //       'type': 'raster',
+  //       'source': 'raster-tiles',
+  //       'minzoom': 0,
+  //       'maxzoom': 22
+  //     }
+  //   ]
+  // }
+  // mymap.setStyle(customTile);
+
+}
 
 /*
 mymap.on("zoomstart", function (e) { 
@@ -5029,9 +5263,9 @@ dyn_functions['exe_create_button'] = function(item_btn,optIn=new Array()){
 
   // _onsole.log( slug);
   // $('#'+item_btn).on('click',function(optIn){
-  //   console.log('click');
-  //   console.log('e',e);
-  //   console.log('optIn',optIn);
+  //   onsole.log('click');
+  //   onsole.log('e',e);
+  //   onsole.log('optIn',optIn);
   //   exe_btn($(this).attr('g_callback'),$(this).attr("id"),optIn);
   // });
 
@@ -5299,8 +5533,8 @@ var list_creditExtend=[];
 
 function fill_box_sidebar(){
   
-  // _onsole.log(count_js);
-  //_console.log(count_js_load);
+  // onsole.log(count_js);
+  // onsole.log(count_js_load);
 
   let sys_lang = get_sys_lang();
 
@@ -5704,8 +5938,6 @@ function marker_cluster_custom(lyr){
   return cluster_options;
 
 }
-
-
 
 // 'map242-lyr',
 
@@ -6459,24 +6691,24 @@ dlg_field_template['field_colorPicker'] = function(optIn){
   
           // Set events
 /*           pickr.on('init', instance => {
-              console.log('Event: "init"', instance);
+              // onsole.log('Event: "init"', instance);
           }).on('hide', instance => {
-              console.log('Event: "hide"', instance);
+              // onsole.log('Event: "hide"', instance);
           }).on('show', (color, instance) => {
-              console.log('Event: "show"', color, instance);
+              // onsole.log('Event: "show"', color, instance);
           }).on('save', (color, instance) => {
-              console.log('Event: "save"', color, instance);
+              // onsole.log('Event: "save"', color, instance);
           }).on('clear', instance => {
-              console.log('Event: "clear"', instance);
+              // onsole.log('Event: "clear"', instance);
           }).on('change', (color, source, instance) => {
-            //console.log('Event: "change"', color, source, instance);
+            // onsole.log('Event: "change"', color, source, instance);
             pickr.getColor().toRGBA().toString(0);
           }).on('changestop', (source, instance) => {
-              console.log('Event: "changestop"', source, instance);
+              // onsole.log('Event: "changestop"', source, instance);
           }).on('cancel', instance => {
-              console.log('cancel', pickr.getColor().toRGBA().toString(0));
+              // onsole.log('cancel', pickr.getColor().toRGBA().toString(0));
           }).on('swatchselect', (color, instance) => {
-              console.log('Event: "swatchselect"', color, instance);
+              // onsole.log('Event: "swatchselect"', color, instance);
           }); */
 
           pickr.on('init', instance => {
@@ -6796,16 +7028,51 @@ dyn_zoomend['toc_zoomend'] = function(){
 setInterval(
   function() {  
     if (typeof mymap !== 'undefined') {
+
+      // onsole.log('interval 1',mymap.getCenter().lat.toFixed(3));
+      // onsole.log('interval 1',mymap.getCenter().lng.toFixed(3));
+
       if(dMap.logout==1){
       }
       else if(f_wait.geovar_label==0
         ||f_wait.mymap==0){
       }
       else{
-        localStorage.map_lat=mymap.getCenter().lat.toFixed(3);
-        localStorage.map_lng=mymap.getCenter().lng.toFixed(3);
-        localStorage.map_zoom=mymap.getZoom();
+
+        let item = 'map_lat';
+        if(mymap.getCenter().lat.toFixed(3)>179.5
+          || mymap.getCenter().lat.toFixed(3)<-179.5){
+          // onsole.log('lat error')
+          localStorage[item]=gLang['lat_start'];
+        }
+        else{
+          // onsole.log('lat ok: ' + mymap.getCenter().lat.toFixed(3))
+          localStorage[item]=mymap.getCenter().lat.toFixed(3);
+        }
+        
+        item = 'map_lng';
+        if(mymap.getCenter().lng.toFixed(3)>89.5
+          || mymap.getCenter().lng.toFixed(3)<-89.5){
+          // onsole.log('lng error')
+          // onsole.log('lng use' + gLang['lng_start'])
+          localStorage[item]=gLang['lng_start'];
+        }
+        else{
+          // onsole.log('lng ok: ' + mymap.getCenter().lng.toFixed(3))
+          localStorage[item]=mymap.getCenter().lng.toFixed(3);
+        }
+      
+        item = 'map_zoom';
+        if(mymap.getZoom()>24
+          || mymap.getZoom()<1){
+          localStorage[item]=gLang['zoom_start'];
+        }
+        else{
+          localStorage[item]=mymap.getZoom();
+        }
+
         prepare_discover();
+
       }
     }
     // _onsole.log('------------------------------------');
@@ -7876,7 +8143,7 @@ dyn_functions['succ_show_table'] = function(r){
 // 'map230-map-click',
 
 function m230_ready(){
-
+  // onsole.log('m230_ready');
   if (typeof mymap !== 'undefined') {
     mymap.on('click', on_mapclick);
     dMap.mapclick_status = true;
@@ -8041,7 +8308,7 @@ function disableMapClicksExcept(element) {
 
 // 'map236-template-mobile',
 function m236_ready(){
-
+  // onsole.log('m236_ready');
   $('#box-tool-top').html(''
     +'<div class="d-grid gap-2 col-6 mx-auto">'
       //+'<button class="btn btn-dark btn-sm nav-link-map" type="button">BUTTON</button>'
@@ -8064,7 +8331,7 @@ function m236_ready(){
     +'</div>'
   +'');
 
-  console.log('map236-template-mobile_ready');
+  // onsole.log('map236-template-mobile_ready');
   create_button('btn_menu_mobile2');
 
   //$('.nav-link-map').on('click',map_choose_link);
@@ -8128,7 +8395,7 @@ dyn_zoomend['get_scale_dimension'] = function(map){
 
   //let scale = L.control.scale()
   // This is the scale denominator
-  //console.log(MeterPerPixel*scale.options.maxWidth);
+  // onsole.log(MeterPerPixel*scale.options.maxWidth);
 
   //878 px = 270 mm
   //DPI = DotPerInch

@@ -632,7 +632,7 @@
 }
 
 
-.mycluster_point_cityplanner09_lyr4 {
+.mycluster_point_geosystem09_lyr4 {
   text-align: center;
 	width: 40px;
   margin-left: -20px!important;
@@ -644,7 +644,7 @@
   background-position: center center;
   /*background-size: 40px 40px;*/
 }
-.mycluster_point_cityplanner09_lyr4 > span{
+.mycluster_point_geosystem09_lyr4 > span{
 	color: #000;
     font-size: 12px;
     font-weight: 600;
@@ -657,8 +657,8 @@
     top: -15px;
 }
 
-/*mycluster_point_cityplanner09_lyr5*/
-.mycluster_point_cityplanner09_lyr5 {
+/*mycluster_point_geosystem09_lyr5*/
+.mycluster_point_geosystem09_lyr5 {
     /**/
     text-align: center;
     /*border-radius: 50%;*/
@@ -675,7 +675,7 @@
     /*background-size: 40px 40px;*/
 	/*border:2px solid #008000;*/
 }
-.mycluster_point_cityplanner09_lyr5 > span{
+.mycluster_point_geosystem09_lyr5 > span{
 	color: #000;
     font-size: 12px;
     font-weight: 600;
@@ -688,8 +688,8 @@
     top: -15px;
 }
 
-/*mycluster_point_cityplanner09_lyr6*/
-.mycluster_point_cityplanner09_lyr6 {
+/*mycluster_point_geosystem09_lyr6*/
+.mycluster_point_geosystem09_lyr6 {
     /**/
     text-align: center;
     /*border-radius: 50%;*/
@@ -706,7 +706,7 @@
     /*background-size: 40px 40px;*/
 	/*border:2px solid #008000;*/
 }
-.mycluster_point_cityplanner09_lyr6 > span{
+.mycluster_point_geosystem09_lyr6 > span{
 	color: #000;
     font-size: 12px;
     font-weight: 600;
@@ -894,4 +894,31 @@
 .divicon_type2 > .divicon_box > span {
   vertical-align:middle;
   display: table-cell;
+}
+
+
+
+/*defailt type2*/
+.divicon_seqNodes{ /* < 10 */
+	width: 48px!important;
+	height: 48px!important;
+	padding: 4px!important;
+	border: 1px solid #0000!important;
+  /*position: relative;*/
+}
+.divicon_seqNodes > .divicon_box{ /* < 10 */
+  font-size:18px!important;
+  text-align:center!important;
+  height:40px!important;
+  display: table;
+  width: 100%!important;
+  background: yellow;
+  border-radius: 50%;
+  /* font-family: Play; */
+  border: 1px solid black;
+}
+
+.divicon_seqNodes > .divicon_box > span {
+  vertical-align:middle!important;
+  display: table-cell!important;
 }

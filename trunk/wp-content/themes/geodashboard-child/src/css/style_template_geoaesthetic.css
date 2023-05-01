@@ -705,7 +705,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 
 .leaflet-control-layers-toggle {
-	background-image: url(https://geoweb.cityplanner.ch/source/icon/geoaesthetic/BasemapSearch.png) ! important;
+	background-image: url(https://geoweb.studiositsa.ch/source/icon/geoaesthetic/BasemapSearch.png) ! important;
 	background-size: 30px 30px;
 	border-radius: 18px;
 
@@ -713,7 +713,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 .leaflet-retina .leaflet-control-layers-toggle {
 
-	background-image: url(https://geoweb.cityplanner.ch/source/icon/geoaesthetic/BasemapSearch.png) ! important;
+	background-image: url(https://geoweb.studiositsa.ch/source/icon/geoaesthetic/BasemapSearch.png) ! important;
 
 	background-size: 30px 30px;
 
@@ -1324,7 +1324,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 
 	.leaflet-measure-toggle {
-		background-image: url(https://geoweb.cityplanner.ch/source/icon/geoaesthetic/MeasureArea.png) ! important;
+		background-image: url(https://geoweb.studiositsa.ch/source/icon/geoaesthetic/MeasureArea.png) ! important;
 		border-radius: 18px;
 		border-bottom-left-radius: 18px;
 		border-bottom-right-radius: 18px;
@@ -1542,3 +1542,20 @@ border: 1px solid rgb(150, 0, 0);
 	}
 
 /*ddddfFD*/
+
+.box-usrprofile{
+  top:100px;
+  padding-right: 11px;
+}
+
+.btn-main-sidebar{
+  height:48px;
+  width:48px;
+  border: 2px solid rgba(22, 49, 129);
+  border-radius: 18px;
+}
+
+.btn-outline-dark:hover {
+  color: #000;
+  background-color: #fff;
+}

@@ -156,7 +156,7 @@ dyn_functions['a234_1_CollectionExtend'] =  function(){
     a234_create_main_list(opt);
     //dyn_functions['prepare_collection_'+sessionStorage.collection](MAPSLUG);
 
-  }
+  } 
   else{
     console.log('no parts');
     return;
@@ -287,7 +287,7 @@ function a234_create_main_list(optIn){ //
   //_onsole.log(optIn)
   full_obj.forEach(el => {
 
-    //_onsole.log(el)
+    console.log(el)
     let p = new Array();
     if(optIn.collection=='geovar_label_edit'){
       p = el;

@@ -1,21 +1,15 @@
-$(document).ready(function() {
-
+dyn_functions['addon203-item1-exlorer'+'_ready'] = function(){
   addon203_ready();
-
-}); //$(document).ready
+}
 
 if(sessionStorage.btn_explorer_open!== null){
   sessionStorage.btn_explorer_open=0;
 }
 
 function addon203_ready(){
-  if (f_wait.geovar_action==0) {
-    // _onsole.log('wait')
-    setTimeout(function(){addon203_ready()},100);
-    return;
-  } else {
-    list_actions();
-  };
+
+  list_actions();
+
 }
 
 var listCollectionExtend=[];
@@ -107,9 +101,9 @@ function list_actions(){
         +'>'+p.g_label+'</button>'
     +'');
 
-    if(p.g_slug=='create_data'){
-      $('.btn-action-'+p.g_slug).prop('disabled',true);
-    } 
+    // if(p.g_slug=='create_data'){
+    //   $('.btn-action-'+p.g_slug).prop('disabled',true);
+    // } 
 
   });
 
@@ -349,14 +343,24 @@ function get_collection_params(){
   let o = g_meta.geovar_tb;//.features;
   let this_obj = o.filter(({name}) => name === sessionStorage.collection);
 
+  // _onsole.log('get_collection_params',this_obj);
+
   if(this_obj.length==0){
-    console.log('No params for this collection' + sessionStorage.collection);
 
-    listCollectionExtend.forEach(adds => {
-      dyn_functions[adds+'_CollectionExtend']();
-    });
+    console.log('No params for this collection ' + sessionStorage.collection);
 
-    return;
+    if(listCollectionExtend.length!=0){
+
+      console.log('Found listCollectionExtend',listCollectionExtend);
+  
+      listCollectionExtend.forEach(adds => {
+        dyn_functions[adds+'_CollectionExtend']();
+      });
+  
+    }
+
+    return
+
   }
 
   let obj_collection_params=this_obj[0];//.properties;

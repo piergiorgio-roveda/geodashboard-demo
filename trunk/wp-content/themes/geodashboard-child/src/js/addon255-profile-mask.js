@@ -16,7 +16,15 @@ dyn_functions['addon255-profile-mask'+'_ready'] = function(){
 
 function prepare_a255(){
 
-  let user_token = localStorage.user_token;
+  let user_token = '0x0';
+
+  value = localStorage.getItem('user_token');
+  if(value === null){
+    localStorage.user_token=user_token;
+  }
+  else{
+    user_token = localStorage.user_token;
+  }
 
   $('.box-sidebar-footer-bottom').html('');
   $('.box-sidebar-footer-bottom').html(''
@@ -92,11 +100,11 @@ function prepare_a255(){
     }
     objField_omnivore(opt);
 
-    $('.box-sidebar-info').css('display','table-cell');
+    // $('.box-sidebar-info').css('display','table-cell');
     $('.box-sidebar-info').css('vertical-align','middle');
     $('#group-user_email').css('text-align','center');
 
-    $('.box-info-0').css('max-width','500px');
+    $('.box-info-0').css('max-width','100%');
     $('.box-info-0').css('margin','auto');
 
     $('#input-user_email').css('text-align','center');
@@ -131,6 +139,8 @@ function prepare_a255(){
 
   }
   else{
+
+    $('.sidebar-box-center').css('vertical-align','top');
 
     $('.box-info-0').html('<div class="dlg_info-0_body"></div>');
 
@@ -295,23 +305,47 @@ async function a255_search_map_by_token() {
 
     let display ='display:none;';
     if(iTAb==1){
+
       $('#btn_a255main_'+tab).addClass('active');
       display ='display:block;';
+
+      let c = ''+
+        '<div class="clearfix"></div>'+
+        '<div class="box-tab box_a255main_'+tab+'" '+
+          'style="text-align:left;'+display+'">'+
+          '<div class="boxItem">'+
+            '<div ' +
+              'style="padding:3px;">'+
+              '<div class="content_a255main_'+tab+'_title">'+
+                '<b>Profile Projects</b>'+
+              '</div>'+ 
+              '<div class="content_a255main_'+tab+'">'
+              '</div>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+        '';
+      $('.dlg_'+slug+'_body').append(c);
+
+      c = ''+
+        '<div class="clearfix"></div>'+
+        '<div class="box-tab box_a255main_'+tab+'" '+
+          'style="text-align:left;'+display+'">'+
+          '<div class="boxItem">'+
+            '<div ' +
+              'style="padding:3px;">'+
+              '<div class="content_a255main_'+tab+'_public_title">'+
+                '<b>Public Projects</b>'+
+              '</div>'+              
+              '<div class="content_a255main_'+tab+'_public">'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+        '';
+      $('.dlg_'+slug+'_body').append(c);
+
     }
-
-    let c = '<div class="clearfix"></div>'
-      +'<div class="box-tab box_a255main_'+tab+'" style="'+display+'">'
-        +'<div class="boxItem">'
-          +'<div ' 
-            +'style="padding:3px;">'
-            +'<div class="content_a255main_'+tab+'">'
-            +'</div>'
-          +'</div>'
-        +'</div>'
-      +'</div>'
-    +'';
-
-    $('.dlg_'+slug+'_body').append(c);
 
   });  
 
@@ -343,6 +377,20 @@ async function a255_search_map_by_token() {
 
       let p = element.properties;
   
+      let icon = ''+
+        '<span style="'+
+          'font-size: 150%;'+
+          '">'+
+          '<i class="bi bi-arrow-up-right-square"></i></span>'+
+        '';
+      if(p.g_sessions==1){
+        icon = ''+
+        '<span style="'+
+          'font-size: 150%;'+
+          '">'+
+          '<i class="bi bi-chevron-compact-right"></i></span>'+
+        '';
+      }
       c = ''+
         '<div class="display-table" style="'+
           'border-bottom: 1px solid grey;'+
@@ -353,6 +401,8 @@ async function a255_search_map_by_token() {
             'style="'+
               'cursor: pointer;'+
             '" '+
+            'g_sessions="'+p.g_sessions+'" '+
+            'mapSlug="'+p.g_slug+'" '+
             'map_token="'+p.map_token+'" '+
             'item_token="'+p.item_token+'" '+
             'g_label="'+p.g_label+'">'+ //tr
@@ -365,15 +415,17 @@ async function a255_search_map_by_token() {
               'width: 40px;'+
               'text-align: center;'+
               '">'+
-              '<span style="'+
-                'font-size: 150%;'+
-                '">'+
-                '<i class="bi bi-chevron-compact-right"></i></span>'+
+              icon+
             '</div>'+          
           '</div>'+
         '</div>'+
         '';
-      $('.content_a255main_'+tab).append(c);
+      if(p.g_group.includes('public')==false){
+        $('.content_a255main_'+tab).append(c);
+      }
+      else{
+        $('.content_a255main_'+tab+'_public').append(c);
+      }
       
     });
   }
@@ -381,12 +433,19 @@ async function a255_search_map_by_token() {
 
   $('.btn_a255main_project').on('click',function(){
 
-    // $('.box-info-0').html('');    
-    a255_search_session_by_project(
-      $(this).attr('item_token'),
-      $(this).attr('map_token'),
-      $(this).attr('g_label')
-    );
+    if(parseInt($(this).attr('g_sessions'))==1){      
+      // $('.box-info-0').html('');    
+      a255_search_session_by_project(
+        $(this).attr('item_token'),
+        $(this).attr('map_token'),
+        $(this).attr('g_label')
+      );
+    }
+    else{
+      let mapSlug = $(this).attr('mapSlug');
+      window.open(HOME_PROJECT+'/map_2/'+mapSlug+'/',"_self");
+    }
+
 
   });
 
@@ -440,7 +499,8 @@ async function a255_search_session_by_project(
     +'<div class="clearfix"></div>';
   $('.dlg_'+slug+'_body').append(c);
 
-  c = '<div>'
+  c = ''
+  +'<div>'
     +'<div class="col-btn-attrs" style="text-align:center;">'
     +'</div>'
   +'</div>';
@@ -448,17 +508,19 @@ async function a255_search_session_by_project(
 
   //--
   let display ='display:block;';
-  c = '<div class="clearfix"></div>'
-    +'<div class="box-tab box_a255project_session_'+tab+'" style="'+display+'">'
-      +'<div class="boxItem">'
-        +'<div ' 
-          +'style="padding:3px;">'
-          +'<div class="content_a255project_session_'+tab+'">'
-          +'</div>'
-        +'</div>'
-      +'</div>'
-    +'</div>'
-  +'';
+  c = ''+
+    '<div class="clearfix"></div>'+
+      '<div class="box-tab box_a255project_session_'+tab+'" '+
+        'style="text-align:left;'+display+'">'+
+        '<div class="boxItem">'+
+          '<div ' +
+            'style="padding:3px;">'+
+            '<div class="content_a255project_session_'+tab+'">'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '';
 
   $('.dlg_'+slug+'_body').append(c);  
 
@@ -507,56 +569,106 @@ async function a255_search_session_by_project(
 
   //--
 
-  r.features.forEach(element => {
+  let mapSlug = r.features2[0].properties.g_slug;
 
-    let p = element.properties;
-    let mapSlug = r.features2[0].properties.g_slug;
-
-    c = ''+
-      '<div class="display-table" style="'+
-        'border-bottom: 1px solid grey;'+
-        'min-height: 40px;'+
-        'width: 100%;'+
-        '">'+
-        '<div class="btn_a255project_session" '+
-          'style="'+
-            'cursor: pointer;'+
-          '" '+
-          'mapSlug="'+mapSlug+'" '+
-          'session_token="'+p.session_token+'" '+
-          '">'+ //tr
-          //cell
-          '<div>'+
-            '<span class="dateM" >'+moment(p.last_date).format('llll')+'</span>'+
-          '</div>'+
-          '<div style="text-align:center;">'+
-            '<span class="badge bg-success">'+p.mycount+'</span>'+
-          '</div>'+          
-          //cell
-          '<div style="'+
-            'width: 40px;'+
-            'text-align: center;'+
+  c = ''+
+    '<div class="display-table" style="'+
+      'border-bottom: 1px solid grey;'+
+      'min-height: 40px;'+
+      'width: 100%;'+
+      '">'+
+      '<div class="btn_a255project_new_session" '+
+        'style="'+
+          'cursor: pointer;'+
+        '" '+
+        'mapSlug="'+mapSlug+'" '+
+        '">'+ //tr
+        //cell
+        '<div>'+
+          '<i class="bi bi-plus-square"></i>&nbsp;'+
+          '<span class="dateM" >Start New Session</span>'+
+        '</div>'+         
+        //cell
+        '<div style="'+
+          'width: 40px;'+
+          'text-align: center;'+
+          '">'+
+          '<span style="'+
+            'font-size: 150%;'+
             '">'+
-            '<span style="'+
-              'font-size: 150%;'+
-              '">'+
-              '<i class="bi bi-arrow-up-right-square"></i></span>'+
-          '</div>'+          
-        '</div>'+
+            '<i class="bi bi-arrow-up-right-square"></i></span>'+
+        '</div>'+          
       '</div>'+
-      '';
-    $('.content_a255project_session_'+tab).append(c);
-   
-  });
+    '</div>'+
+    '';
+  $('.content_a255project_session_'+tab).append(c);
 
-  $('.btn_a255project_session').on('click',function(){
+  $('.btn_a255project_new_session').on('click',function(){
 
     let mapSlug = $(this).attr('mapSlug');
-    let session_token = $(this).attr('session_token');
+    // let session_token = $(this).attr('session_token');
 
-    window.open(HOME_PROJECT+'/map_2/'+mapSlug+'/?session_token='+session_token,"_self");
+    window.open(HOME_PROJECT+'/map_2/'+mapSlug+'/',"_self");
 
   });
+
+  if(r.features.length>0) {
+
+    r.features.forEach(element => {
+
+      let p = element.properties;
+      let mapSlug = r.features2[0].properties.g_slug;
+  
+      c = ''+
+        '<div class="display-table" style="'+
+          'border-bottom: 1px solid grey;'+
+          'min-height: 40px;'+
+          'width: 100%;'+
+          '">'+
+          '<div class="btn_a255project_session" '+
+            'style="'+
+              'cursor: pointer;'+
+            '" '+
+            'mapSlug="'+mapSlug+'" '+
+            'session_token="'+p.session_token+'" '+
+            '">'+ //tr
+            //cell
+            '<div>'+
+              '<span class="dateM" >'+moment(p.last_date).format('llll')+'</span>'+
+            '</div>'+
+            '<div style="text-align:center;">'+
+              '<span class="badge bg-success">'+p.mycount+'</span>'+
+            '</div>'+          
+            //cell
+            '<div style="'+
+              'width: 40px;'+
+              'text-align: center;'+
+              '">'+
+              '<span style="'+
+                'font-size: 150%;'+
+                '">'+
+                '<i class="bi bi-arrow-up-right-square"></i></span>'+
+            '</div>'+          
+          '</div>'+
+        '</div>'+
+        '';
+      $('.content_a255project_session_'+tab).append(c);
+     
+    });
+
+    $('.btn_a255project_session').on('click',function(){
+
+      let mapSlug = $(this).attr('mapSlug');
+      let session_token = $(this).attr('session_token');
+  
+      window.open(HOME_PROJECT+'/map_2/'+mapSlug+'/?session_token='+session_token,"_self");
+  
+    });    
+
+  }
+
+
+
 
   return
 

@@ -1035,3 +1035,19 @@ kbd {
   height: 50px;
   object-fit: cover; /* make sure the image fits within the container */
 }
+
+.display-table {
+  display: table; 
+}
+.display-table > div { 
+  display: table-row; 
+}
+.display-table > div > div { 
+  display: table-cell;
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.div-icon-hide{
+  display:none!important;
+}

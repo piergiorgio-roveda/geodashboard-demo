@@ -258,16 +258,6 @@
         await new Promise(resolve => setTimeout(resolve, 1));
         // _onsole.log('end page_inizialize'); 
 
-        //search Map Properties
-        g_ds = {
-          geovar:"obj_maps",//obj_maps
-          slug:MAPSLUG,//filter
-          type:'single_object'//,//'item' or 'single_object' or 'full_object'
-        }
-        let mapItem = get_geovar_obj(g_ds);
-
-        //--
-
         hide_loading2('.mapid-loading');
 
         //then load scripts functions        
@@ -287,36 +277,12 @@
           //map207-template-b    
         m207_ready();
 
-        g_ds = {
-          geovar:mapItem.g_addon,//obj_maps
-          filter_field:'addon',
-          slug:'m211',//filter
-          type:'single_object',//'item' or 'single_object' or 'full_object'
-          noproperties:true
-        }
-        let m211_Addon = get_geovar_obj(g_ds);
-
-        // m211_rotation = 'disabled'; default in default.js
-        if(m211_Addon.rotation != undefined){
-          m211_rotation = m211_Addon.rotation;
-        }
-
-        // m211_mapLibrary = 'leafletjs'; default in default.js
-        if(m211_Addon.map_library != undefined){
-          m211_mapLibrary = m211_Addon.map_library;
-        }
-
         if(document.getElementById("mapid") !== null)
         {
           //require
             //map211-add-map 
-
-          let opt = {
-            mapLibrary:m211_mapLibrary,
-            mapRotation:m211_rotation
-          }
-          m211_ready_2(opt);
-
+          // m211_ready();
+          m211_testroutingrotate_ready();
         }        
 
         //require
@@ -333,50 +299,44 @@
         //require
           //map232-basemaps
         if (typeof mymap !== 'undefined') {
-
-          let opt = {
-            mapLibrary:m211_mapLibrary,
-            mapRotation:m211_rotation
-          }
-          map232_ready_2(opt);
-          
+          // map232_ready();
+          map232_testroutingrotate_ready();
         }
 
-        //--uncomment all
-        //require
-          //map214-sidebar-footer-b
-        map214_ready();
+        // //require
+        //   //map214-sidebar-footer-b
+        // map214_ready();
 
-        //require
-          //map231-js-loader.js
-        // m231_ready();
+        // //require
+        //   //map231-js-loader.js
+        // // m231_ready();
 
-        //require
-          //map230-map-click.js
-        m230_ready();
+        // //require
+        //   //map230-map-click.js
+        // m230_ready();
 
-        //require
-          //map236-template-mobile.js
-        m236_ready();
+        // //require
+        //   //map236-template-mobile.js
+        // m236_ready();
 
-        js_loader_list_map_lyr.forEach(element => {
-          if(dyn_functions[element+'_ready']!=null){
-            dyn_functions[element+'_ready']();
-          }
-        });
+        // js_loader_list_map_lyr.forEach(element => {
+        //   if(dyn_functions[element+'_ready']!=null){
+        //     dyn_functions[element+'_ready']();
+        //   }
+        // });
 
-        js_loader_list_map_config.forEach(element => {
-          if(dyn_functions[element+'_ready']!=null){
-            dyn_functions[element+'_ready']();
-          }
-        });
+        // js_loader_list_map_config.forEach(element => {
+        //   if(dyn_functions[element+'_ready']!=null){
+        //     dyn_functions[element+'_ready']();
+        //   }
+        // });
 
-        if(typeof dyn_external !== 'undefined' && dyn_external.length>0){
-          dyn_external.forEach(element => {
-            // _onsole.log('dynFuncExt',element)
-            dyn_functions[element]();
-          });
-        }
+        // if(typeof dyn_external !== 'undefined' && dyn_external.length>0){
+        //   dyn_external.forEach(element => {
+        //     // _onsole.log('dynFuncExt',element)
+        //     dyn_functions[element]();
+        //   });
+        // }
 
 
       }
