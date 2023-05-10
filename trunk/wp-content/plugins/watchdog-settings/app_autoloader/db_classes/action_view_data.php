@@ -4686,9 +4686,6 @@ class App_Action_ViewData extends Data_Access {
 
       $encodedline =$obj->routes[0]->overview_polyline->points;
 
-      // "google": "origin=45.5229649,9.1211799&destination=45.5230836,9.1189199&waypoints=45.523093,9.1199016&key=AIzaSyD7j9vTmoMrOW5RmH8425aDeY2VQPvJrLk&callback=?"
-
-
       // print_r($obj);
       $string = $encodedline;
   
