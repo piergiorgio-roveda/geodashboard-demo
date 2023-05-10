@@ -89,7 +89,26 @@ class App_Action_ViewData extends Data_Access {
       'getGeomType',
       'viewBuildings3d',
       'get_SunTree',
-      'a251_AllActiveLyrByXY'
+      'a251_AllActiveLyrByXY',
+      'a252_seqAllNodes',
+      'a254_seqAllNodes',
+      'a252_all_route_lines',
+      'a252_seqDirectionPath','a254_seqDirectionPath',
+      'a254_userGetDirectionToSeq',
+      'a254_userLocationRegister',
+      'a254_getCatTail',
+      'a254_sessionGraph',
+      'a254_missingGraph',
+      'a254_GoogleDirections',
+      'a254_GoogleDirectionsWithRandomPoints',
+      'getProjectToken',
+      'a254_loadFakeGPS',
+      'a255_search_token_by_email',
+      'a255_search_map_by_token',
+      'a255_search_session_by_project',
+      'mvt_test',
+      'mvt_dbbldg_eu_pg_buildings',
+      'mvt_baseGraph'
     ]);
 
 		if(!isset($ds['collection']) 
@@ -188,7 +207,7 @@ class App_Action_ViewData extends Data_Access {
           }
         }
 
-        $map_tb_meta=$cApp_fn->get_map_tb_meta($ds['MAPSLUG'],$table_slug);
+        
 
         if($ds['lyr']=='lyr035'){
 
@@ -339,6 +358,8 @@ class App_Action_ViewData extends Data_Access {
                 count(*) AS count,
           ";
 
+          $map_tb_meta=$cApp_fn->get_map_tb_meta($ds['MAPSLUG'],$table_slug);
+
           foreach ($cols as $key => $value) {
 
             foreach($map_tb_meta as $k => $v){
@@ -484,7 +505,7 @@ class App_Action_ViewData extends Data_Access {
             stab_indus,
             ST_ASGEOJSON(geom) AS geojson
           FROM
-            dbgeoa_pg_aree7comuni_cityplanner foo
+            dbgeoa_pg_aree7comuni_elisa foo
           WHERE
             foo.geom && ST_MakeEnvelope(
               ".$ds['mye'].",
@@ -503,7 +524,7 @@ class App_Action_ViewData extends Data_Access {
             casello,
             ST_ASGEOJSON(geom) AS geojson
           FROM
-            dbgeoa_pt_caselli_cityplanner foo
+            dbgeoa_pt_caselli_elisa foo
           WHERE
             foo.geom && ST_MakeEnvelope(
               ".$ds['mye'].",
@@ -616,7 +637,7 @@ class App_Action_ViewData extends Data_Access {
             popolazion,
             ST_ASGEOJSON(geom) AS geojson
           FROM
-            dbgeoa_pg_istat7comuni_cityplanner foo
+            dbgeoa_pg_istat7comuni_elisa foo
           WHERE
             foo.geom && ST_MakeEnvelope(
               ".$ds['mye'].",
@@ -687,7 +708,7 @@ class App_Action_ViewData extends Data_Access {
             note,
             ST_ASGEOJSON(geom) AS geojson
           FROM
-            dbgeoa_pt_parcheggi foo
+            dbgeoa_pt_parcheggi_elisa foo
           WHERE
             foo.geom && ST_MakeEnvelope(
               ".$ds['mye'].",
@@ -714,7 +735,7 @@ class App_Action_ViewData extends Data_Access {
             gestore,
             ST_ASGEOJSON(geom) AS geojson
           FROM
-            dbgeoa_pt_ristoro_cityplanner foo
+            dbgeoa_pt_ristoro_elisa foo
           WHERE
             foo.geom && ST_MakeEnvelope(
               ".$ds['mye'].",
@@ -1553,13 +1574,22 @@ class App_Action_ViewData extends Data_Access {
 
       //--
 
+      $this_name=$name;
+      $this_features='features';
       $tmpres = $this->getResultSetArray($query);
+      if ($tmpres['response'] != '200') {
+        $o['type']='FeatureCollection';
+        $o[$this_features]=array();
+        $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+      }
+      else{
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
 
-      $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+        $o['type']=$json_obj['type'];
+        $o[$this_features]=$json_obj['features'];
+        $o['geoQuery'][$this_name]['iTotalRecords'] = $json_obj['iTotalRecords'];
 
-      $o['type']=$json_obj['type'];
-      $o['features']=$json_obj['features'];
-
+      }
 
     }
     elseif($ds['collection']=='user_access'){
@@ -2055,7 +2085,7 @@ class App_Action_ViewData extends Data_Access {
               "addon": "a223",
               "g_master": "db009003",
               "MAPSLUG": "mapsit001",
-              "municipality":"cityplanner",
+              "municipality":"albissolamarina",
               "intersect_lyrs": [
                 {
                   "table_slug": "DB009003_07_PG_ZONE_EXPORT",
@@ -2093,7 +2123,7 @@ class App_Action_ViewData extends Data_Access {
             {
               "addon": "a223",
               "g_master": "db008017",
-              "municipality":"cityplanner",
+              "municipality":"cervo",
               "MAPSLUG": "mapsit002",
               "intersect_lyrs": [
                 {
@@ -2132,7 +2162,7 @@ class App_Action_ViewData extends Data_Access {
             {
               "addon": "a223",
               "g_master": "db007028",
-              "municipality":"cityplanner",
+              "municipality":"fontainemore",
               "MAPSLUG": "mapsit003",
               "intersect_lyrs": [
                 {
@@ -2178,7 +2208,7 @@ class App_Action_ViewData extends Data_Access {
             {
               "addon": "a223",
               "g_master": "db009030",
-              "municipality":"cityplanner",
+              "municipality":"garlenda",
               "MAPSLUG": "mapsit004",
               "intersect_lyrs": [
                 {
@@ -2238,7 +2268,7 @@ class App_Action_ViewData extends Data_Access {
             {
               "addon": "a223",
               "g_master": "db011020",
-              "municipality":"cityplanner",
+              "municipality":"luni",
               "MAPSLUG": "mapsit005",
               "intersect_lyrs": [
                 {
@@ -2277,7 +2307,7 @@ class App_Action_ViewData extends Data_Access {
             {
               "addon": "a223",
               "g_master": "db010048",
-              "municipality":"cityplanner",
+              "municipality":"rezzoaglio",
               "MAPSLUG": "mapsit006",
               "intersect_lyrs": [
                 {
@@ -2323,7 +2353,7 @@ class App_Action_ViewData extends Data_Access {
             {
               "addon": "a223",
               "g_master": "db009067",
-              "municipality":"cityplanner",
+              "municipality":"vezziportio",
               "MAPSLUG": "mapsit007",
               "intersect_lyrs": [
                 {
@@ -2816,7 +2846,7 @@ class App_Action_ViewData extends Data_Access {
     }
     elseif($ds['collection']=='viewGeoserverFLyrs'){
 
-      $url = 'https://geoserver.cityplanner.ch:8443/geoserver/rest/workspaces/cityplanner/featuretypes.json';
+      $url = 'https://geoserver.studiositsa.ch:8443/geoserver/rest/workspaces/studiosit/featuretypes.json';
 
       $my_curl = curl_init(); 
 
@@ -3052,72 +3082,2038 @@ class App_Action_ViewData extends Data_Access {
         $cols= $cApp_fn->get_tb_cols_preview($table_slug,'short');
         $cols_group = $cols;
         if(empty($cols)){
-          $cols=array("'".$table_slug."' AS table_slug");
-          $cols_group=array("pid");
-        }
-
-        if($join_with_geom==0){
-
-          $query = "
-            SELECT 
-              ".implode( ",", $cols )."
-            FROM ".$table_prop["g_label"]."
-            WHERE
-              ST_DWITHIN(
-                st_setsrid(geom,4326),
-                st_setsrid(ST_MakePoint(
-                  ".$ds['lng'].",
-                  ".$ds['lat']."
-                ),4326),
-                ".$distance."
-              )
-            ORDER BY ST_DISTANCE(
-              st_setsrid(geom,4326),
-              st_setsrid(ST_MakePoint(".$ds['lng'].",".$ds['lat']."),4326)
-            ) ASC LIMIT 1;
-          ";
-
+          // $cols=array("'".$table_slug."' AS table_slug");
+          // $cols_group=array("pid");
         }
         else{
+          if($join_with_geom==0){
 
-          $query = "
-            SELECT 
-              *
-            FROM 
-              ".$table_prop["g_label"]." foo,
-              ".$geom_table_prop["g_label"]." bar
-            WHERE
-              foo.item_token=bar.item_token
-              AND ST_DWITHIN(
-                st_setsrid(ST_MakePoint(
-                  ".$ds['lng'].",
-                  ".$ds['lat']."
-                ),4326),
-                geom,
-                ".$distance."
-              )
-            ORDER BY ST_DISTANCE(
-              st_setsrid(geom,4326),
-              st_setsrid(ST_MakePoint(".$ds['lng'].",".$ds['lat']."),4326)
-            ) ASC 
-            LIMIT 1;
-          ";    
-
+            $query = "
+              SELECT 
+                ".implode( ",", $cols )."
+              FROM ".$table_prop["g_label"]."
+              WHERE
+                ST_DWITHIN(
+                  st_setsrid(geom,4326),
+                  st_setsrid(ST_MakePoint(
+                    ".$ds['lng'].",
+                    ".$ds['lat']."
+                  ),4326),
+                  ".$distance."
+                )
+              ORDER BY ST_DISTANCE(
+                st_setsrid(geom,4326),
+                st_setsrid(ST_MakePoint(".$ds['lng'].",".$ds['lat']."),4326)
+              ) ASC LIMIT 1;
+            ";
+  
+  
+          }
+          else{
+  
+            $query = "
+              SELECT 
+                *
+              FROM 
+                ".$table_prop["g_label"]." foo,
+                ".$geom_table_prop["g_label"]." bar
+              WHERE
+                foo.item_token=bar.item_token
+                AND ST_DWITHIN(
+                  st_setsrid(ST_MakePoint(
+                    ".$ds['lng'].",
+                    ".$ds['lat']."
+                  ),4326),
+                  geom,
+                  ".$distance."
+                )
+              ORDER BY ST_DISTANCE(
+                st_setsrid(geom,4326),
+                st_setsrid(ST_MakePoint(".$ds['lng'].",".$ds['lat']."),4326)
+              ) ASC 
+              LIMIT 1;
+            ";    
+  
+          }
+  
+          $tmpres = $this->getResultSetArray($query);
+          if ($tmpres['response'] != '200') {
+  
+          }
+          else{
+            $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+            $o['type']=$json_obj['type'];
+            $o['cols'][$lyr]=$cols;
+            $o['f_'.$lyr]=$json_obj['features'];    
+          }          
+          //print_r($query);
         }
 
-        $tmpres = $this->getResultSetArray($query);
-        if ($tmpres['response'] != '200') {
 
+      }//--end foreach
+
+    }
+    elseif($ds['collection']=='a252_seqAllNodes'){
+
+      $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyr'],$ds['MAPSLUG']);
+      $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+
+      if(!empty($lyr_meta['properties']['g_cols_minimal'])){
+
+        foreach (json_decode($lyr_meta['properties']['g_cols_minimal'],true) as $key => $value) {
+          if($value['table']==$table_slug){
+            $cols=$value['cols'];
+          }
+        }
+
+      }
+      else{
+
+        $cols[]='pid';
+
+      }
+
+      //$map_tb_meta=$cApp_fn->get_map_tb_meta($ds['MAPSLUG'],$table_slug);
+
+      if(!empty($ds['geom'])){
+        $cols[]='ST_ASGEOJSON(geom) AS geojson';
+      }
+
+      $map_meta=$cApp_fn->get_map_meta($ds['MAPSLUG']);
+
+      // foreach (json_decode($map_meta['properties']['g_table'],true) as $key => $value) {
+      //   if($value['slug']==$table_slug){
+      //     $table_name=$value['name'];
+      //   }
+      // }
+
+      $table_name=$cApp_fn->get_real_table_prop($table_slug);
+
+      //$cols[]='in_edges';
+      //$cols[]='out_edges';
+
+      $query = "
+        SELECT 
+          ".implode( ",", $cols )."
+        FROM
+          ".$table_name." foo
+        --WHERE
+          --NOT(in_edges IS null OR out_edges IS null)
+        ORDER BY seq ASC
+      ";
+
+      //--
+      $this_name=$name;
+      $this_features='features';
+      $tmpres = $this->getResultSetArray($query);
+
+      if ($tmpres['response'] != '200') {
+        $o['type']='FeatureCollection';
+        $o[$this_features]=array();
+        $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+      }
+      else{
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+
+        $o['type']=$json_obj['type'];
+        $o[$this_features]=$json_obj['features'];
+        $o['geoQuery'][$this_name]['iTotalRecords'] = $json_obj['iTotalRecords'];
+
+      }
+
+    }
+    elseif($ds['collection']=='a254_seqAllNodes'
+      || $ds['collection']=='a257_seqAllNodes'){
+
+
+      if($ds['lyr']=='free'){
+        $this_name='A';
+        $this_features='features';
+        $o['type']='FeatureCollection';
+        $o[$this_features]=array();
+        $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+      }
+      else{
+        $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyr'],$ds['MAPSLUG']);
+        $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+  
+        if(!empty($lyr_meta['properties']['g_cols_minimal'])){
+  
+          foreach (json_decode($lyr_meta['properties']['g_cols_minimal'],true) as $key => $value) {
+            if($value['table']==$table_slug){
+              $cols=$value['cols'];
+            }
+          }
+  
+        }
+        else{
+  
+          $cols[]='pid';
+  
+        }
+  
+        //$map_tb_meta=$cApp_fn->get_map_tb_meta($ds['MAPSLUG'],$table_slug);
+  
+        if(!empty($ds['geom'])){
+          $cols[]='ST_X(geom) AS lng';
+          $cols[]='ST_Y(geom) AS lat';
+          $cols[]='ST_ASGEOJSON(geom) AS geojson';
+        }
+  
+        $map_meta=$cApp_fn->get_map_meta($ds['MAPSLUG']);
+  
+        // foreach (json_decode($map_meta['properties']['g_table'],true) as $key => $value) {
+        //   if($value['slug']==$table_slug){
+        //     $table_name=$value['name'];
+        //   }
+        // }
+  
+        $table_name=$cApp_fn->get_real_table_prop($table_slug);
+  
+        //$cols[]='in_edges';
+        //$cols[]='out_edges';
+  
+        $query = "
+          SELECT 
+            ".implode( ",", $cols )."
+          FROM
+            ".$table_name." foo
+          --WHERE
+            --NOT(in_edges IS null OR out_edges IS null)
+          ORDER BY seq ASC
+        ";
+  
+        //--
+        $this_name=$name;
+        $this_features='features';
+        $tmpres = $this->getResultSetArray($query);
+  
+        if ($tmpres['response'] != '200') {
+          $o['type']='FeatureCollection';
+          $o[$this_features]=array();
+          $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
         }
         else{
           $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+  
           $o['type']=$json_obj['type'];
-          $o['cols'][$lyr]=$cols;
-          $o['f_'.$lyr]=$json_obj['features'];    
-        }          
-        //print_r($query);
-      }//--end foreach
+          $o[$this_features]=$json_obj['features'];
+          $o['geoQuery'][$this_name]['iTotalRecords'] = $json_obj['iTotalRecords'];
+  
+        }
+      }
 
+    }
+    elseif($ds['collection']=='a252_all_route_lines'){
+
+      $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyr'],$ds['MAPSLUG']);
+      $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+
+      if(!empty($lyr_meta['properties']['g_cols_minimal'])){
+
+        foreach (json_decode($lyr_meta['properties']['g_cols_minimal'],true) as $key => $value) {
+          if($value['table']==$table_slug){
+            $cols=$value['cols'];
+          }
+        }
+
+      }
+      else{
+
+        $cols[]='pid';
+
+      }
+
+      //$map_tb_meta=$cApp_fn->get_map_tb_meta($ds['MAPSLUG'],$table_slug);
+
+      if(!empty($ds['geom'])){
+        $cols[]='ST_ASGEOJSON(geom) AS geojson';
+      }
+
+      $map_meta=$cApp_fn->get_map_meta($ds['MAPSLUG']);
+
+      // foreach (json_decode($map_meta['properties']['g_table'],true) as $key => $value) {
+      //   if($value['slug']==$table_slug){
+      //     $table_name=$value['name'];
+      //   }
+      // }
+
+      $table_name=$cApp_fn->get_real_table_prop($table_slug);
+
+      $cols[]='id';
+      $cols[]='f_jnctid';
+      $cols[]='t_jnctid';
+
+      $query = "
+        SELECT 
+          ".implode( ",", $cols )."
+        FROM
+          ".$table_name." foo
+      ";
+
+      //--
+      $this_name=$name;
+      $this_features='features';
+      $tmpres = $this->getResultSetArray($query);
+
+      if ($tmpres['response'] != '200') {
+        $o['type']='FeatureCollection';
+        $o[$this_features]=array();
+        $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+      }
+      else{
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+
+        $o['type']=$json_obj['type'];
+        $o[$this_features]=$json_obj['features'];
+        $o['geoQuery'][$this_name]['iTotalRecords'] = $json_obj['iTotalRecords'];
+
+      }
+
+    } 
+    elseif($ds['collection']=='a252_seqDirectionPath'
+      || $ds['collection']=='a254_seqDirectionPath'){
+
+      $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyr'],$ds['MAPSLUG']);
+      $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+      $edgesTable_name=$cApp_fn->get_real_table_prop($table_slug);
+
+      $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyrSeqNodes'],$ds['MAPSLUG']);
+      $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+      $seqTable_name=$cApp_fn->get_real_table_prop($table_slug);
+
+      $cols[]='node';//start node
+
+      // START NODE
+      $query = "
+        SELECT 
+          ".implode( ",", $cols )."
+        FROM
+          ".$seqTable_name." foo
+        WHERE seq=".$ds['seq']."
+      ";
+      //--
+      $tmpres = $this->getResultSetArray($query);
+
+      if ($tmpres['response'] != '200') {
+        // never happens!
+      }
+      else{
+        $startNode = $tmpres['dataArray'][0]['node'];
+      }
+
+      // END NODE
+      $seqNext = $ds['seq']+1;
+      $query = "
+        SELECT 
+          ".implode( ",", $cols )."
+        FROM
+          ".$seqTable_name." foo
+        WHERE seq=".$seqNext."
+      ";
+      //--
+      
+      $tmpres = $this->getResultSetArray($query);
+
+      if ($tmpres['response'] != '200') {
+        $res['response']='000';
+        $o['msg'][]='No more nodes.';
+        $cApp_fn->fail_and_exit(
+          $o,
+          'e033'
+        );
+      }
+      else{
+        $endNode = $tmpres['dataArray'][0]['node'];
+      }    
+      
+      // PATH
+      $query = "
+        SELECT foo.*,ST_ASGEOJSON(bar.geom) AS geojson FROM pgr_Dijkstra(
+          'SELECT id, f_jnctid AS source, t_jnctid AS target, cost, reverse_cost FROM ".$edgesTable_name."',
+          ".$startNode.", ".$endNode.", true) foo,
+          (SELECT id,geom FROM ".$edgesTable_name.") bar
+        WHERE foo.edge=bar.id;
+      ";
+      //--
+
+      $tmpres = $this->getResultSetArray($query);
+
+      //--
+
+      $this_name=$name;
+      $this_features='features';
+      $tmpres = $this->getResultSetArray($query);
+
+      if ($tmpres['response'] != '200') {
+        $o['type']='FeatureCollection';
+        $o[$this_features]=array();
+        $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+      }
+      else{
+
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+
+        $o['type']=$json_obj['type'];
+        $o[$this_features]=$json_obj['features'];
+        $o['geoQuery'][$this_name]['iTotalRecords'] = $json_obj['iTotalRecords'];
+
+      }
+    } 
+    elseif($ds['collection']=='a254_userGetDirectionToSeq'
+      ||$ds['collection']=='a257_userGetDirectionToSeq'){
+      
+      if(isset($ds['typeNavigation'])
+        && $ds['typeNavigation']=='free'){
+
+        // liveNavigation:'google'
+        $fromNodeLat=$ds['lat'];
+        $fromNodeLng=$ds['lng'];
+        
+        $i=0;
+        foreach ($ds['seqNodes']['features'] as $key => $value) {
+          if($value['properties']['seq']==$ds['seq']){
+
+            $toNodeLat = $value['geometry']['coordinates'][1];
+            $toNodeLng = $value['geometry']['coordinates'][0];
+
+            $vNext=$ds['seqNodes']['features'][$i+1];
+            $bNodeLat = $vNext['geometry']['coordinates'][1];
+            $bNodeLng = $vNext['geometry']['coordinates'][0];
+
+          }
+          $i++;
+        }
+
+        $string_output = array();
+        $googleUrl ='https://maps.googleapis.com/maps/api/directions/json?';
+  
+        $origin = 'origin='.$fromNodeLat.','.$fromNodeLng;
+        $destination = '&destination='.$bNodeLat.','.$bNodeLng;
+        $waypoints = '&waypoints='.$toNodeLat.','.$toNodeLng;
+        // $waypoints .= '|45.523850782750316,9.120727361456261';
+  
+        $url_here = $googleUrl.$origin.$destination.$waypoints.'&key='.GMAP_IP_KEY.'&callback=?';
+        if(isset($ds['drivingMode'])){
+          $url_here.='&mode='.$ds['drivingMode'];
+        }
+
+        $o['_hide']['ds']['google']=$url_here;
+        $json = file_get_contents($url_here);
+
+        $obj = json_decode($json);
+  
+        // $properties = $obj->routes[0]->legs[0];
+
+        // $encodedline = $obj->routes[0]->overview_polyline->points;
+
+        // $string_output[] = decodeGooglePolyline($encodedline);
+  
+        // $completeRoute = $cApp_fn->decodeGooglePolyline($encodedline);
+
+        $tmpresOutput = array();
+
+        // A - Route
+        if(count($obj->routes) == 0){
+          print_r($obj);
+          exit;
+        }
+        $aLeg = $obj->routes[0]->legs[0];
+
+        $aRoute = array();
+
+        if(count($aLeg->steps)>1){
+
+          foreach ($aLeg->steps as $key => $step) {
+            # code...
+            $encodedline = $step->polyline->points;
+            $aRoute[] = $cApp_fn->decodeGooglePolyline($encodedline);
+          }
+          $iA=0;
+          foreach ($aRoute as $key => $points) {
+            # code...'LINESTRING(0 0, 1 1,2 2)'
+          
+            $string = str_replace("],[", "|", $points);
+            $string = str_replace(",", " ", $string);
+            $string = str_replace("|", ",", $string);
+            $string = str_replace("[", "", $string);
+            $string = str_replace("]", "", $string);
+            $query = "
+            SELECT 
+              'A' AS serie,
+              'a".$iA."' AS leg,
+              ST_ASGEOJSON(ST_LineFromText('LINESTRING(".$string.")')) AS geojson
+            ";
+            $tmpres2a = $this->getResultSetArray($query);
+
+            foreach ($tmpres2a['dataArray'] as $k2a => $v2a) {
+              $tmpresOutput['dataArray'][]=$v2a;
+            }
+            $iA++;
+          }
+        }
+
+        // B - Route
+        $bLeg = $obj->routes[0]->legs[1];
+
+        $bRoute = array();
+
+        foreach ($bLeg->steps as $key => $step) {
+          # code...
+          $encodedline = $step->polyline->points;
+          $bRoute[] = $cApp_fn->decodeGooglePolyline($encodedline);
+        }
+        
+        $iB=0;
+        foreach ($bRoute as $key => $points) {
+          # code...'LINESTRING(0 0, 1 1,2 2)'
+        
+          $string = str_replace("],[", "|", $points);
+          $string = str_replace(",", " ", $string);
+          $string = str_replace("|", ",", $string);
+          $string = str_replace("[", "", $string);
+          $string = str_replace("]", "", $string);
+          $query = "
+          SELECT 
+            'B' AS serie,
+            'b".$iB."' AS leg,
+            ST_ASGEOJSON(ST_LineFromText('LINESTRING(".$string.")')) AS geojson
+          ";
+          $tmpres2a = $this->getResultSetArray($query);
+
+          foreach ($tmpres2a['dataArray'] as $k2a => $v2a) {
+            $tmpresOutput['dataArray'][]=$v2a;
+          }
+          $iB++;
+
+        }
+
+        $json_obj=$cApp_fn->list_to_geojson($tmpresOutput['dataArray'],false);
+
+        $this_name='A';
+        $this_features='features';
+        $o['type']=$json_obj['type'];
+        $o[$this_features]=$json_obj['features'];
+        $o['geoQuery'][$this_name]['iTotalRecords'] = 1;  
+
+      } // end if typeNavigation == free
+      else{
+        $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyrSeqNodes'],$ds['MAPSLUG']);
+        $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+        $seqTable_name=$cApp_fn->get_real_table_prop($table_slug);
+  
+        $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyrGraph'],$ds['MAPSLUG']);
+        $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+        $edgesTable_name=$cApp_fn->get_real_table_prop($table_slug);
+  
+        $cols[]='node';//node id
+        $cols[]='ST_X(geom) AS node_lng';
+        $cols[]='ST_Y(geom) AS node_lat';
+  
+        if($ds['liveNavigation']=='google'){
+          $ds['edge']=-1;
+        }
+
+        // FROM NODE
+        if($ds['edge']==-1){
+          $query = "
+            SELECT 
+              ".implode( ",", $cols )."
+            FROM ".$seqTable_name." foo
+            WHERE 
+              ST_DWITHIN(
+                foo.geom,
+                ST_SETSRID(
+                  ST_MAKEPOINT(
+                    ".(float)$ds['lng'].",
+                    ".(float)$ds['lat']."
+                  ),
+                  4326
+                ),
+                1
+              )
+            ORDER BY 
+              ST_DISTANCE(
+                foo.geom,
+                ST_SETSRID(
+                  ST_MAKEPOINT(
+                    ".(float)$ds['lng'].",
+                    ".(float)$ds['lat']."
+                  ),
+                  4326
+                )
+              )
+            LIMIT 1          
+          ";
+        }
+        else{
+          $query = "
+            SELECT 
+              ".implode( ",", $cols )." 
+              FROM (
+                SELECT id,f_jnctid AS node,
+                ST_STARTPOINT(geom) AS geom
+                FROM ".$edgesTable_name." 
+                WHERE id=".$ds['edge']."
+                UNION
+                SELECT id,t_jnctid AS node,
+                ST_ENDPOINT(geom) AS geom 
+                FROM ".$edgesTable_name." 
+                WHERE id=".$ds['edge']."
+              ) foo       
+            WHERE 
+              ST_DWITHIN(
+                foo.geom,
+                ST_SETSRID(
+                  ST_MAKEPOINT(
+                    ".(float)$ds['lng'].",
+                    ".(float)$ds['lat']."
+                  ),
+                  4326
+                ),
+                1
+              )
+            ORDER BY 
+              ST_DISTANCE(
+                foo.geom,
+                ST_SETSRID(
+                  ST_MAKEPOINT(
+                    ".(float)$ds['lng'].",
+                    ".(float)$ds['lat']."
+                  ),
+                  4326
+                )
+              )
+            LIMIT 1          
+          ";
+
+        }
+
+        //--
+        $this_name=$name;
+        $this_features='features';
+        $tmpres = $this->getResultSetArray($query);
+
+        if ($tmpres['response'] != '200') {
+          $o['type']='FeatureCollection';
+          $o[$this_features]=array();
+          $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+        }
+        else{
+
+          $fromNode = $tmpres['dataArray'][0]['node'];
+          $fromNodeLat = $tmpres['dataArray'][0]['node_lat'];
+          $fromNodeLng = $tmpres['dataArray'][0]['node_lng'];
+          $o['_hide']['ds']['fromNodeLat']=$fromNodeLat;
+          $o['_hide']['ds']['fromNodeLng']=$fromNodeLng;
+
+          $cols=array('seq');
+          $cols[]='node';//node id
+          $cols[]='ST_X(geom) AS node_lng';
+          $cols[]='ST_Y(geom) AS node_lat';
+
+          $nextSeq = $ds['seq']+1;
+          // TO NODE
+          if(isset($ds['seqCheckedList']) && !empty($ds['seqCheckedList'])){
+            $seqCheckedList=$ds['seqCheckedList'];
+          }
+          else{
+            $seqCheckedList=array(0);
+          }
+          $query = "
+            SELECT 
+              ".implode( ",", $cols )."
+            FROM
+              ".$seqTable_name." foo
+            WHERE 
+              --seq=".$ds['seq']."
+              --OR seq=".$nextSeq."
+              NOT(seq IN(".implode( ",", $seqCheckedList )."))
+            ORDER BY seq
+            LIMIT 2
+          ";
+
+          //--
+          $tmpres = $this->getResultSetArray($query);
+
+          if ($tmpres['response'] != '200') {
+            // never happens!
+          }
+          else{
+            $toNode = $tmpres['dataArray'][0]['node'];
+            $toNodeLat = $tmpres['dataArray'][0]['node_lat'];
+            $toNodeLng = $tmpres['dataArray'][0]['node_lng'];
+            if(!empty($tmpres['dataArray'][1])){
+              $bNode = $tmpres['dataArray'][1]['node'];
+              $bNodeLat = $tmpres['dataArray'][1]['node_lat'];
+              $bNodeLng = $tmpres['dataArray'][1]['node_lng'];
+            }
+            else{
+              $bNode = 0;
+              $bNodeLat = 0;
+              $bNodeLng = 0;
+            }
+          }
+
+          if($ds['liveNavigation']=='google'){
+
+            $string_output = array();
+            $googleUrl ='https://maps.googleapis.com/maps/api/directions/json?';
+      
+            $origin = 'origin='.$fromNodeLat.','.$fromNodeLng;
+            $destination = '&destination='.$bNodeLat.','.$bNodeLng;
+            $waypoints = '&waypoints='.$toNodeLat.','.$toNodeLng;
+            // $waypoints .= '|45.523850782750316,9.120727361456261';
+      
+            $url_here = $googleUrl.$origin.$destination.$waypoints.'&key='.GMAP_IP_KEY.'&callback=?';
+            $o['_hide']['ds']['google']=$url_here;
+            $json = file_get_contents($url_here);
+
+            $obj = json_decode($json);
+      
+            // $properties = $obj->routes[0]->legs[0];
+
+            $encodedline = $obj->routes[0]->overview_polyline->points;
+
+            //$string_output[] = decodeGooglePolyline($encodedline);
+      
+            $completeRoute = $cApp_fn->decodeGooglePolyline($encodedline);
+
+            $tmpresOutput = array();
+
+            // A - Route
+            $aLeg = $obj->routes[0]->legs[0];
+
+            $aRoute = array();
+
+            foreach ($aLeg->steps as $key => $step) {
+              # code...
+              $encodedline = $step->polyline->points;
+              $aRoute[] = $cApp_fn->decodeGooglePolyline($encodedline);
+            }
+            $iA=0;
+            foreach ($aRoute as $key => $points) {
+              # code...'LINESTRING(0 0, 1 1,2 2)'
+            
+              $string = str_replace("],[", "|", $points);
+              $string = str_replace(",", " ", $string);
+              $string = str_replace("|", ",", $string);
+              $string = str_replace("[", "", $string);
+              $string = str_replace("]", "", $string);
+              $query = "
+              SELECT 
+                'A' AS serie,
+                'a".$iA."' AS leg,
+                ST_ASGEOJSON(ST_LineFromText('LINESTRING(".$string.")')) AS geojson
+              ";
+              $tmpres2a = $this->getResultSetArray($query);
+
+              foreach ($tmpres2a['dataArray'] as $k2a => $v2a) {
+                $tmpresOutput['dataArray'][]=$v2a;
+              }
+              $iA++;
+            }
+            
+            // B - Route
+            $bLeg = $obj->routes[0]->legs[1];
+
+            $bRoute = array();
+
+            foreach ($bLeg->steps as $key => $step) {
+              # code...
+              $encodedline = $step->polyline->points;
+              $bRoute[] = $cApp_fn->decodeGooglePolyline($encodedline);
+            }
+            
+            $iB=0;
+            foreach ($bRoute as $key => $points) {
+              # code...'LINESTRING(0 0, 1 1,2 2)'
+            
+              $string = str_replace("],[", "|", $points);
+              $string = str_replace(",", " ", $string);
+              $string = str_replace("|", ",", $string);
+              $string = str_replace("[", "", $string);
+              $string = str_replace("]", "", $string);
+              $query = "
+              SELECT 
+                'B' AS serie,
+                'b".$iB."' AS leg,
+                ST_ASGEOJSON(ST_LineFromText('LINESTRING(".$string.")')) AS geojson
+              ";
+              $tmpres2a = $this->getResultSetArray($query);
+
+              foreach ($tmpres2a['dataArray'] as $k2a => $v2a) {
+                $tmpresOutput['dataArray'][]=$v2a;
+              }
+              $iB++;
+
+            }
+
+            $json_obj=$cApp_fn->list_to_geojson($tmpresOutput['dataArray'],false);
+
+            $this_name='A';
+            $this_features='features';
+            $o['type']=$json_obj['type'];
+            $o[$this_features]=$json_obj['features'];
+            $o['geoQuery'][$this_name]['iTotalRecords'] = 1;   
+
+          }
+          else{
+            // pgr_Dijkstra version
+            // $query = "
+            //   SELECT 
+            //     foo.*,
+            //     'A' AS serie, 
+            //     CASE
+            //     WHEN f_jnctid =  foo.node THEN
+            //         ST_ASGEOJSON(bar.geom) 
+            //     WHEN t_jnctid = foo.node THEN
+            //         ST_ASGEOJSON(ST_Reverse(bar.geom)) 
+            //     END AS geojson            
+            //   FROM pgr_Dijkstra(
+            //     'SELECT id, f_jnctid AS source, t_jnctid AS target, cost, reverse_cost FROM ".$edgesTable_name."',
+            //     ".$fromNode.", ".$toNode.", true) foo,
+            //     (
+            //       SELECT 
+            //         id, 
+            //         f_jnctid,
+            //         t_jnctid,
+            //         geom 
+            //       FROM ".$edgesTable_name."
+            //     ) bar
+            //   WHERE foo.edge=bar.id;
+            // ";
+            // if($ds['edge']!=-1){
+            //   $query = "
+            //       SELECT 
+            //       foo.*,
+            //       'A' AS serie, 
+            //       CASE
+            //       WHEN f_jnctid = ".$fromNode." THEN
+            //           ST_ASGEOJSON(bar.geom) 
+            //       WHEN t_jnctid = ".$fromNode." THEN
+            //           ST_ASGEOJSON(ST_Reverse(bar.geom)) 
+            //       ELSE 
+            //         ST_ASGEOJSON(bar.geom) 
+            //       END AS geojson      
+            //     FROM 
+            //     pgr_withPoints(
+            //       '
+            //         SELECT id, f_jnctid AS source, t_jnctid AS target, cost, reverse_cost 
+            //         FROM ".$edgesTable_name."
+            //       ',
+            //       '
+            //         SELECT 
+            //           1 AS pid, 
+            //           ".$ds['edge']." AS edge_id, 
+            //           ST_LineLocatePoint(
+            //             (SELECT geom FROM ".$edgesTable_name." WHERE id=".$ds['edge']."), 
+            //             (SELECT 
+            //               ST_SETSRID(ST_MAKEPOINT(
+            //                 ".$ds['lng'].",
+            //                 ".$ds['lat']."
+            //               ),4326) AS geom)
+            //           ) AS fraction
+            //       ',
+            //       -1, 
+            //       ".$toNode.",
+            //       details => true
+            //       ) foo,
+            //       (
+            //         SELECT 
+            //           id, 
+            //           f_jnctid,
+            //           t_jnctid,
+            //           geom 
+            //         FROM ".$edgesTable_name."
+            //       ) bar
+            //       WHERE foo.edge=bar.id;  
+            //   ";
+
+            //   $this_name=$name;
+            //   $this_features='features';
+            //   $tmpresOutput = $this->getResultSetArray($query);
+
+            // }
+            // else{
+              // pgr_trspVia version
+              $o['_hide']['ds']['fromNode']=$fromNode;
+              $o['_hide']['ds']['toNode']=$toNode;
+              $o['_hide']['ds']['bNode']=$bNode;
+              if($fromNode==$toNode){
+                $sqlPart=array($fromNode,$bNode);
+              }
+              else{
+                $sqlPart=array($fromNode,$toNode,$bNode);
+              }
+              $query = "
+                SELECT 
+                  foo.*,
+                  CASE 
+                    WHEN path_id=1 THEN 'A'
+                    WHEN path_id=2 THEN 'B'
+                  END AS serie, 
+                  CASE
+                  WHEN f_jnctid =  foo.node THEN
+                      ST_ASGEOJSON(bar.geom) 
+                  WHEN t_jnctid = foo.node THEN
+                      ST_ASGEOJSON(ST_Reverse(bar.geom)) 
+                  END AS geojson      
+                FROM 
+                pgr_trspVia(
+                    'SELECT id, f_jnctid AS source, t_jnctid AS target, cost, reverse_cost FROM ".$edgesTable_name."',
+                    'SELECT ARRAY[".$fromNode.", ".$toNode."] AS path, 0 AS cost',
+                    ARRAY[".implode( ",", $sqlPart )."], 
+                    directed => false,
+                    strict => false,
+                    U_turn_on_edge => false
+                  ) foo,
+                  (
+                    SELECT 
+                      id, 
+                      f_jnctid,
+                      t_jnctid,
+                      geom 
+                    FROM ".$edgesTable_name."
+                  ) bar
+                WHERE foo.edge=bar.id;
+              "; 
+
+              $this_name=$name;
+              $this_features='features';
+              $tmpresOutput = $this->getResultSetArray($query);
+
+            // }
+
+
+            // //$serie = ['B','C','D','E','F'];
+            // $serie = ['B'];
+            // $nextSeq = $ds['seq']+1;
+            // $fromNode = $toNode;
+            // foreach ($serie as $keyS => $s) {
+            //   $cols=array('node');//node id
+              
+            //   $query = "
+            //     SELECT 
+            //       ".implode( ",", $cols )."
+            //     FROM
+            //       ".$seqTable_name." foo
+            //     WHERE seq=".$nextSeq."
+            //   ";
+            //   //--
+            //   $tmpres2a = $this->getResultSetArray($query);
+
+            //   // if ($tmpres['response'] != '200') {
+            //   //   // never happens!
+            //   // }
+            //   // else{
+
+            //     $toNode = $tmpres2a['dataArray'][0]['node'];
+
+            //     $query = "
+            //       SELECT foo.*,'".$s."' AS serie, ST_ASGEOJSON(bar.geom) AS geojson FROM pgr_Dijkstra(
+            //         'SELECT id, f_jnctid AS source, t_jnctid AS target, cost, reverse_cost FROM ".$edgesTable_name."',
+            //         ".$fromNode.", ".$toNode.", true) foo,
+            //         (SELECT id,geom FROM ".$edgesTable_name.") bar
+            //       WHERE foo.edge=bar.id;
+            //     ";
+            //     //--
+
+            //     $tmpres2b = $this->getResultSetArray($query);
+
+            //     foreach ($tmpres2b['dataArray'] as $k3 => $d2Array) {
+            //       $tmpresOutput['dataArray'][]=$d2Array;
+            //     }
+            //     $fromNode=$toNode;
+            //     $nextSeq++;
+
+            //   // }
+
+            // }
+
+            if (empty($tmpresOutput['dataArray'])) {
+              $o['type']='FeatureCollection';
+              $o[$this_features]=array();
+              $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+            }
+            else{
+
+              $json_obj=$cApp_fn->list_to_geojson($tmpresOutput['dataArray'],false);
+
+              $o['type']=$json_obj['type'];
+              $o[$this_features]=$json_obj['features'];
+              $o['geoQuery'][$this_name]['iTotalRecords'] = $json_obj['iTotalRecords'];
+
+            }
+
+          }          
+
+
+        } // if ($tmpres['response'] != '200') {
+
+      } // end else typeNavigation == free
+
+
+
+
+    }
+    elseif($ds['collection']=='a254_userLocationRegister'
+      ||$ds['collection']=='a257_userLocationRegister'){
+
+      if($ds['lyrGraph']=='free'){
+        foreach ($ds['gps_collection'] as $kC => $coords) {
+          $query = "
+            INSERT INTO tb_user_location(
+              session_token,
+              project_token,
+              user_token,
+              lat,
+              lng
+            )
+            VALUES (
+              '".$ds['session_token']."',
+              '".$ds['project_token']."',
+              '".$ds['user_token']."',
+              '".$coords[0]."',
+              '".$coords[1]."'
+            )
+            RETURNING pid;
+          ";
+          $tmpres = $this->getResultSetArray($query);
+        }
+        $o['_hide']['ds']['seqArray']=array();
+      }
+      else{
+        $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyrSeqNodes'],$ds['MAPSLUG']);
+        $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+        $seqTable_name=$cApp_fn->get_real_table_prop($table_slug);
+
+        $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyrGraph'],$ds['MAPSLUG']);
+        $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+        $edgesTable_name=$cApp_fn->get_real_table_prop($table_slug);
+
+        $note='';
+        if(isset($ds['note']) &&  !empty($ds['note']) ){
+          $note=$ds['note'];
+        }
+        $seqArray=[];
+        $seqReturnArray=[];
+        if(isset($ds['seq']) &&  !empty($ds['seq']) ){
+          $seqArray[]=array(
+            "seq" => $ds['seq'],
+            "lat" => $ds['lat'],
+            "lng" => $ds['lng']
+          );
+          $seqReturnArray[]=$ds['seq'];
+        }
+        else{
+          $cols[]='seq';//node id
+          $line =[];
+          foreach ($ds['gps_collection'] as $kC => $coords) {
+            # code...
+            // ST_MakeLine(ST_MakePoint(1,2,3), ST_MakePoint(3,4,5)
+            $line[]= "ST_Point(".$coords[1].",".$coords[0].")";
+            // 
+
+            //          
+            $query = "
+              INSERT INTO tb_user_location(
+                session_token,
+                project_token,
+                user_token,
+                lat,
+                lng
+              )
+              VALUES (
+                '".$ds['session_token']."',
+                '".$ds['project_token']."',
+                '".$ds['user_token']."',
+                '".$coords[0]."',
+                '".$coords[1]."'
+              )
+              RETURNING pid;
+            ";
+            $tmpres = $this->getResultSetArray($query);
+
+            $query = "
+              INSERT INTO tb_user_location_edge(
+                session_token,
+                project_token, 
+                user_token,    
+                lat,
+                lng,        
+                edge_id,
+                geom_intersection
+              )
+              SELECT
+                '".$ds['session_token']."' AS session_token,
+                '".$ds['project_token']."' AS project_token, 
+                '".$ds['user_token']."' AS user_token,     
+                ".$coords[0]." AS lat,
+                ".$coords[1]." AS lng,
+                bar.id AS edge_id,
+                ST_INTERSECTION(
+                  ST_TRANSFORM(
+                    ST_BUFFER(
+                      ST_TRANSFORM(ST_SETSRID(ST_Point(".$coords[1].",".$coords[0]."),4326),32632), 
+                      20
+                    ),
+                    4326
+                  ),                 
+                  bar.geom
+                ) AS geom_intersection
+              FROM 
+                ".$edgesTable_name." bar
+              WHERE 
+                ST_INTERSECTS(
+                  ST_TRANSFORM(
+                    ST_BUFFER(
+                      ST_TRANSFORM(ST_SETSRID(ST_Point(".$coords[1].",".$coords[0]."),4326),32632), 
+                      20
+                    ),
+                    4326
+                  ), 
+                  bar.geom
+                )            
+              RETURNING pid;
+            ";
+
+            $tmpres = $this->getResultSetArray($query);          
+
+            $query = "
+              UPDATE tb_user_session_edge foo
+              SET edge_progress=bar.edge_progress
+              FROM (
+                SELECT 
+                  bar.edge_id,
+                  ST_LENGTH(ST_UNION(bar.geom_intersection)) AS edge_progress
+                FROM 
+                  tb_user_location_edge bar
+                WHERE 
+                  bar.session_token='".$ds['session_token']."'
+                  AND bar.project_token='".$ds['project_token']."'
+                  AND bar.user_token='".$ds['user_token']."'
+                GROUP BY bar.edge_id
+              ) bar
+              WHERE
+                foo.edge_id=bar.edge_id
+                AND foo.session_token='".$ds['session_token']."'
+                AND foo.project_token='".$ds['project_token']."'
+                AND foo.user_token='".$ds['user_token']."'
+              RETURNING pid;
+            ";
+            $tmpres = $this->getResultSetArray($query); 
+
+          }
+
+          $query = "
+            SELECT 
+              ".implode( ",", $cols ).",
+              ST_Y(geom) AS lat,
+              ST_X(geom) AS lng
+            FROM ".$seqTable_name." foo
+            WHERE  
+              ST_WITHIN(
+                foo.geom, 
+                ST_TRANSFORM(ST_Buffer(
+                  ST_TRANSFORM(ST_SETSRID(ST_MakeLine(
+                    ARRAY[".implode( ",", $line )."]
+                  ),4326),32632)
+                  , 
+                  10,
+                  'endcap=round join=round'
+                ),4326)
+              )
+          ";
+
+          //--
+          $tmpres = $this->getResultSetArray($query);  
+          if(!empty($tmpres['dataArray'])){
+            // $seq=$tmpres['dataArray'][0]['seq'];
+            foreach ($tmpres['dataArray'] as $kS => $data) {
+              $seqArray[]=array(
+                "seq" => $data['seq'],
+                "lat" => $data['lat'],
+                "lng" => $data['lng']
+              );
+            }
+          }
+          else{
+            $seqArray[]=array(
+              "seq" => -1,
+              "lat" => $ds['lat'],
+              "lng" => $ds['lng']
+            );
+          }
+        }
+        // FROM NODE
+        foreach ($seqArray as $kSeq => $tSeq) {
+          
+          $seqReturnArray[]=$tSeq['seq'];
+
+          $query = "
+            INSERT INTO dbroute_tb_user_seq(
+              session_token,
+              project_token,
+              user_token,
+              lat,
+              lng,
+              seq,
+              note
+            )
+            VALUES (
+              '".$ds['session_token']."',
+              '".$ds['project_token']."',
+              '".$ds['user_token']."',
+              '".$tSeq['lat']."',
+              '".$tSeq['lng']."',
+              '".$tSeq['seq']."',
+              '".$note."'
+            )
+            RETURNING pid;
+          ";
+          $tmpres = $this->getResultSetArray($query);
+        }
+        $o['_hide']['ds']['seqArray']=$seqReturnArray;
+        $o['type']='FeatureCollection';
+        $o['features']=array();//$json_obj['features'];
+      }
+
+
+      //--
+
+    }
+    elseif($ds['collection']=='a254_getCatTail'
+      || $ds['collection']=='a257_getCatTail'){
+      $cols[]='lat';
+      $cols[]='lng';
+      //$cols[]='seq';
+      $query = "
+        SELECT 
+          ".implode( ",", $cols )."
+        FROM tb_user_location foo
+        WHERE  
+          session_token='".$ds['session_token']."'
+          AND project_token='".$ds['project_token']."'
+          AND user_token='".$ds['user_token']."'
+        ORDER BY post_date   
+      ";  
+
+      $this_name=$name;
+      $this_features='features';
+      $tmpres = $this->getResultSetArray($query);
+
+      if ($tmpres['response'] != '200') {
+        $o['type']='FeatureCollection';
+        $o[$this_features]=array();
+        $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+      }
+      else{
+        
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+
+        $o['type']=$json_obj['type'];
+        $o[$this_features]=$json_obj['features'];
+        $o['geoQuery'][$this_name]['iTotalRecords'] = $json_obj['iTotalRecords'];
+
+
+        // $cols[]='lat';
+        // $cols[]='lng';
+        $cols[]='seq';
+        $query = "
+          SELECT * FROM (
+            SELECT 
+              ".implode( ",", $cols )."
+            FROM dbroute_tb_user_seq foo
+            WHERE  
+              session_token='".$ds['session_token']."'
+              AND project_token='".$ds['project_token']."'
+              AND user_token='".$ds['user_token']."'
+            ORDER BY post_date
+          ) foo
+          GROUP BY ".implode( ",", $cols )."     
+        ";  
+
+        $this_name=$name.'_seq';
+        $this_features='features'.'_seq';
+        $tmpres = $this->getResultSetArray($query);
+
+        if ($tmpres['response'] != '200') {}
+        else{
+          $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+          $o['type']=$json_obj['type'];
+          $o[$this_features]=$json_obj['features'];
+          $o['geoQuery'][$this_name]['iTotalRecords'] = $json_obj['iTotalRecords'];
+        }
+
+      }
+
+      //--
+
+    }
+    elseif($ds['collection']=='a254_sessionGraph'
+      || $ds['collection']=='a257_sessionGraph'){
+      $query = "
+        SELECT 
+          pid
+        FROM tb_user_session_edge foo
+        WHERE  
+          session_token='".$ds['session_token']."'
+          AND project_token='".$ds['project_token']."'
+          AND user_token='".$ds['user_token']."'
+        LIMIT 1
+      ";
+      //--
+      $tmpres = $this->getResultSetArray($query); 
+      if ($tmpres['response'] != '200') {
+
+        $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyrGraph'],$ds['MAPSLUG']);
+        $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+        $edgesTable_name=$cApp_fn->get_real_table_prop($table_slug);        
+
+        $query = "
+          INSERT INTO tb_user_session_edge(
+            session_token,
+            project_token,
+            user_token,
+            edge_id,
+            edge_length
+          )
+          SELECT
+            '".$ds['session_token']."' AS session_token,
+            '".$ds['project_token']."' AS project_token, 
+            '".$ds['user_token']."' AS user_token,    
+            bar.id AS edge_id,
+            ST_LENGTH(bar.geom) AS edge_length
+          FROM 
+            ".$edgesTable_name." bar  
+          WHERE
+            NOT(
+              (cost=-1 AND reverse_cost = -1)
+              --Motorway,Roundabout,Sliproad
+              OR fow IN (1,4,10,20)
+              --MultiCarriageway (Not Motorway)
+              OR (fow=2 AND oneway='TF')
+            )
+            AND project='yes'       
+          RETURNING pid;
+        ";
+
+        $tmpres = $this->getResultSetArray($query); 
+      }
+      else{
+        $o['type']='FeatureCollection';
+        $o['features']=array();
+        $o['geoQuery']['A']['iTotalRecords'] = 1;
+      }      
+    }
+    elseif($ds['collection']=='getProjectToken'){
+
+      $query = "
+        SELECT 
+          item_token
+        FROM tb_map foo
+        WHERE  
+          item_token='".$ds['map_token']."'
+        LIMIT 1
+      ";
+      //--
+      $tmpres = $this->getResultSetArray($query); 
+
+      $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+
+      $o['type']=$json_obj['type'];
+      $o['features']=$json_obj['features'];
+      $o['geoQuery']['A']['iTotalRecords'] = $json_obj['iTotalRecords'];
+   
+    }
+    elseif($ds['collection']=='a254_loadFakeGPS'
+      ||$ds['collection']=='a257_loadFakeGPS'){
+
+      if(isset($ds['inputLine'])){
+        $sql = array();
+        foreach($ds['inputLine']['features']  as $k=>$v){
+          $sql[]= "SELECT ST_GeomFromGeoJSON(
+            '".JSON_encode($v['geometry'])."'
+            ) as geom";
+        }
+
+        $query = "
+          SELECT
+          (ST_Dump(foo.mpoint)).path[1],
+          ST_Y((ST_Dump(foo.mpoint)).geom) as lat,
+          ST_X((ST_Dump(foo.mpoint)).geom) as lng,
+          ST_ASGEOJSON((ST_Dump(foo.mpoint)).geom) as geojson
+          FROM(
+            SELECT 
+            ST_LineInterpolatePoints(
+            ST_LineMerge(ST_UNION(
+            geom
+            ))
+            , 0.02
+            ) as mpoint
+            FROM(        
+              ".implode( " UNION ALL ", $sql )."
+            ) bar
+          ) foo
+          ;
+        ";
+
+      }
+      else{
+
+        $query = "
+          SELECT 
+            ST_Y(geom) as lat,
+            ST_X(geom) as lng
+          FROM(
+            SELECT master_seq,
+              (master_seq*20)+(ST_Dump(foo.mpoint)).path[1] as myorder, 
+              (ST_Dump(foo.mpoint)).geom AS geom 
+            FROM
+            (
+              SELECT  
+                master_seq,
+                ST_LineInterpolatePoints(
+                  --ST_LineMerge(ST_UNION(
+                    geom
+                  --))
+                  , 0.05
+                ) as mpoint
+              FROM dbroute_pl_".$ds['dbroute_name']."_output_route 
+              WHERE master_seq<10
+              --GROUP BY master_seq
+            ) foo
+          ) bar ORDER BY myorder;
+        ";
+
+      }
+
+
+      //--
+      $tmpres = $this->getResultSetArray($query); 
+
+      $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+
+      $o['type']=$json_obj['type'];
+      $o['features']=$json_obj['features'];
+      $o['geoQuery']['A']['iTotalRecords'] = $json_obj['iTotalRecords'];
+   
+    }
+    elseif($ds['collection']=='a254_missingGraph'){
+      $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyrVGraph'],$ds['MAPSLUG']);
+      $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+      $edgesTable_name=$cApp_fn->get_real_table_prop($table_slug); 
+
+      $query = "
+        SELECT
+          edge_id,
+          edge_length,     
+          edge_progress,
+          ST_ASGEOJSON(bar.geom) AS geojson
+        FROM 
+          tb_user_session_edge foo,
+          ".$edgesTable_name." bar
+        WHERE 
+          foo.session_token='".$ds['session_token']."'
+          AND foo.project_token='".$ds['project_token']."'
+          AND foo.user_token='".$ds['user_token']."'
+          AND foo.edge_id=bar.id 
+          AND edge_progress/edge_length < 0.90 
+          AND project='yes'   
+        ;
+      ";
+      $tmpres = $this->getResultSetArray($query); 
+      if ($tmpres['response'] != '200') {  
+
+        $o['type']='FeatureCollection';
+        $o['features']=array();
+        $o['geoQuery']['A']['iTotalRecords'] = 1;
+
+      }    
+      else{
+
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+
+        $o['type']=$json_obj['type'];
+        $o['features']=$json_obj['features'];
+        $o['geoQuery']['A']['iTotalRecords'] = $json_obj['iTotalRecords'];
+
+        $query1 = "
+          SELECT 
+            sum(edge_progress)/sum(edge_length) AS progress
+          FROM (
+            SELECT
+              edge_progress,
+              edge_length
+            FROM 
+              tb_user_session_edge foo,
+              ".$edgesTable_name." bar
+            WHERE 
+              foo.session_token='".$ds['session_token']."'
+              AND foo.project_token='".$ds['project_token']."'
+              AND foo.user_token='".$ds['user_token']."'
+              AND foo.edge_id=bar.id 
+              AND edge_progress/edge_length < 0.90    
+          ) foo1
+          ;
+        ";
+        $tmpres = $this->getResultSetArray($query1); 
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+        $o['features_sum']=$json_obj['features'];       
+
+      } 
+    }
+    elseif($ds['collection']=='a254_GoogleDirections'
+      || $ds['collection']=='a257_GoogleDirections'){
+
+      $lyr_meta=$cApp_fn->get_lyr_meta($ds['lyrSeqNodes'],$ds['MAPSLUG']);
+      $table_slug=json_decode($lyr_meta['properties']['g_tables'],true)[0];
+      $seqTable_name=$cApp_fn->get_real_table_prop($table_slug);
+
+      $cols[]='node';//node id
+      $cols[]='ST_X(geom) AS node_lng';
+      $cols[]='ST_Y(geom) AS node_lat';
+      
+      $query = "
+        SELECT 
+          ".implode( ",", $cols )."
+        FROM ".$seqTable_name." foo
+        WHERE 
+          ST_DWITHIN(
+            foo.geom,
+            ST_SETSRID(
+              ST_MAKEPOINT(
+                ".(float)$ds['lng'].",
+                ".(float)$ds['lat']."
+              ),
+              4326
+            ),
+            1
+          )
+        ORDER BY 
+          ST_DISTANCE(
+            foo.geom,
+            ST_SETSRID(
+              ST_MAKEPOINT(
+                ".(float)$ds['lng'].",
+                ".(float)$ds['lat']."
+              ),
+              4326
+            )
+          )
+        LIMIT 1          
+      ";      
+
+      //--
+      $this_name=$name;
+      $this_features='features';
+      $tmpres = $this->getResultSetArray($query);   
+
+      if ($tmpres['response'] != '200') {
+        $o['type']='FeatureCollection';
+        $o[$this_features]=array();
+        $o['geoQuery'][$this_name]['iTotalRecords'] = 1;
+      }
+      else{  
+        $fromNode = $tmpres['dataArray'][0]['node'];
+        $fromNodeLat = $tmpres['dataArray'][0]['node_lat'];
+        $fromNodeLng = $tmpres['dataArray'][0]['node_lng'];
+        $o['_hide']['ds']['fromNodeLat']=$fromNodeLat;
+        $o['_hide']['ds']['fromNodeLng']=$fromNodeLng;
+
+        $cols[]='node';//node id
+        $cols[]='ST_X(geom) AS node_lng';
+        $cols[]='ST_Y(geom) AS node_lat';
+
+        $nextSeq = $ds['seq']+1;
+        // TO NODE
+        $query = "
+          SELECT 
+            ".implode( ",", $cols )."
+          FROM
+            ".$seqTable_name." foo
+          WHERE seq=".$ds['seq']."
+            OR seq=".$nextSeq."
+          ORDER BY seq
+        ";
+
+        //--
+        $tmpres = $this->getResultSetArray($query);
+
+        if ($tmpres['response'] != '200') {
+          // never happens!
+        }
+        else{
+          $toNode = $tmpres['dataArray'][0]['node'];
+          $toNodeLat = $tmpres['dataArray'][0]['node_lat'];
+          $toNodeLng = $tmpres['dataArray'][0]['node_lng'];
+          if(!empty($tmpres['dataArray'][1])){
+            $bNode = $tmpres['dataArray'][1]['node'];
+            $bNodeLat = $tmpres['dataArray'][1]['node_lat'];
+            $bNodeLng = $tmpres['dataArray'][1]['node_lng'];
+          }
+          else{
+            $bNode = 0;
+            $bNodeLat = 0;
+            $bNodeLng = 0;
+          }
+
+        }
+
+      }
+
+      // $source = array(45.5230836,9.1189199);
+      // $target = array();
+      // $target[] = array(45.5230836,9.1189199);
+      // $target[] = array(45.523093,9.1199016);
+      // $target[] = array(45.5231439,9.1206262);
+
+
+      $string_output = array();
+      $googleUrl ='https://maps.googleapis.com/maps/api/directions/json?';
+
+      $origin = 'origin='.$fromNodeLat.','.$fromNodeLng;
+      $destination = '&destination='.$bNodeLat.','.$bNodeLng;
+      $waypoints = '&waypoints='.$toNodeLat.','.$toNodeLng;
+
+      $url_here = $googleUrl.$origin.$destination.$waypoints.'&key='.GMAP_IP_KEY.'&callback=?';
+      $o['_hide']['ds']['google']=$url_here;
+      $json = file_get_contents($url_here);
+      echo $json;
+      exit;
+      $obj = json_decode($json);
+
+      $encodedline =$obj->routes[0]->overview_polyline->points;
+
+      // "google": "origin=45.5229649,9.1211799&destination=45.5230836,9.1189199&waypoints=45.523093,9.1199016&key=AIzaSyD7j9vTmoMrOW5RmH8425aDeY2VQPvJrLk&callback=?"
+
+
+      // print_r($obj);
+      $string = $encodedline;
+  
+      $properties = $obj->routes[0]->legs[0];
+  
+      //http://stackoverflow.com/questions/15380712/how-to-decode-polylines-from-google-maps-direction-api-in-php
+      # Step 11) unpack the string as unsigned char 'C'
+      $byte_array = array_merge(unpack('C*', $string));
+      $results = array();
+  
+      $index = 0; # tracks which char in $byte_array
+      do {
+        $shift = 0;
+        $result = 0;
+        do {
+          $char = $byte_array[$index] - 63; # Step 10
+          # Steps 9-5
+          # get the least significat 5 bits from the byte
+          # and bitwise-or it into the result
+          $result |= ($char & 0x1F) << (5 * $shift);
+          $shift++; $index++;
+        } while ($char >= 0x20); # Step 8 most significant bit in each six bit chunk
+          # is set to 1 if there is a chunk after it and zero if it's the last one
+          # so if char is less than 0x20 (0b100000), then it is the last chunk in that num
+  
+        # Step 3-5) sign will be stored in least significant bit, if it's one, then
+        # the original value was negated per step 5, so negate again
+        if ($result & 1)
+          $result = ~$result;
+        # Step 4-1) shift off the sign bit by right-shifting and multiply by 1E-5
+        $result = ($result >> 1) * 0.00001;
+        $results[] = $result;
+      } while ($index < count($byte_array));
+  
+      # to save space, lat/lons are deltas from the one that preceded them, so we need to
+      # adjust all the lat/lon pairs after the first pair
+      for ($i = 2; $i < count($results); $i++) {
+        $results[$i] += $results[$i - 2];
+      }
+  
+      $a=array_chunk($results, 2);
+      $geometry_string='';
+      $point=0;
+      foreach ($a as $v1) {
+
+        $point++;
+        if($point==1){}
+        else{
+          //fwrite($fh, ',');
+          $geometry_string.=',';
+        }
+        //fwrite($fh, '['.$v1[1].','.$v1[0].']'); // array coordinates
+        $geometry_string.='['.$v1[1].','.$v1[0].']';
+
+      } // for each points
+
+      $string_output[] = $geometry_string;
+
+      print_r($string_output);
+
+    }
+    elseif($ds['collection']=='a254_GoogleDirectionsWithRandomPoints'
+      || $ds['collection']=='a257_GoogleDirectionsWithRandomPoints'){
+
+      $string_output = array();
+      $googleUrl ='https://maps.googleapis.com/maps/api/directions/json?';
+
+      $origin = 'origin='.$ds['lat'].','.$ds['lng'];
+      $destination = '&destination='.$ds['lat'].','.$ds['lng'];
+
+      $destinationsArray = array();
+      foreach ($ds['destinations']['features'] as $key => $value) {
+        # code...
+        $destinationsArray[] = $value['geometry']['coordinates'][1].','.$value['geometry']['coordinates'][0];
+      }
+
+      $waypoints = '&waypoints=optimize:true|'.implode('|', $destinationsArray);
+
+      $url_here = $googleUrl.$origin.$destination.$waypoints.'&key='.GMAP_IP_KEY.'';
+
+      if(isset($ds['drivingMode'])){
+        $url_here.='&mode='.$ds['drivingMode'];
+      }
+
+      $o['_hide']['ds']['google']=$url_here;
+      $json = file_get_contents($url_here);
+
+      $obj = json_decode($json);
+
+
+      // $encodedline =$obj->routes[0]->overview_polyline->points;
+
+      // $completeRoute = $cApp_fn->decodeGooglePolyline($encodedline);
+      
+      // print_r($completeRoute);
+      // exit;
+      if(count($obj->routes) == 0){
+        print_r($obj);
+        exit;
+      }
+      $legs = $obj->routes[0]->legs;
+      $tmpres['dataArray'] = array();
+      foreach ($legs as $seq => $leg) {
+
+        $geojson = array(
+          "type" => "Point",
+          "coordinates" => array(
+            $leg->start_location->lng,
+            $leg->start_location->lat
+          )  
+        );
+        $geojson_json = json_encode($geojson, JSON_PRETTY_PRINT);        
+
+        $tmpres['dataArray'][] = array(
+          'seq'=>$seq,
+          'lat'=>$leg->start_location->lat,
+          'lng'=>$leg->start_location->lng,
+          'geojson'=>$geojson_json,
+        );
+      }
+      $json_obj=$cApp_fn->list_to_geojson(
+        $tmpres['dataArray'],
+        false
+      );
+
+      $this_name='A';
+      $this_features='features';
+      $o['type']=$json_obj['type'];
+      $o[$this_features]=$json_obj['features'];
+      $o['geoQuery'][$this_name]['iTotalRecords'] = 1;      
+
+    }
+    elseif($ds['collection']=='a255_search_token_by_email'){
+
+      $query = "
+        SELECT 
+          item_token
+        FROM
+          geovar_user foo
+        WHERE
+          user_email='".$ds['email']."'
+          AND post_status='publish' 
+      ";
+
+      $tmpres = $this->getResultSetArray($query); 
+
+      if ($tmpres['response'] != '200') {  
+
+        $user_role = array("user-testing");
+        $user_role_json = json_encode($user_role, JSON_PRETTY_PRINT);
+      
+        $query = "
+          INSERT INTO geovar_user(user_email,user_role)
+          VALUES ('".$ds['email']."','".$user_role_json."')
+          RETURNING pid;
+        ";
+        $tmpres = $this->getResultSetArray($query);
+
+        $query = "
+          SELECT 
+            item_token
+          FROM
+            geovar_user foo
+          WHERE
+            pid=".$tmpres['dataArray'][0]['pid']."
+        ";
+
+        $tmpres = $this->getResultSetArray($query); 
+
+      }
+
+      $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+      
+      $o['type']=$json_obj['type'];
+      $o['features']=$json_obj['features'];
+      $o['geoQuery']['A']['iTotalRecords'] = $json_obj['iTotalRecords'];
+
+    }    
+    elseif($ds['collection']=='a255_search_map_by_token'){
+
+      $query = "      
+        SELECT 
+          foo.item_token, foo.g_slug, foo.g_label, 
+          foo.item_token AS map_token, 
+          foo.g_sessions, foo.g_group::text AS g_group
+        FROM 
+          (
+            SELECT 
+              json_array_elements_text(g_group) AS single_group, 
+              * 
+              FROM tb_map
+          ) foo,
+          (
+            SELECT 
+              json_array_elements_text(user_role) AS single_user_role, 
+              * 
+            FROM geovar_user
+          ) bar
+        WHERE 
+          bar.item_token='".$ds['user_token']."'
+          AND (
+            bar.item_token = foo.single_group
+            OR bar.single_user_role = foo.single_group
+            --OR foo.single_group = 'public'
+          )
+        GROUP BY 
+          foo.item_token, foo.g_slug, foo.g_label, foo.item_token, 
+          foo.g_sessions, foo.g_group::text
+        ORDER BY g_label
+      ";
+
+      $tmpres = $this->getResultSetArray($query);
+
+      if ($tmpres['response'] != '200') {
+        $o['type']='FeatureCollection';
+        $o['features']=array();
+        $o['geoQuery']['A']['iTotalRecords'] = 1;
+      }
+      else{     
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+        
+        $o['type']=$json_obj['type'];
+        $o['features']=$json_obj['features'];
+        $o['geoQuery']['A']['iTotalRecords'] = $json_obj['iTotalRecords'];
+      }
+
+    }    
+    elseif($ds['collection']=='a255_search_session_by_project'){
+
+      $query = "      
+        SELECT 
+          session_token, 
+          count(pid) AS mycount,
+          max(post_date) AS last_date
+        FROM tb_user_activities --dbroute_tb_user_seq
+        WHERE
+          user_token='".$ds['user_token']."'
+          AND project_token='".$ds['project_token']."'
+        GROUP BY session_token
+        ;
+      ";
+
+      $tmpres = $this->getResultSetArray($query);
+      if ($tmpres['response'] != '200') {
+        $o['type']='FeatureCollection';
+        $o['features']=array();
+        $o['geoQuery']['A']['iTotalRecords'] = 1;
+      }
+      else{     
+        $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+      
+        $o['type']=$json_obj['type'];
+        $o['features']=$json_obj['features'];
+        $o['geoQuery']['A']['iTotalRecords'] = $json_obj['iTotalRecords'];
+      }
+
+      // --
+
+      $query = "      
+        SELECT 
+          *
+        FROM tb_map
+        WHERE
+          item_token='".$ds['map_token']."'
+        ;
+      ";
+
+      $tmpres = $this->getResultSetArray($query);
+
+      $json_obj=$cApp_fn->list_to_geojson($tmpres['dataArray'],false);
+      
+      $o['type']=$json_obj['type'];
+      $o['features2']=$json_obj['features'];
+
+    }
+    elseif($ds['collection']=='mvt_test'){
+
+      // Build the SQL query to retrieve the MVT tile
+      // $query = "
+      //   SELECT ST_AsMVT(tile, 'mapillary') AS mvt 
+      //   FROM (
+      //     SELECT * FROM pg_housing_census_mix01
+      //     WHERE ST_Intersects(ST_TRANSFORM(geom,3857), ST_TileEnvelope(
+      //       ".$ds['z'].", 
+      //       ".$ds['x'].", 
+      //       ".$ds['y']."
+      //     ))
+      //   ) AS tile
+      // ";
+      $query = "      
+      SELECT ST_AsMVT(mvtgeom.*) AS mvt  FROM  (   
+        SELECT 
+        ST_AsMVTGeom(ST_TRANSFORM(t.geom,3857), ST_TileEnvelope( 
+          ".$ds['z'].", 
+          ".$ds['x'].", 
+          ".$ds['y']."
+        )) AS geom,
+        cenblock10,job_rank,job_n * 10 AS job_n
+        FROM pg_housing_census_mix01 t
+        WHERE ST_Intersects(ST_TRANSFORM(t.geom,3857), ST_TileEnvelope( 
+          ".$ds['z'].", 
+          ".$ds['x'].", 
+          ".$ds['y']."
+        )) 
+      ) mvtgeom
+      ";
+
+      $tmpres = $this->rawQueryResult($query);
+
+      //echo $tmpres;
+      // var_dump($tmpres);
+      // exit;
+      $data = $tmpres['mvt'];
+      // header('Content-Length: ' . filesize($data));
+      // Read the contents of the stream and output them to the browser
+      while (!feof($data)) {
+        echo fread($data, 8192);
+      }
+      
+      // Close the stream
+      fclose($data);  
+      exit;    
+      // SELECT ST_AsMVT(tile, \'layer\', 4096, \'geom\') AS mvt 
+      // FROM (SELECT id, geom FROM my_table WHERE ST_Intersects(geom, ST_TileEnvelope(:z, :x, :y))) AS tile');
+        
+    }
+    elseif($ds['collection']=='mvt_dbbldg_eu_pg_buildings'){
+
+      // Build the SQL query to retrieve the MVT tile
+      $query = "      
+      SELECT ST_AsMVT(mvtgeom.*) AS mvt  FROM  (   
+        SELECT 
+          ST_AsMVTGeom(
+            foo.geom_3857, 
+            ST_TileEnvelope( 
+              ".$ds['z'].", 
+              ".$ds['x'].", 
+              ".$ds['y']."
+            )
+          ) AS geom,
+          foo.height, 'A' AS type2, foo.type AS mytype, id
+        FROM 
+          dbbldg_eu_pg_buildings foo
+        WHERE 
+          ST_Intersects(
+            foo.geom_3857, 
+            ST_TileEnvelope( 
+              ".$ds['z'].", 
+              ".$ds['x'].", 
+              ".$ds['y']."
+            )
+          ) 
+      ) mvtgeom
+      ";
+
+      $tmpres = $this->rawQueryResult($query);
+
+      //echo $tmpres;
+      // var_dump($tmpres);
+      // exit;
+      $data = $tmpres['mvt'];
+      // header('Content-Length: ' . filesize($data));
+      // Read the contents of the stream and output them to the browser
+      while (!feof($data)) {
+        echo fread($data, 8192);
+      }
+      
+      // Close the stream
+      fclose($data);  
+      exit;    
+      // SELECT ST_AsMVT(tile, \'layer\', 4096, \'geom\') AS mvt 
+      // FROM (SELECT id, geom FROM my_table WHERE ST_Intersects(geom, ST_TileEnvelope(:z, :x, :y))) AS tile');
+        
+    }
+    elseif($ds['collection']=='mvt_baseGraph'){
+
+      if(!isset($ds['slug'])){
+        echo 'slug not set';
+        exit;
+      }
+      // Build the SQL query to retrieve the MVT tile
+      $query = "      
+      SELECT ST_AsMVT(mvtgeom.*) AS mvt  FROM  (   
+        SELECT 
+          ST_AsMVTGeom(
+            ST_TRANSFORM(foo.geom,3857), 
+            ST_TileEnvelope( 
+              ".$ds['z'].", 
+              ".$ds['x'].", 
+              ".$ds['y']."
+            )
+          ) AS geom,
+          foo.motor_vehicle, id
+        FROM 
+          dbroute_pl_".$ds['slug']."_edges foo
+        WHERE 
+          ST_Intersects(
+            ST_TRANSFORM(foo.geom,3857), 
+            ST_TileEnvelope( 
+              ".$ds['z'].", 
+              ".$ds['x'].", 
+              ".$ds['y']."
+            )
+          ) 
+      ) mvtgeom
+      ";
+
+      $tmpres = $this->rawQueryResult($query);
+
+      //echo $tmpres;
+      // var_dump($tmpres);
+      // exit;
+      $data = $tmpres['mvt'];
+      // header('Content-Length: ' . filesize($data));
+      // Read the contents of the stream and output them to the browser
+      while (!feof($data)) {
+        echo fread($data, 8192);
+      }
+      
+      // Close the stream
+      fclose($data);  
+      exit;    
+      // SELECT ST_AsMVT(tile, \'layer\', 4096, \'geom\') AS mvt 
+      // FROM (SELECT id, geom FROM my_table WHERE ST_Intersects(geom, ST_TileEnvelope(:z, :x, :y))) AS tile');
+        
     }
     else{
 			$res['response']='000';
