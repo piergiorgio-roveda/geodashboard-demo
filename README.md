@@ -1,4 +1,4 @@
-# GEO::DASHBOARD
+# `[GEO]DASHBOARD`
 
 ## Official Link
 
