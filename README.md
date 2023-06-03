@@ -16,6 +16,8 @@
 5. [Case Studies: GEO::DASHBOARD in Action](./docs/case-studies.md)
 6. [Conclusion](./docs/conclusion.md)
 
+[📢 Announcements & Updates](./docs/announcements.md)
+
 ## Introduction
 
 GEO::DASHBOARD is a web application that enables the creation of visualizations for maps, tables, graphs and generic web pages using a Postgres database with a geographical extension PostGIS and Geoserver to generate map tiles.
