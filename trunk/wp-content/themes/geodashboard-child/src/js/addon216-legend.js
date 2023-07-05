@@ -61,9 +61,6 @@ var a216_legends=[];
 //var a216_legends_exist=[];
 var a216_legends_load=[];
 
-var dyn_legends = [];
-var list_legends=[];
-
 setInterval(
 
   function() {  

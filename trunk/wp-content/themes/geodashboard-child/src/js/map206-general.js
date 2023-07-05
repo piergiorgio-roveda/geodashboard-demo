@@ -118,7 +118,8 @@ function scroll_to_top() {
 } // click() scroll top END
 
 function log_tag_manager(myFunction='none',myDefinition='none',myValue=''){
-  // _onsole.log('tag_manager')
+  console.log('deprecated - log_tag_manager');
+  return;
   dataLayer.push({
     mytrackid:GA_TRACKING_ID,//GA - log_tag_manager - Tracking ID
     event: 'log_tag_manager',
@@ -130,6 +131,74 @@ function log_tag_manager(myFunction='none',myDefinition='none',myValue=''){
   });
 
 }
+
+function temporaryLogTagManager(
+  myFunction='none',
+  myDefinition='none',
+  myValue=''){
+
+  // _onsole.log('tag_manager1 - temporary',myFunction);
+
+  let newObj = {
+    // mytrackid:GA_TRACKING_ID,//GA - log_tag_manager - Tracking ID
+    event: 'log_tag_manager',
+    myEnvironment:ENVIRONMENT,
+    myFunction:myFunction,//GA - log_tag_manager - action
+    myUser:localStorage.user_token, // MAPSLUG+':'+user_login,//GA - log_tag_manager - category
+    myDefinition:myDefinition,//GA - log_tag_manager - label
+    myValue:myFunction+'|'+myDefinition+'|'+myValue, //GA - log_tag_manager - value (optional)
+    myMapSlug:MAPSLUG,
+    myDomain:HOME_PROJECT
+  }
+
+  console.log('tag_manager - temporary',newObj);
+
+  let o = dataLayer;
+  // let objFiltered=o.filter(
+  //   (x) => x.event === 'log_tag_manager'
+  // );
+  // let objItem=objFiltered[0];
+  // _onsole.log('objItem',objItem);
+
+  // var a = [{name:'tc_001'}, {name:'tc_002'}, {name:'tc_003'}];
+  o.splice(o.findIndex(x => x.event === 'log_tag_manager'),1);
+  // _onsole.log(o);
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(newObj);
+  // if(objItem==undefined){
+    // _onsole.log('dataLayer > NEW');
+    // dataLayer.push(newObj);
+  // }
+  // else{
+  //   console.log('dataLayer > EXIST (Update)');
+  //   objItem = newObj;
+  // }
+
+  // _onsole.log('dataLayer',dataLayer);
+
+  // dataLayer.push(objItem);
+  // Code for temporary function
+  
+  return Promise.resolve('temporaryLogTagManager - Done!');
+
+}
+
+// function newLogTagManager() {
+//   // Code for new function
+//   console.log('New function called');
+// }
+
+// // Call the temporary function and chain it with the new function
+// temporaryFunction()
+//   .then(result => {
+//     console.log(result); // Output: Temporary function completed
+//     newFunction(); // Call the new function
+//   })
+//   .catch(error => {
+//     console.error('An error occurred:', error);
+//   });
+
 
 function log_info_tracker(){
   //1
@@ -231,8 +300,8 @@ const autoNumericOptionsEuro = {
     decimalCharacter           : ',',
     decimalCharacterAlternative: '.',
     currencySymbol             : '\u202f€',
-    currencySymbolPlacement    : AutoNumeric.options.currencySymbolPlacement.suffix,
-    roundingMethod             : AutoNumeric.options.roundingMethod.halfUpSymmetric,
+    // currencySymbolPlacement    : AutoNumeric.options.currencySymbolPlacement.suffix,
+    // roundingMethod             : AutoNumeric.options.roundingMethod.halfUpSymmetric,
 };
 
 const numberM = {
@@ -240,7 +309,7 @@ const numberM = {
     decimalCharacter            : ',',
     decimalCharacterAlternative : '.',
     decimalPlaces               : 0,     
-    roundingMethod              : AutoNumeric.options.roundingMethod.halfUpSymmetric,
+    // roundingMethod              : AutoNumeric.options.roundingMethod.halfUpSymmetric,
 };
 
 const numberM1 = {
@@ -248,7 +317,7 @@ const numberM1 = {
     decimalCharacter            : ',',
     decimalCharacterAlternative : '.',
     decimalPlaces               : 1,     
-    roundingMethod              : AutoNumeric.options.roundingMethod.halfUpSymmetric,
+    // roundingMethod              : AutoNumeric.options.roundingMethod.halfUpSymmetric,
 };
 
 const numberM2 = {
@@ -256,7 +325,7 @@ const numberM2 = {
     decimalCharacter            : ',',
     decimalCharacterAlternative : '.',
     decimalPlaces               : 2,     
-    roundingMethod              : AutoNumeric.options.roundingMethod.halfUpSymmetric,
+    // roundingMethod              : AutoNumeric.options.roundingMethod.halfUpSymmetric,
 };
 
 function format_autoNumeric(){

@@ -1,5 +1,6 @@
 dyn_functions['addon238-satellite'+'_ready'] = function(){
 
+  // _onsole.log('Ready-1-satellite!')
   sessionStorage.basemap='default';
 
   $('.box-usrprofile').css('display','block');

@@ -53,11 +53,16 @@ var geo_lyr = [];
 var this_tb = [];
 var this_watchlist = [];
 var dyn_lyr_discover = [];
+var dyn_template_by_slug = [];
 
 var f_btn = [];
 
 var dyn_on_ready = [];
 var list_on_ready=[];
+var list_f_mapbox=[];
+
+var dyn_legends = [];
+var list_legends=[];
 
 //license manager
 //USER_LICENSE=USER_LICENSE;
@@ -112,8 +117,22 @@ var pin_address = new Array();
 
 var locationIcon1 = new Array();
 
-var m211_rotation = 'disabled';
+var m211_mapRotation = 'disabled';
 var m211_mapLibrary = 'leafletjs';
+var m211_mapPitch = '2D';
+
+var list_players = {
+  features:[]
+}
+var list_MapByToken={
+  features : []
+}
+
+var geovar_table_exists = {}
+var geovar_table_schema = {}
+var installation_tables = {}
+
+// --
 
 function initialize() {
   //aggiungi_box_ricerca();
@@ -146,37 +165,65 @@ function initAutoComplete() {
 // [START region_fillform]
 function setAddressOnMap() {
   //_onsole.log('setAddressOnMap')
-  pin_address = new L.featureGroup();
-  locationIcon1 = L.icon({
-    iconUrl: HOME_PROJECT+'/source/icon/'+	gLang.locationIcon1_img,
-    iconSize: [25, 25], // size of the icon
-    iconAnchor: [12.5,12.5] // point of the icon which will correspond to marker's location
-  });
-
   var place = autocomplete.getPlace();
-
+    
   dMap.place.lat = place.geometry.location.lat();
   dMap.place.lng = place.geometry.location.lng();
 
   dMap.place.zoom=gLang.zoom_result;
-  mymap.setView(
-    [
-      dMap.place.lat,
-      dMap.place.lng
-    ], 
-    dMap.place.zoom
-  );
-  var marker = L.marker([dMap.place.lat, dMap.place.lng], {
-    //icon: locationIcon1
-  });
-  pin_address.addLayer(marker);
-  pin_address.addTo(mymap);
-  window.setTimeout(function(){
-   mymap.removeLayer(pin_address);
-   pin_address.clearLayers(); 
-  }, 15000);
-}
 
+  switch (m211_mapLibrary) {
+    case 'leafletjs':
+
+      pin_address = new L.featureGroup();
+      locationIcon1 = L.icon({
+        iconUrl: HOME_PROJECT+'/source/icon/'+	gLang.locationIcon1_img,
+        iconSize: [25, 25], // size of the icon
+        iconAnchor: [12.5,12.5] // point of the icon which will correspond to marker's location
+      });
+    
+      mymap.setView(
+        [
+          dMap.place.lat,
+          dMap.place.lng
+        ], 
+        dMap.place.zoom
+      );
+      var marker = L.marker([dMap.place.lat, dMap.place.lng], {
+        //icon: locationIcon1
+      });
+      pin_address.addLayer(marker);
+      pin_address.addTo(mymap);
+      window.setTimeout(function(){
+        mymap.removeLayer(pin_address);
+        pin_address.clearLayers(); 
+      }, 15000);
+
+    break;
+    case 'mapbox':
+      mymap.setCenter(
+        [
+          dMap.place.lng,
+          dMap.place.lat
+        ]
+      );
+      mymap.setZoom(17);
+    break;
+    case 'maplibre':
+      mymap.setCenter(
+        [
+          dMap.place.lng,
+          dMap.place.lat
+        ]
+      );
+      mymap.setZoom(17);
+    break;
+    default:
+
+        console.log(`Not setAddressOnMap() options for ${m211_mapLibrary}.`);
+
+  } // switch
+}
 
 // Funzioni del geolocator
 function aggiungi_box_ricerca(){
@@ -215,7 +262,7 @@ function fill_search_cointainer(){
   if (obj_addon.length>0) {
     if(obj_addon[0].enabled===false){
       
-      console.log('obj_addon[0].enabled===false')
+      // _onsole.log('obj_addon[0].enabled===false')
       return;
     }
   }
@@ -396,17 +443,65 @@ function scroll_to_top() {
 
 } // click() scroll top END
 
-function log_tag_manager(myFunction='none',myDefinition='none',myValue=''){
-  // _onsole.log('tag_manager')
-  dataLayer.push({
-    mytrackid:GA_TRACKING_ID,//GA - log_tag_manager - Tracking ID
+function hashCode(s) {
+  return s.split("").reduce(function(a, b) {
+    a = ((a << 5) - a) + b.charCodeAt(0);
+    return a & a;
+  }, 0);
+}
+
+function log_tag_manager(
+  myFunction='none',
+  myDefinition='none',
+  myValue=''){
+
+  console.log('tag_manager1',myFunction);
+  let value = localStorage.getItem('session_token');
+  let mySession_token = '';
+  if(value === null){
+
+  }
+  else{
+    mySession_token = '|'+value;
+  }
+
+  let newObj = {
+    // mytrackid:GA_TRACKING_ID,//GA - log_tag_manager - Tracking ID
     event: 'log_tag_manager',
     myEnvironment:ENVIRONMENT,
     myFunction:myFunction,//GA - log_tag_manager - action
-    myUser:MAPSLUG+':'+user_login,//GA - log_tag_manager - category
+    myUser:localStorage.user_token+mySession_token, // MAPSLUG+':'+user_login,//GA - log_tag_manager - category
     myDefinition:myDefinition,//GA - log_tag_manager - label
-    myValue:myValue //GA - log_tag_manager - value (optional)
-  });
+    myValue:myFunction+'|'+myDefinition+'|'+myValue, //GA - log_tag_manager - value (optional)
+    myMapSlug:MAPSLUG,
+    myDomain:HOME_PROJECT
+  }
+  // onsole.log('tag_manager2',newObj);
+  let o = dataLayer;
+  // let objFiltered=o.filter(
+  //   (x) => x.event === 'log_tag_manager'
+  // );
+  // let objItem=objFiltered[0];
+  // _onsole.log('objItem',objItem);
+
+  // var a = [{name:'tc_001'}, {name:'tc_002'}, {name:'tc_003'}];
+  o.splice(o.findIndex(x => x.event === 'log_tag_manager'),1);
+  // _onsole.log(o);
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(newObj);
+  // if(objItem==undefined){
+    // _onsole.log('dataLayer > NEW');
+    // dataLayer.push(newObj);
+  // }
+  // else{
+  //   console.log('dataLayer > EXIST (Update)');
+  //   objItem = newObj;
+  // }
+
+  // _onsole.log('dataLayer',dataLayer);
+
+  // dataLayer.push(objItem);
 
 }
 
@@ -828,6 +923,13 @@ function adler32(input) {
   return (b << 16) | a;
 }
 
+function toHoursAndMinutes(totalMinutes) {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${hours}h${minutes > 0 ? ` ${minutes}m` : ''}`;
+}
+
 // 'map218-api',
 function generic_api(datastring,successFn){
   
@@ -1085,7 +1187,7 @@ function m223_ready(){
 
 function load_geovar(g_meta_list){
 
-  console.log('load_geovar',g_meta_list);
+  // onsole.log('load_geovar',g_meta_list);
 
   g_meta_list.forEach(element => {
     var dataString = {}
@@ -1136,7 +1238,7 @@ dyn_functions['succ_load_geovar'] = function(r){
 }
 
 function load_geovar_project(g_meta_project_list){
-  console.log('load_geovar_project',g_meta_project_list);
+  // onsole.log('load_geovar_project',g_meta_project_list);
   g_meta_project_list.forEach(element => {
     var dataString = {}
     dataString.slug=element;
@@ -1556,7 +1658,8 @@ $(document).ready(function() {
 
 // 'map207-template-b',
 function m207_ready(){
-  // _onsole.log('WebGIS ready!');
+
+  // _onsole.log('m207_ready()');
   
   var source_w = $('.box-sidebar').width();
   var target_l = source_w+5;
@@ -1568,14 +1671,17 @@ function m207_ready(){
   log_tag_manager(
     'ready - view map v'+GEOLIB_VER,
     //GA - log_tag_manager - action // _onsole.log_ready_map
-    'map-dashboard',//GA - log_tag_manager - label
+    g_meta.geovar_map.features[0].properties.g_label,
+    //'map-dashboard',//GA - log_tag_manager - label
     '0' //GA - log_tag_manager - value (optional)
   );
 
   $('.div-on-map').on(
     'click',
     function(ev){
-      L.DomEvent.stopPropagation(ev);
+      if(m211_mapLibrary=='leafletjs'){
+        L.DomEvent.stopPropagation(ev);
+      }
     }
   ); 
 
@@ -1697,6 +1803,7 @@ function m211_ready_2(opt){
 
   }
   else if(opt.mapLibrary=='mapbox'){
+
     mapboxgl.accessToken = MAPBOXGL_KEY;
     mymap = new mapboxgl.Map({
       container: 'mapid', // container ID
@@ -1705,8 +1812,55 @@ function m211_ready_2(opt){
       // style: 'mapbox://styles/mapbox/streets-v12', // style URL
       // center: [-74.5, 40], // starting position [lng, lat]
       // zoom: 9 // starting zoom
+      // pitchWithRotate: false
     });
     add_mymap();
+
+    if(m211_mapPitch=='3D'){
+      mymap.dragRotate._mousePitch.enable();
+    }
+    else{
+      mymap.dragRotate._mousePitch.disable();
+    }
+
+    mymap.on('load', () => {
+
+      list_f_mapbox.forEach(element => {
+        if(dyn_functions[element]!=null){
+          dyn_functions[element]();
+        }
+      });
+
+    });  
+
+  }
+  else if(opt.mapLibrary=='maplibre'){
+
+    mymap = new maplibregl.Map({
+      container: 'mapid',
+      // style: 'https://demotiles.maplibre.org/style.json', // stylesheet location
+      // center: [-74.5, 40], // starting position [lng, lat]
+      // zoom: 9 // starting zoom
+    });
+    add_mymap();
+
+    if(m211_mapPitch=='3D'){
+      mymap.dragRotate._mousePitch.enable();
+    }
+    else{
+      mymap.dragRotate._mousePitch.disable();
+    }
+
+    mymap.on('load', () => {
+
+      list_f_mapbox.forEach(element => {
+        if(dyn_functions[element]!=null){
+          dyn_functions[element]();
+        }
+      });
+
+    }); 
+
   }
   else{
     console.log('m211_ready_2','mapLibrary not supported');
@@ -1827,6 +1981,18 @@ function add_mymap(){
     //---
   }
   else if(m211_mapLibrary=='mapbox'){
+
+    mymap.setCenter([localStorage.map_lng,localStorage.map_lat]);
+    mymap.setZoom(localStorage.map_zoom);
+  
+    //--
+    sessionStorage.zoomend_status = 'true';
+    
+    //--
+    sessionStorage.zoomstart_status = 'true';
+
+  }
+  else if(m211_mapLibrary=='maplibre'){
 
     mymap.setCenter([localStorage.map_lng,localStorage.map_lat]);
     mymap.setZoom(localStorage.map_zoom);
@@ -2949,6 +3115,184 @@ dyn_functions['succ_upload_image'] = function(r){
 
 }
 
+
+dlg_field_template['field_offerta'] = function(lyr,col_prop,field_prop){
+
+  //_onsole.log(main_slug)
+  //_console.log(slug)
+  //let slug = col_prop.g_slug
+
+  //field_prop.disabled='';
+
+  let html = append_options_field(col_prop,field_prop);
+  $('.form_'+lyr +' > .group-'+col_prop.g_slug).append(html);
+
+  //if(field_prop.required=='0'){
+    //$('#input-'+col_prop.g_slug).append($('<option>', { 
+    //  value: '',
+    //  text : '--Leave blank or select an option'
+    //}));
+
+    let o = new Option('-- Seleziona una Offerta', '');
+    //o.selected=true;
+    $('.form_'+lyr +' > .group-'+col_prop.g_slug +' > .control-'+col_prop.g_slug)
+      .append(o);
+  //}
+  /*col_prop.g_options.forEach(element => {
+
+    //$('#input-'+col_prop.g_slug).append($('<option>', { 
+    //    value: element.slug,
+    //    text : element.name
+    //}));
+
+    var o = new Option(element.name,element.slug);
+    //if(element.slug==p[col_prop.g_slug]){
+    //  o.selected=true;
+    //}
+    $('#input-'+col_prop.g_slug).append(o);
+  });*/
+
+  add_list_offerta(lyr);
+
+}
+
+dlg_field_template['field_prodotto'] = function(lyr,col_prop,field_prop){
+
+  //_onsole.log(main_slug)
+  //_console.log(slug)
+  //let slug = col_prop.g_slug
+
+  //field_prop.disabled='';
+
+  let html = append_options_field(col_prop,field_prop);
+  $('.form_'+lyr +' > .group-'+col_prop.g_slug).append(html);
+
+  //if(field_prop.required=='0'){
+    //$('#input-'+col_prop.g_slug).append($('<option>', { 
+    //  value: '',
+    //  text : '--Leave blank or select an option'
+    //}));
+
+    let o = new Option('-- Seleziona un Prodotto', '');
+    //o.selected=true;
+    //$('#input-'+col_prop.g_slug).append(o);
+    $('.form_'+lyr +' > .group-'+col_prop.g_slug +' > .control-'+col_prop.g_slug)
+      .append(o);
+
+  //}
+  /*col_prop.g_options.forEach(element => {
+
+    //$('#input-'+col_prop.g_slug).append($('<option>', { 
+    //    value: element.slug,
+    //    text : element.name
+    //}));
+
+    var o = new Option(element.name,element.slug);
+    //if(element.slug==p[col_prop.g_slug]){
+    //  o.selected=true;
+    //}
+    $('#input-'+col_prop.g_slug).append(o);
+  });*/
+
+  //$('.group-'+col_prop.g_slug).append('<div class="offerta-box" style="padding: 7px;"></div>');
+  //$('.group-'+col_prop.g_slug).append('<div class="licenza-box" style="padding: 7px;"></div>');
+
+  add_list_prodotto(lyr);
+}
+
+dlg_field_template['field_speciale'] = function(lyr,col_prop,field_prop){
+
+  let p = new Array();
+
+  if(ai.model=='modify'){
+    p = this_lyr[lyr].last_r.features[0].properties;
+    if(p.datafattura!=''){
+
+      $('.form_'+lyr +' > .group-'+col_prop.g_slug).remove();
+    }
+
+  }
+
+  $('.form_'+lyr +' > .group-'+col_prop.g_slug).append(''
+    +'<div class="clearfix"></div>'
+    +'<div class="control-main-'+col_prop.g_slug +'" style="width:50%;float:left;"></div>'
+    +'<div class="control-sub-'+col_prop.g_slug +'" style="width:50%;float: right;padding-left:10px;"></div>'
+    +'<div class="clearfix"></div>'
+  +'');
+
+  html = append_options_field(col_prop,field_prop);
+  $('.form_'+lyr +' > .group-'+col_prop.g_slug + ' > .control-main-'+col_prop.g_slug).append(html)
+  $('.form_'+lyr +' > .group-'+col_prop.g_slug + ' > .control-main-'+col_prop.g_slug +' > .control-'+col_prop.g_slug).attr('lyr',lyr);
+
+  //if(field_prop.required=='0'){
+  //  var o = new Option('--Leave blank or select an option', '');
+  //  $('.form_'+lyr +' > .group-'+col_prop.g_slug + ' > .control-main-'+col_prop.g_slug +' > .control-'+col_prop.g_slug)
+  //    .append(o);
+  //}
+  col_prop.g_options.forEach(element => {
+    if(parseInt(element.slug)==0){
+      var o = new Option(element.name,element.slug, true, true);
+    }
+    else{
+      var o = new Option(element.name,element.slug);
+    }
+    
+    $('.form_'+lyr +' > .group-'+col_prop.g_slug + ' > .control-main-'+col_prop.g_slug +' > .control-'+col_prop.g_slug)
+      .append(o);
+  });
+
+  //--
+
+  col_prop.g_slug='numerofattura-speciale';
+  field_prop.type='character varying';
+  html = append_simple_field(col_prop,field_prop/*,p*/);
+  $('.form_'+lyr +' > .group-speciale' + ' > .control-sub-speciale').append(html)
+  $('.form_'+lyr +' > .group-speciale' + ' > .control-sub-speciale > .control-'+col_prop.g_slug).attr('lyr',lyr);
+  $('.control-'+col_prop.g_slug).filter('[lyr=lyr_cicloattivo_a]').prop('disabled',true);
+
+  $('.control-speciale').filter('[lyr=lyr_cicloattivo_a]').on('change', function() {
+
+    if(parseInt($(this).val())==0){//No
+      $('.control-'+col_prop.g_slug).filter('[lyr=lyr_cicloattivo_a]').prop('disabled',true);
+      $('.control-'+col_prop.g_slug).filter('[lyr=lyr_cicloattivo_a]').attr('required','0');
+    }
+    else{
+      $('.control-'+col_prop.g_slug).filter('[lyr=lyr_cicloattivo_a]').prop('disabled',false);
+      $('.control-'+col_prop.g_slug).filter('[lyr=lyr_cicloattivo_a]').attr('required','1');
+    }
+
+  });
+
+}
+
+dlg_field_template['field_datafattura'] = function(lyr,col_prop,field_prop){
+
+  let p = new Array();
+
+  if(ai.model=='modify'){
+    p = this_lyr[lyr].last_r.features[0].properties;
+    if(p.datafattura!='' && p.datafattura!=null){
+
+      $('.form_'+lyr +' > .group-'+col_prop.g_slug).html(''
+        +'Data emissione fattura: '+p.datafattura+' (Non modificabile)'
+      +'');
+      return;
+    }
+
+  }
+
+  //--simple field
+  html = append_simple_field(col_prop,field_prop,p);
+  $('.form_'+lyr +' > .group-'+col_prop.g_slug).append(html);
+
+  if(col_prop.g_type=='timestamp without time zone'){
+    $('.form_'+lyr +' > .group-'+col_prop.g_slug +' > .control-'+col_prop.g_slug)
+      .datepicker({dateFormat:'dd/mm/yy'});
+  }
+  //--
+
+}
+
 // 'map235-dialog-body-support',
 
 function objField_omnivore(optIn){
@@ -2957,100 +3301,108 @@ function objField_omnivore(optIn){
 
   let pCol = optIn.pCol;
   let objItem = optIn.objItem;
+
   //_onsole.log('objField_omnivore')
 
-  if(pCol.g_callback!=null
-    && pCol.g_callback!='none'){
-
-
-    //-- CREATE FORM GROUP AND LABEL
-    opt = {
-      "ct_slug": pCol.g_slug,//optIn.ct_slug,
-      "pCol": pCol,
-      "objItem": objItem,
-    }
-    dlg_field_template[pCol.g_callback](opt);
-  }
-  else{    //callback none
-    if( pCol.g_options ) {
-    
-      //_onsole.log(optIn)
-      //-- CREATE INPUT SELECT
+  if(pCol.input_type===false){
+    let html = objItem[pCol.g_slug]
+    $('#group-'+pCol.g_slug).append(html);
+  } // input_type === false
+  else{
+    if(pCol.g_callback!=null
+      && pCol.g_callback!='none'){
+  
+  
+      //-- CREATE FORM GROUP AND LABEL
       opt = {
-        "slug": pCol.g_slug,
-        "params_control": true,
+        "ct_slug": pCol.g_slug,//optIn.ct_slug,
         "pCol": pCol,
+        "objItem": objItem,
       }
-      $('#group-'+pCol.g_slug).append(''
-        +append_options_field_2(opt)
-      +'');
-      //-- APPEND BLANK OPTION
-      if(pCol.blank_option!=undefined){
-        $('#input-'+pCol.g_slug).append($('<option>', { 
-          value: 'null',
-          text : pCol.blank_option
-        }));
-      }
-      else{
-        append_leaveblank_option(pCol.g_slug);
-      }
-      
-      let selected = false;
-      pCol.g_options.forEach(el4 => {
-  
-        //_onsole.log('a',el4);
-  
-        if (typeof el4 === 'object'){
-          el4Val = el4.val;
-          el4Text = el4.text;
-        }
-        else{
-          el4Val = el4;
-          el4Text = el4;
-        }
-  
-        if(el4Val == objItem[pCol.g_slug]){
-          selected = true;
-          selOpt = new Option(el4Text,el4Val, false, true);
-          $('#input-'+pCol.g_slug).append(selOpt);
-        }
-        else{
-          selOpt = new Option(el4Text,el4Val, false, false);
-          $('#input-'+pCol.g_slug).append(selOpt);
-        }
-  
-  
-      });
-  
+      dlg_field_template[pCol.g_callback](opt);
     }
-    else{
-  
-      if(pCol.data_type==='json'){
-        //-- CREATE INPUT TEXT AREA
+    else{    //callback none
+      if( pCol.g_options ) {
+      
+        //_onsole.log(optIn)
+        //-- CREATE INPUT SELECT
         opt = {
           "slug": pCol.g_slug,
           "params_control": true,
           "pCol": pCol,
-          "objItem": objItem,
         }
-        html = append_textarea_field(opt);
-  
+        $('#group-'+pCol.g_slug).append(''
+          +append_options_field_2(opt)
+        +'');
+        //-- APPEND BLANK OPTION
+        if(pCol.blank_option!=undefined){
+          $('#input-'+pCol.g_slug).append($('<option>', { 
+            value: 'null',
+            text : pCol.blank_option
+          }));
+        }
+        else{
+          append_leaveblank_option(pCol.g_slug);
+        }
+        
+        let selected = false;
+        pCol.g_options.forEach(el4 => {
+    
+          //_onsole.log('a',el4);
+    
+          if (typeof el4 === 'object'){
+            el4Val = el4.val;
+            el4Text = el4.text;
+          }
+          else{
+            el4Val = el4;
+            el4Text = el4;
+          }
+    
+          if(el4Val == objItem[pCol.g_slug]){
+            selected = true;
+            selOpt = new Option(el4Text,el4Val, false, true);
+            $('#input-'+pCol.g_slug).append(selOpt);
+          }
+          else{
+            selOpt = new Option(el4Text,el4Val, false, false);
+            $('#input-'+pCol.g_slug).append(selOpt);
+          }
+    
+    
+        });
+    
       }
       else{
-        //-- CREATE INPUT TEXT
-        opt = {
-          "slug": pCol.g_slug,
-          "params_control": true,
-          "pCol": pCol,
-          "objItem": objItem,
+    
+        if(pCol.data_type==='json'){
+          //-- CREATE INPUT TEXT AREA
+          opt = {
+            "slug": pCol.g_slug,
+            "params_control": true,
+            "pCol": pCol,
+            "objItem": objItem,
+          }
+          html = append_textarea_field(opt);
+    
         }
-        html = append_simple_field_2(opt);
-      }
-  
-      $('#group-'+pCol.g_slug).append(html);
-  
-    }    
-  }
+        else{
+          //-- CREATE INPUT TEXT
+          opt = {
+            "slug": pCol.g_slug,
+            "params_control": true,
+            "pCol": pCol,
+            "objItem": objItem,
+          }
+          html = append_simple_field_2(opt);
+        }
+    
+        $('#group-'+pCol.g_slug).append(html);
+    
+      }    
+    }
+  } // input_type != false
+
 
 }
 
@@ -3060,7 +3412,7 @@ function objField_omnivore_viewOnly(optIn){
   let pCol = optIn.pCol;
   let objItem = optIn.objItem;
 
-  let valItem = opt.objItem[pCol.g_slug]
+  let valItem = objItem[pCol.g_slug]
 
   if(pCol.data_type==='json'){
     //-- CREATE INPUT TEXT AREA
@@ -3741,7 +4093,7 @@ dyn_functions['geovar_lyr_extend'] = function(){
       obj_lyr.table_schema=new Array();
       obj_lyr.table_schema.features=[];
       load_table_schema(table_slug,p.g_slug);
-
+      load_table_schema2(table_slug,p.g_slug);
     }
 
   });
@@ -3778,6 +4130,71 @@ dyn_functions['fill_table_schema'] = function(table_slug,lyr){
   });
 
   f_wait.table_schema=1;
+
+}
+
+f_wait.table_schema2=0;
+
+function load_table_schema2(table_slug,lyr){
+
+  if (f_wait.geovar_map==0) {
+    //_onsole.log('wait geovar_map')
+    setTimeout(function(){load_table_schema2(table_slug,lyr)},100);
+    return;
+  } else {
+    //_onsole.log('stop wait geovar_map')
+    dyn_functions['fill_table_schema2'](table_slug,lyr);
+  };
+
+}
+
+dyn_functions['fill_table_schema2'] = function(table_slug,lyr){
+  //this_lyr[lyr].g_cols_schema
+  if(this_lyr[lyr].g_cols_schema!=undefined){
+
+    let obj = g_meta.geovar_map_tb.filter( element => element.name == table_slug)[0];
+    let el2_obj = this_lyr[lyr].g_cols_schema.filter( element => element.table == table_slug);
+
+    el2_obj.forEach(el2 => {
+
+      this_lyr[lyr].table_schema2[el2.slug]=new Array();
+      this_lyr[lyr].table_schema2[el2.slug].features=[];
+
+      //obj.features.forEach(el3 => {
+        if(el2.cols[0]=='all'){
+          obj.features.forEach(el3 => {
+            this_lyr[lyr].table_schema2[el2.slug].features.push(el3.properties);
+          });
+        }
+        // else if(el2.cols.includes(el3.properties.g_slug)){
+
+        //   el2.cols.forEach(el3 => {
+        //     this_lyr[lyr].table_schema2[el2.slug].features.push(el3.properties);
+        //   });
+
+        //   this_lyr[lyr].table_schema2[el2.slug].features.push(el3.properties);
+        // }
+        else{
+
+          el2.cols.forEach(el4 => {
+            obj.features.forEach(el3 => {
+              if(el3.properties.g_slug==el4){
+                this_lyr[lyr].table_schema2[el2.slug].features.push(el3.properties);
+              }
+              
+            });
+            // let el2_obj = obj.filter( element => element.table == table_slug);
+            // this_lyr[lyr].table_schema2[el2.slug].features.push(el3.properties);
+          });
+
+          // this_lyr[lyr].table_schema2[el2.slug].features.push(el3.properties);
+        }
+      //});
+
+    });
+
+  }
+  f_wait.table_schema2=1;
 
 }
 
@@ -4871,6 +5288,9 @@ function map232_ready_2(opt){
   else if(opt.mapLibrary=='mapbox'){
     exe_map232_mapbox();
   }
+  else if(opt.mapLibrary=='maplibre'){
+    exe_map232_mapbox();
+  }
 
 }
 
@@ -4939,34 +5359,73 @@ function exe_map232_BaseRotate(){
 
 function exe_map232_mapbox(){
 
-  // onsole.log('exe_map232_mapbox')
-  let layerId = 'streets-v12';
-  // let layerId = 'dark-v11';
-  mymap.setStyle('mapbox://styles/mapbox/' + layerId);
-  // let customTile = {
-  //   'version': 8,
-  //   'sources': {
-  //     'raster-tiles': {
-  //       'type': 'raster',
-  //       'tiles': [
-  //         'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg'
-  //       ],
-  //       'tileSize': 256,
-  //       'attribution':
-  //       'Map tiles by <a target="_top" rel="noopener" href="http://stamen.com">Stamen Design</a>, under <a target="_top" rel="noopener" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_top" rel="noopener" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_top" rel="noopener" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>'
-  //     }
-  //   },
-  //   'layers': [
-  //     {
-  //       'id': 'simple-tiles',
-  //       'type': 'raster',
-  //       'source': 'raster-tiles',
-  //       'minzoom': 0,
-  //       'maxzoom': 22
-  //     }
-  //   ]
-  // }
-  // mymap.setStyle(customTile);
+  if(list_basemap[0] == 'streets-v12'){
+    // onsole.log('exe_map232_mapbox')
+    let layerId = 'streets-v12';
+    // let layerId = 'dark-v11';
+    mymap.setStyle('mapbox://styles/mapbox/' + layerId);
+  }
+  else if(list_basemap[0] == 'lyr040'){
+
+    let o = g_meta.geovar_lyr.features;
+    let this_obj_lyr038=o.filter(({properties}) => properties.g_slug === 'lyr038');
+    let obj_lyr_lyr038=this_obj_lyr038[0].properties;
+    let this_obj_lyr040=o.filter(({properties}) => properties.g_slug === 'lyr038');
+    let obj_lyr_lyr040=this_obj_lyr040[0].properties;
+
+    let customTile = {
+      'version': 8,
+      'sources': {
+        'raster-tiles-lyr038': {
+          'type': 'raster',
+          'tiles': [
+            'https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}@2x.png'
+          ],
+          'tileSize': 256,
+          'attribution':
+          ''
+        }
+      },
+      'layers': [
+        {
+          'id': 'id-tiles-lyr038',
+          'type': 'raster',
+          'source': 'raster-tiles-lyr038',
+          'minzoom': 8,
+          'maxzoom': 22
+        }
+      ]
+    }
+    mymap.setStyle(customTile);  
+
+  }
+  else{
+    let customTile = {
+      'version': 8,
+      'sources': {
+        'raster-tiles': {
+          'type': 'raster',
+          'tiles': [
+            'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png'
+          ],
+          'tileSize': 256,
+          'attribution':
+          ''
+        }
+      },
+      'layers': [
+        {
+          'id': 'simple-tiles',
+          'type': 'raster',
+          'source': 'raster-tiles',
+          'minzoom': 0,
+          'maxzoom': 22
+        }
+      ]
+    }
+    mymap.setStyle(customTile);
+  }
+
 
 }
 
@@ -5050,8 +5509,6 @@ dyn_functions['exe_create_button'] = function(item_btn,optIn=new Array()){
     return;
   }
   
-  
-
   let p_btn = obj_btn[0].properties;
   let btn_label='';
   //_onsole.log('p_btn',p_btn);
@@ -5290,7 +5747,7 @@ dyn_functions['exe_create_button'] = function(item_btn,optIn=new Array()){
 // function exe_btn(g_callback,item_btn,optIn=new Array()){
 function exe_btn(e){
   let optIn = e.data;
-  //_onsole.log('exe_btn',optIn)
+  // onsole.log('exe_btn',optIn)
   // _onsole.log('param: '+g_callback);
   //return;
   // _onsole.log( $(this).attr('slug'));
@@ -6019,6 +6476,18 @@ function generic_lyr(lyr){
     // _onsole.log('obj_lyr',obj_lyr);
 
   }
+
+  if(objAddon.onstart_location!=undefined){
+    let p = objAddon.onstart_location;
+    mymap.setView(
+      [
+        p.lat,
+        p.lng
+      ], 
+      p.zoom
+    );
+
+  }  
 
   prepare_map220_lyr(lyr);
 
@@ -8145,8 +8614,51 @@ dyn_functions['succ_show_table'] = function(r){
 function m230_ready(){
   // onsole.log('m230_ready');
   if (typeof mymap !== 'undefined') {
-    mymap.on('click', on_mapclick);
-    dMap.mapclick_status = true;
+    switch (m211_mapLibrary) {
+      case 'leafletjs':    
+
+        dMap.mapclick_status = true;
+
+        mymap.on('click', (e) => {
+          let opt = {
+            lat: e.latlng.lat,
+            lng: e.latlng.lng
+          }
+          on_mapclick(opt);
+        });
+
+      break;
+      case 'mapbox':
+
+        dMap.mapclick_status = true;
+
+        mymap.on('click', (e) => {
+          let opt = {
+            lat: e.lngLat.lat,
+            lng: e.lngLat.lng
+          }
+          on_mapclick(opt);
+        });
+
+      break;
+      case 'maplibre':
+
+        dMap.mapclick_status = true;
+
+        mymap.on('click', (e) => {
+          let opt = {
+            lat: e.lngLat.lat,
+            lng: e.lngLat.lng
+          }
+          on_mapclick(opt);
+        });
+
+      break;
+      default:
+
+        console.log(`Not m230_ready() options for ${m211_mapLibrary}.`);
+
+    } // switch
   }
 
 }
@@ -8161,10 +8673,10 @@ setInterval(
   500
 );
 
-function on_mapclick(e){
+function on_mapclick(opt){
   
-  sessionStorage.mapclick_lat=e.latlng.lat;
-  sessionStorage.mapclick_lng=e.latlng.lng;
+  sessionStorage.mapclick_lat=opt.lat;
+  sessionStorage.mapclick_lng=opt.lng;
 
   if(dMap.mapclick_status===true){
 
@@ -8180,7 +8692,7 @@ function on_mapclick(e){
       if(obj_addon.properties.mapclick_status=='enabled'){
         
         if(dyn_mapclick[element]!=null){
-          dyn_mapclick[element](e);
+          dyn_mapclick[element](opt);
         }
         else{
           console.log('dyn_mapclick['+element+'] is not defined')
@@ -8454,3 +8966,282 @@ function pixelsInMeterWidth(){
 }
 
 //--
+
+function btnOptDefault() {
+  let r = {
+    itemSlug:'btn_default_change_this',//'btn_closedlg3',
+    itemLabel: {
+      "default":"<i class=\"bi bi-bandaid\"></i>",
+    },//gLang.label_close,
+    itemDescription: {"default":"..."},
+    //itemLabel:'<i class="fa fa-ellipsis-h" aria-hidden="true"></i>',
+    itemClass:'btn-sm btn-dark', // btn-main-sidebar',
+    //btnOnClick:'close',
+    itemType:'button', //form-switch
+    itemDisabled:false,
+    itemStyle:'', //backgrund-color:red;
+    g_group: ["public"],
+    g_responsive: "both", //both, mobile, desktop
+    //"g_callback": 'btn_save_point', // same as btnSlug
+  }
+  return r;
+}
+
+function default_logo(optIn){
+
+  c = ''+
+    '<div id="box-main-logo">'+
+    '</div>'+
+  '';
+  $(optIn.container).html(c);
+
+  $('#box-main-logo').css('background-image','url("'+DFL_LABEL_MAIN_LOGO+'")');
+  $('#box-main-logo').css('background-repeat','no-repeat');
+  $('#box-main-logo').css('background-size','225px');
+  $('#box-main-logo').css('background-position','center');
+  $('#box-main-logo').css('height','100%');
+  $('#box-main-logo').css('cursor','pointer');
+  
+  $('#box-main-logo').on('click',function(){
+    let item_dlg = 'dlg_Sidebar';
+
+    var meta = {
+      'properties':{
+        'g_slug': item_dlg+'_single',
+        'g_label': 'Sidebar',
+        'g_template': 'template_by_slug',
+        'g_description': null
+      }
+    }
+    g_meta.geovar_dialog.features.push(meta);
+  
+    sessionStorage.this_dialog_lyr=item_dlg;
+    sessionStorage.this_dialog_slug=item_dlg+'_single';//'lyr035_single'
+
+    create_dialog2(sessionStorage.this_dialog_slug);
+  });
+
+}
+
+
+dyn_functions['template_by_slug_'+'dlg_Sidebar'+'_single'] = function(){
+
+  let dlg_slug = 'dlg_a245_DeckGLOnClick'+'_single';
+
+  let c = '<div class="mainboxItem" style="margin-top:5px;"></div>';
+  $('.dlg_'+dlg_slug+''+'_body').append(c);
+
+  //box button tab
+  c = ''
+    +'<div class="ajs_body_head" '
+      +'pid="999" '
+      +'></div>'
+    +'<div class="clearfix"></div>';
+  $('.dlg_'+dlg_slug+''+'_body').append(c);
+ 
+}
+
+async function getAllUsersData() {
+
+  let datastring = {
+    fn_group:'geodata',
+    action:'view_data',
+    collection:'getAllUsersData',
+    qy_name:'A',
+    lyr:'lyr999'  
+  } 
+
+  let r = await generic_api_v2(datastring,'getAllUsersData');
+
+  list_players.features = r.features;
+
+}
+
+async function default_search_map_by_token() {
+
+  let datastring = {
+    fn_group:'geodata',
+    action:'view_data',
+    collection:'default_search_map_by_token',
+    qy_name:'A',
+    geom:1,
+    user_token:localStorage.user_token
+  } 
+
+  let r = await generic_api_v2(datastring,'default_search_map_by_token');
+
+  list_MapByToken.features = r.features;
+  
+}
+
+async function update_obj_maps() {
+
+  let datastring = {
+    fn_group:'geodata',
+    action:'view_data',
+    collection:'update_obj_maps',
+    qy_name:'A',
+    geom:1
+  } 
+
+  let r = await generic_api_v2(datastring,'update_obj_maps');
+
+  g_meta.obj_maps = r;
+  
+}
+
+
+f_wait['decode_data']=0;
+f_wait['decode_data_lyr_prodotto_a']=0;
+f_wait['decode_data_lyr_societa_a']=0;
+
+function load_decode_data(){
+
+  let g_meta_decode_data_list = [
+    'lyr_prodotto_a',
+    'lyr_societa_a'
+  ];
+
+  g_meta_decode_data_list.forEach(element => {
+
+    var dataString = {
+      fn_group:'geodata',
+      action:'view_data',
+      collection:'decode_data',
+      qy_name:'A',
+      lyr:element
+    };
+    generic_api(dataString,'load_decode_data');
+
+  });
+
+  f_wait['decode_data']=1;
+
+}
+
+dyn_functions['succ_load_decode_data'] = function(r){
+  //_onsole.log(r)
+  let slug=r.ds.lyr;
+  //_onsole.log('Load '+slug+': success');
+  let f = r.features;
+  
+  g_decode[slug]=new Array();
+
+  f.forEach(element => {
+    let p = element.properties;
+    g_decode[slug][p.codgeo]=p.myname;
+  });
+
+  f_wait['decode_data_'+slug]=1;
+  //_onsole.log(g_meta);
+
+}
+
+function prepare_load_sub_scripts(subScripts){
+
+  //-- ADD SUB SCRIPT
+  // let subScripts = a279_subScript;
+  // _onsole.log('a279_load_sub_scripts',subScript)
+  subScripts.forEach(element => {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    let url=THEME_PROJECT+'/src/js/'+element+'.js?ver='+VER;
+    // script.src = url;   
+    // document.head.appendChild(script);
+    // loadScript(url)
+    // // .catch(loadScript.bind(null, localSource))
+    // .then(successCallback(element), failureCallback);
+    load_sub_scripts(url,element, callback_load_sub_scripts);    
+  });
+  return;
+}
+
+function load_sub_scripts(url, element, callback){
+
+  var script = document.createElement('script');
+  script.src = url;
+
+  script.onload = function() {
+    if (typeof callback === 'function') {
+      callback(element);
+    }
+  };
+
+  document.body.appendChild(script);
+
+}
+
+function callback_load_sub_scripts(element) {
+  // Your code for the function to be executed when the script is ready
+  // onsole.log('Script loaded and function executed! ' + element);
+  if(dyn_functions[element+'_ready']!=null){
+    dyn_functions[element+'_ready']();
+  }
+  else{
+    // _onsole.log(element+'_ready','not found')
+  }  
+}
+
+async function check_if_geovar_table_exists(optIn) {
+
+  await new Promise(resolve => setTimeout(resolve, 1));
+
+  // _onsole.log('start_2');
+
+  let datastring = {
+    fn_group:'geodata',
+    action:'view_data',
+    collection:'check_if_geovar_table_exists',
+    qy_name:'A',
+    geom:1,
+    table_slug:optIn.table_slug,
+    table_name:optIn.table_name,
+    master_type:optIn.master_type
+  } 
+  //let r = await a254_seqAllNodes(myUrl);
+  let r = await generic_api_v2(datastring,'check_if_geovar_table_exists');
+
+  geovar_table_exists[optIn.table_slug] = r;
+
+}
+
+async function check_if_geovar_table_schema(table_slug) {
+
+  await new Promise(resolve => setTimeout(resolve, 1));
+
+  // _onsole.log('start_2');
+
+  let datastring = {
+    fn_group:'geodata',
+    action:'view_data',
+    collection:'check_if_geovar_table_schema',
+    qy_name:'A',
+    geom:1,
+    table_slug:table_slug
+  } 
+  //let r = await a254_seqAllNodes(myUrl);
+  let r = await generic_api_v2(datastring,'check_if_geovar_table_schema');
+
+  geovar_table_schema[table_slug] = r;
+
+}
+
+async function getAllInstallationTables(){
+
+  await new Promise(resolve => setTimeout(resolve, 1));
+
+  // _onsole.log('start_2');
+
+  let datastring = {
+    fn_group:'geodata',
+    action:'view_data',
+    collection:'getAllInstallationTables',
+    qy_name:'A',
+    geom:1
+  } 
+  //let r = await a254_seqAllNodes(myUrl);
+  let r = await generic_api_v2(datastring,'getAllInstallationTables');
+
+  installation_tables = r;
+
+}

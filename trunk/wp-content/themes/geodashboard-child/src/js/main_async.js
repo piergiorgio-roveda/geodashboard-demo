@@ -54,6 +54,63 @@
         // _onsole.log('end '  + slug);
       }
 
+      async function geovar_user_local() {
+
+        g_meta.geovar_user_local = {
+          features : [
+            {
+              properties : {
+                user_id:0,
+                user_token:'0x0'
+              }
+            }
+          ]
+        }
+
+        if(localStorage.getItem('user_token')===null){
+          // await new Promise(resolve => setTimeout(resolve, 1));
+          prepare_start_geovar_2_case();
+        }
+        else if(localStorage.getItem('user_token')==='0x0'){
+          // await new Promise(resolve => setTimeout(resolve, 1));
+          prepare_start_geovar_2_case();
+        }
+        else{
+          let datastring = {
+            call_type:'silent',
+            fn_group:'geodata',
+            action:'view_data',
+            collection:'geovar_user_local',
+            qy_name:'A',
+            lyr:'lyr999',
+            geom:0,
+            user_token:localStorage.user_token
+          };
+          let r = await generic_api_v2(
+            datastring,
+            'geovar_user_local'
+          )
+          g_meta.geovar_user_local = r;
+          prepare_start_geovar_2_case();
+        }
+      }
+
+      function prepare_start_geovar_2_case(){
+
+        if(g_meta.geovar_map.features[0].properties.g_group.includes('public')==true){
+          start_geovar_2_case('nothing');
+        }
+        else if (window.location.href.includes('/'+PAGE_CLIENT_SLUG+'/profile/')){
+          start_geovar_2_case('check_user_token');
+        }
+        else if (g_meta.geovar_map.features[0].properties.g_group.includes('private')==true){
+          start_geovar_2_case('private');
+        }
+        else{
+          start_geovar_2_case('check_user_token');
+        } 
+      }
+
       async function start_geovar_1() {
 
         await Promise.all([
@@ -67,7 +124,6 @@
           start_geovar_label_full()
         ]);
 
-        // _onsole.log('start_geovar_1');
         show_loading2('.mapid-loading');
         
         await new Promise(resolve => setTimeout(resolve, 1));
@@ -189,55 +245,18 @@
         await new Promise(resolve => setTimeout(resolve, 1));
         // _onsole.log('end geovar_2'); 
 
-        // _onsole.log(g_meta);
-
-        if(g_meta.geovar_map.features[0].properties.g_group.includes('public')==false
-          || window.location.href.includes('/map_2/profile/')){
-            
-          if(window.location.href.includes('?user_token=')){
-  
-            let user_token_from_url = window.location.href.split('?user_token=')[1];
-            localStorage.setItem('user_token', user_token_from_url);
-            let url = window.location.href.split('?')[0];
-            window.open(url,"_self");
-  
-          }
-          else{
-  
-            let value = localStorage.getItem('user_token');
-            if(value === null){
-  
-              if(mapuser_meta[0]['user_token']=='0x0'){
-                
-                let url = HOME_PROJECT+'/map_2/profile/';
-                if(window.location.href!=url){
-                  window.open(url,"_self");
-                }
-                
-              }
-              else{
-                localStorage.setItem('user_token', mapuser_meta[0]['user_token']);
-              }
-              
-            }
-            else{
-  
-              if(mapuser_meta[0]['user_token']!='0x0'){
-                localStorage.setItem('user_token', mapuser_meta[0]['user_token']);
-              }
-              else if(value!='0x0'){
-              }
-              else{
-                let url = HOME_PROJECT+'/map_2/profile/';
-                if(window.location.href!=url){
-                  window.open(url,"_self");
-                }
-              }
-              
-            }
-  
-          }
-        }           
+        // if(g_meta.geovar_map.features[0].properties.g_group.includes('public')==true){
+        //   start_geovar_2_case('nothing');
+        // }
+        // else if (window.location.href.includes('/'+PAGE_CLIENT_SLUG+'/profile/')){
+        //   start_geovar_2_case('check_user_token');
+        // }
+        // else if (g_meta.geovar_map.features[0].properties.g_group.includes('private')==true){
+        //   start_geovar_2_case('private');
+        // }
+        // else{
+        //   start_geovar_2_case('check_user_token');
+        // }  
 
       }
 
@@ -272,6 +291,11 @@
 
         //then load scripts functions        
 
+
+        // _onsole.log('end geovar_2'); 
+
+        geovar_user_local();       
+
         //require
           //map203-google-initialize
           //map204-search-cointaner
@@ -296,28 +320,38 @@
         }
         let m211_Addon = get_geovar_obj(g_ds);
 
-        // m211_rotation = 'disabled'; default in default.js
-        if(m211_Addon.rotation != undefined){
-          m211_rotation = m211_Addon.rotation;
+        if(m211_Addon.map == 'disabled'){
+
         }
-
-        // m211_mapLibrary = 'leafletjs'; default in default.js
-        if(m211_Addon.map_library != undefined){
-          m211_mapLibrary = m211_Addon.map_library;
-        }
-
-        if(document.getElementById("mapid") !== null)
-        {
-          //require
-            //map211-add-map 
-
-          let opt = {
-            mapLibrary:m211_mapLibrary,
-            mapRotation:m211_rotation
+        else{
+          // m211_mapRotation = 'disabled'; default in default.js
+          if(m211_Addon.rotation != undefined){
+            m211_mapRotation = m211_Addon.rotation;
           }
-          m211_ready_2(opt);
 
-        }        
+          // m211_mapLibrary = 'leafletjs'; default in default.js
+          if(m211_Addon.map_library != undefined){
+            m211_mapLibrary = m211_Addon.map_library;
+          }
+
+          // m211_mapPitch = '2D'; default in default.js
+          if(m211_Addon.pitch != undefined){
+            m211_mapPitch = m211_Addon.pitch;
+          }
+
+          if(document.getElementById("mapid") !== null){
+            //require
+              //map211-add-map 
+
+            let opt = {
+              mapLibrary:m211_mapLibrary,
+              mapRotation:m211_mapRotation
+            }
+            m211_ready_2(opt);
+
+          }
+        }
+     
 
         //require
           //map225-user-meta
@@ -332,15 +366,21 @@
 
         //require
           //map232-basemaps
-        if (typeof mymap !== 'undefined') {
+        if(m211_Addon.map == 'disabled'){
 
-          let opt = {
-            mapLibrary:m211_mapLibrary,
-            mapRotation:m211_rotation
-          }
-          map232_ready_2(opt);
-          
         }
+        else{
+          if (typeof mymap !== 'undefined') {
+
+            let opt = {
+              mapLibrary:m211_mapLibrary,
+              mapRotation:m211_mapRotation
+            }
+            map232_ready_2(opt);
+            
+          }
+        }
+
 
         //--uncomment all
         //require
@@ -382,3 +422,113 @@
       }
 
       page_inizialize();//page_inizialize...
+
+      function start_geovar_2_case(myCase){
+      
+        switch (myCase) {
+          case 'nothing':
+
+          break;
+
+          case 'private':
+
+            // onsole.log(`Manage start_geovar_2_case options for ${myCase}.`);
+            // localStorage.user_token need valid token
+            if(localStorage.getItem('user_token')===null){               
+              if(mapuser_meta[0]['user_token']=='0x0'){
+                open_page_profile();
+              }
+              else{
+                set_user_token_from_meta();
+              }
+            }
+            else if(localStorage.getItem('user_token')==='0x0'){ 
+              if(mapuser_meta[0]['user_token']=='0x0'){
+                open_page_profile();
+              }
+              else{
+                set_user_token_from_meta();
+              }
+            }
+            else{
+              let user_token = localStorage.getItem('user_token');
+              if(g_meta.geovar_map.features[0].properties.g_group.includes(user_token)==true){
+                // nothing
+              }
+              else{
+                let i = 0;
+                g_meta.geovar_user_local.features[0].properties.user_role.forEach(element => {
+                  // onsole.log('user_role',element);
+                  if(g_meta.geovar_map.features[0].properties.g_group.includes(element)==true){
+                    i++;
+                  }                  
+                });
+                if(i==0){
+                  open_page_profile();
+                }
+                else{
+                  // nothing
+                  console.log('user_role: all done!');
+                }
+              }
+            }
+
+          break;
+
+          case 'check_user_token':
+
+            if(window.location.href.includes('?user_token=')){
+  
+              // Set new user_token and reload page
+              let user_token_from_url = window.location.href.split('?user_token=')[1];
+              localStorage.setItem('user_token', user_token_from_url);
+              let url = window.location.href.split('?')[0];
+              window.open(url,"_self");
+    
+            }
+            else{
+    
+              if(localStorage.getItem('user_token') === null){
+                if(mapuser_meta[0]['user_token']=='0x0'){
+                  open_page_profile();
+                }
+                else{
+                  set_user_token_from_meta();
+                }
+              }
+              else{
+    
+                if(mapuser_meta[0]['user_token']!='0x0'){
+                  // nothing
+                  // set_user_token_from_meta();
+                  alert('Admin: `user_token` override by client');
+                }
+                else if(localStorage.getItem('user_token')=='0x0'){
+                  open_page_profile();
+                }
+                else{
+                  // nothing
+                }
+                
+              }
+    
+            }            
+          break;
+
+          default:
+    
+            console.log(`No start_geovar_2_case options for ${myCase}.`);
+    
+        } // switch
+      }
+
+      function open_page_profile(){
+        let url = HOME_PROJECT+'/'+PAGE_CLIENT_SLUG+'/profile/';
+        if(window.location.href!=url){
+          window.open(url,"_self");
+        }
+      }
+
+      function set_user_token_from_meta(){
+        localStorage.setItem('user_token', mapuser_meta[0]['user_token']);
+      }

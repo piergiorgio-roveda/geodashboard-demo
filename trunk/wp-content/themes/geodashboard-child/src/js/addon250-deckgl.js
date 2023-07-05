@@ -140,7 +140,7 @@ function disable_a250(){
 
 }
 
-dyn_mapclick[a250_slug] = function(e){
+dyn_mapclick[a250_slug] = function(opt){
 
   let item_addon = 'DeckGLOnClick';
   let g = g_meta.geovar_addon.features;
@@ -151,8 +151,8 @@ dyn_mapclick[a250_slug] = function(e){
   //_onsole.log(objAddon)
   if(objAddon.properties.mapclick_status=='enabled'){
 
-    sessionStorage.mapclick_lat=e.latlng.lat;
-    sessionStorage.mapclick_lng=e.latlng.lng;
+    sessionStorage.mapclick_lat=opt.lat;
+    sessionStorage.mapclick_lng=opt.lng;
 
     //let latlng = [e.latlng.lng,e.latlng.lat];
 
