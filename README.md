@@ -1,4 +1,4 @@
-# What is WATCHDOG?
+# What is GEODASHBOARD?
 
 <p>
 <img src="https://img.shields.io/badge/wordpress-5.7-red"/>
