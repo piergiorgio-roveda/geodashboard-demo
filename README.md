@@ -1,12 +1,6 @@
 # What is GEODASHBOARD?
 
-<p>
-<img src="https://img.shields.io/badge/wordpress-5.7-red"/>
-</p>
-
 **watchdog** is a framework to develop rich WebGIS platform that integrates online map, analytics and transactions.
-
-**watchdog** is a part of [GISTIPS project](https://github.com/piergiorgio-roveda/gis-tips/README.md), founded by Pjhooker and hosted on cityplanner.biz servers.
 
 # What is GISTIPS project?
 
@@ -20,19 +14,6 @@ More about >> [GISTIPS project](https://github.com/piergiorgio-roveda/gis-tips/R
 ## basemap
 
 - gistips_bassemaps.js
-
-# Join the Gistipsters community!
-
-**watchdog** is in continuous development, and it’s supported by an active community (Gistipster) which produces new
-content for everyone to enjoy. New features are constantly added.
-
-Join us on our [Official Discord Server](https://discord.gg/ccgwq7Y8E8)!
-
-# Demo
-
-![screen shot of the map](https://www.cityplanner.biz/wp-content/uploads/2021/07/webgis-cover-2021.jpg)
-
-[LIVE DEMO>>](https://www.cityplanner.biz/webgis/)
 
 # Ecosystem
 
