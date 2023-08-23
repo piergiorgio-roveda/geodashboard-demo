@@ -1,5 +1,7 @@
+// A $( document ).ready() block.
 jQuery( document ).ready(function() {
-
+    //log( "ready!" );
+    //var language = 'en';
     document.getElementById("login-css").disabled = true;
     document.getElementById("forms-css").disabled = true;
     if(language=='en'){
@@ -11,7 +13,7 @@ jQuery( document ).ready(function() {
 
     jQuery('#backtoblog').css('display','none');
     jQuery('#loginform').css('border-radius','15px');
-
+    //var wp_originale_form = $('#loginform').html();
     jQuery('body').removeClass();
     jQuery('body').addClass("login-page sidebar-collapse");
 
@@ -26,8 +28,8 @@ jQuery( document ).ready(function() {
         <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">\
           <div class="container">\
             <div class="navbar-translate">\
-              <a class="navbar-brand" href="'+home_url+'">\
-                watchdog\
+              <a class="navbar-brand" href="'+HOME_PROJECT+'">\
+                '+CMS_NAME+'\
               </a>\
             </div>\
             <div class="collapse navbar-collapse">\
@@ -43,7 +45,7 @@ jQuery( document ).ready(function() {
       jQuery('#login-body').append('<div class="page-header header-filter">'
         +'<div class="container ct1"></div>'
         +'<footer class="footer"></footer>');
-      jQuery('.page-header').css('background-image','url(\''+home_url+'/wp-content/themes/watchdog-child-mvp/img/cover.jpg\')');
+      jQuery('.page-header').css('background-image','url(\''+DFL_COVER+'\')');
       jQuery('.page-header').css('background-size','cover');
       jQuery('.page-header').css('background-position','top center');
 
@@ -59,7 +61,7 @@ jQuery( document ).ready(function() {
       jQuery('#login').css('background','#ffffffc2');
       jQuery('#login > form').prepend(''
 +'      <div class="card-header card-header-primary text-center" style="background:linear-gradient(60deg, #fff, #fff);box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.2), 0 13px 24px -11px rgba(185, 185, 185, 0.6);">'
-+'        <h4 class="card-title"><img src="'+logo_login+'" style="width:200px;"></h4>'
++'        <h4 class="card-title"><img src="'+DFL_LABEL_MAIN_LOGO+'" style="width:200px;"></h4>'
 +'      </div>'
 +'      <div class="card-body">'
 +'        <span class="bmd-form-group">'
@@ -106,12 +108,8 @@ jQuery( document ).ready(function() {
     else{ // IT
     }
 
-    if(language=='en'){
-      jQuery('#login > h1').html('Reserved area');
-    }
-    else{
-      jQuery('#login > h1').html('Area riservata');
-    }
+    jQuery('#login > h1').html('Area reserved');
+
     jQuery('#login > h1').addClass('catItemTitle');
 
 
