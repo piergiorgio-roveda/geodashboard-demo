@@ -1,0 +1,21 @@
+body {
+  font-family: Play;
+}
+
+.cyberpunk_mapid{
+  height: calc(100% - 45px)!important;
+  background-color: #FFF!important;
+}
+
+.cyberpunk_main-footer{
+  height:25px!important;
+  border-top: 1px solid black;
+}
+
+.cyberpunk_main-footer > .display-table{
+  height:45px!important;
+}
+
+.cyberpunk_footer-cell{
+  text-align:center!important;
+}

@@ -1,0 +1,30 @@
+
+.cesium-viewer {
+  top: -16px!important;
+}
+
+.card{
+  border: 1px solid #000;
+  border-radius: 0px;
+}
+
+.ajs-button.ajs-ok{
+  color: #343a40!important;
+  background-color: transparent!important;
+  background-image: none!important;
+  border: 1px solid #343a40!important;  
+  font-weight: 400!important;  
+  border-radius: 0.25rem!important;  
+}
+
+.style-table > .row > .cell{
+  border-bottom: 1px solid var(--wd-separator-color);
+}
+
+.cell-light{
+  border-bottom: 1px solid var(--bs-gray-500);
+}
+
+.cell-noborder{
+  border-bottom: 0px;
+}

@@ -1,0 +1,76 @@
+.template-sidebar {
+  flex: 0 0 100%;
+  border-right: 0px;
+  background-color: #f2f4f6;
+}
+
+#box-main-logo{
+  padding-top:10px;
+  text-align:center;
+  overflow: hidden;
+}
+
+.sidebar-content{
+  background:none;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 2px;
+}
+
+.sidebar-box-center{
+  text-align:center;
+  min-width:400px;
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 390px) {
+  .sidebar-box-center{
+    text-align:center;
+    min-width:100%;
+  }
+  .sidebar-box-left{
+    display:none!important;
+  }
+  .sidebar-box-right{
+    display:none!important;
+  }
+}
+
+/* Smartphones (landscape) ----------- */
+/* Portrait */
+@media screen 
+  and (max-height : 320px) {
+
+  #box-main-logo{
+    display:none!important;
+  }
+  
+}
+
+.box-flex {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.box-flex .row-flex {
+  border: 0px dotted grey;
+}
+
+.box-flex .row-flex.header {
+  flex: 0 1 auto;
+  /* The above is shorthand for:
+  flex-grow: 0,
+  flex-shrink: 1,
+  flex-basis: auto
+  */
+}
+
+.box-flex .row-flex.content {
+  flex: 1 1 auto;
+}
+
+.box-flex .row-flex.footer {
+  flex: 0 1 40px;
+}

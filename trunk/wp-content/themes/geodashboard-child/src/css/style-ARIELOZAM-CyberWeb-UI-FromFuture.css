@@ -1,0 +1,107 @@
+/*
+# CodePen: CyberWeb UI From Future | ARIELOZAM
+author: (ARIELOZAM)[https://codepen.io/ARIELOZAM]
+source: https://codepen.io/ARIELOZAM/pen/oNzREJe
+UID: s-cp1
+*/
+.s-cp1-main-msg {
+  /*border: 2px solid lightcyan;*/
+  /*border: 2px solid #b112b3ff;*//*base color Purple dark*/
+  /*border: 2px solid var(--colors-bg--01)*/
+  /*box-shadow: 0 0 20px cyan;*/
+  /*box-shadow: 0 0 20px #b112b3ff;*//*base color Purple dark, alpha 50%*/
+  margin: 2em auto;
+  width: 90%;
+  padding: 1em;
+  /*background-color: rgba(0, 220, 255, 0.2);*/
+  background-color: var(--wd-color-02-primary);
+  /*border-radius: 0 100px 0 100px;*/
+  /*border-radius: 0 25px 0 25px;*/
+  /* background-color: var(--colors-bg--300); */
+  /*border: 2px solid var(--colors-primary--600);*/
+  -webkit-clip-path: var(--ui-notch-path);
+  clip-path: var(--ui-notch-path);  	
+}
+.s-cp1-main-msg > h1, 
+.s-cp1-main-msg > h2, 
+.s-cp1-main-msg > h3{
+  text-shadow: 0 0 10px cyan;
+  color: lightcyan;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.s-cp1-main-msg > p{
+  /*
+  text-shadow: 0 0 10px cyan;
+  color: lightcyan;
+  text-align: justify;
+  font-family: 'Source Code Pro', monospace;
+  line-height: 40px;
+  */
+  /*text-shadow: 0 0 10px white;*//*base color Purpledark*/
+  color: var(--wd-t-color-primary);
+  /*text-align: justify;*/
+  font-family: var(--wd-fonts-msg);
+  line-height: 30px;	
+}
+
+/*
+hr {
+background: lightcyan;
+box-shadow: 0 0 20px cyan;
+height: 4px;
+}
+.buttons {
+display: block;
+position: relative;
+width: 80%;
+margin: auto;
+padding: 2em;
+}
+
+.buttons .left {
+position: absolute;
+left: 0;
+text-align: center;
+}
+
+.buttons .right {
+right: 0;
+position: absolute;
+text-align: center;
+}
+
+.buttons button {
+background: lightcyan;
+box-shadow: 0 0 20px cyan;
+border: 2px solid lightcyan;
+background-color: rgba(0, 220, 255, 0.2);
+text-shadow: 0 0 10px cyan;
+color: lightcyan; 
+padding: 10px 30px;
+transition: all ease-out 200ms;
+}
+
+.buttons button:active {
+background: lightcyan;
+box-shadow: 0 0 10px cyan;
+border: 3px solid white;
+background-color: rgba(0, 220, 255, 0.5);
+text-shadow: 0 0 5px cyan;
+font-weight: bold;
+transition: all ease-in 200ms;
+}
+.buttons button:focus {
+background: lightcyan;
+box-shadow: 0 0 10px cyan;
+border: 3px solid white;
+background-color: rgba(0, 220, 255, 0.5);
+text-shadow: 0 0 5px cyan;
+font-weight: bold;
+transition: all ease-in 200ms;
+}
+body {
+background: #212121;
+}
+*/

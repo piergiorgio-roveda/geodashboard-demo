@@ -1,0 +1,35 @@
+.wiki-box-main{
+  background-color: rgb(255 255 255);
+  border: 1px solid var(--wd-base-color-invert);
+  margin: 15px;
+  padding: 5px;
+  text-align: left;
+}
+
+.wiki-sub-content{
+  background-color: #F8FAFD;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.wiki-card-title{
+  background: black;
+  color: white;
+  padding: 5px;
+  margin-bottom: 0px;
+}
+
+.ul-with-icon{
+  padding-left: 0px;
+  margin-bottom: 0px;
+}
+
+.ul-with-icon > li{
+  list-style: none;
+  padding-left: 10px;
+}
+
+.wiki-form-insert-role-ui{
+  text-align: center;
+  margin-top: 15px;
+}
