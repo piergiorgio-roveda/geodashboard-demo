@@ -1,6 +1,6 @@
 # APP_MASTER
 
-## Example for Module
+## Example for Master
 
 ```json
 {
