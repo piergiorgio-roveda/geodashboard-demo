@@ -1,0 +1,21 @@
+{
+"short_name": "Add a new layer to a slot",
+"name": "Add a new layer to a slot",
+"icons": [
+  {
+      "src": "https://cityplanner.biz/source/img/geodashboard_2024/android-chrome-192x192.png?ver=6.4.6",
+      "type": "image\/png",
+      "sizes": "192x192"
+  },
+  {
+      "src": "https://cityplanner.biz/source/img/geodashboard_2024/android-chrome-512x512.png?ver=6.4.6",
+      "type": "image\/png",
+      "sizes": "512x512"
+  }
+],
+    "start_url": "https://cityplanner.biz/geo-dashboard/geojson-layer-in-slot/",
+"background_color": "#3367D6",
+"display": "standalone",
+"scope": "\/geojson-layer-in-slot\/",
+"theme_color": "#3367D6"
+}

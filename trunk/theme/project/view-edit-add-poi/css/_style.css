@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap');
+:root,
+[data-bs-theme=light] {
+  --falcon-body-color: #f2f3f4;
+}
+[data-bs-theme=dark] {
+  color-scheme: dark;
+  --falcon-body-color: #01050c;
+}
+body {
+  --wd-fonts-primary: 'Rubik', sans-serif;
+  --wd-fonts-secondary:  'Play', sans-serif;
+  --wd-fonts-main: 'Orbitron', sans-serif;
+  --wd-fonts-msg: 'Source Code Pro', monospace;
+}
+
+body {
+  font-family: var(--wd-fonts-secondary);
+}
+
+.wrapper{
+  display: grid;
+  height: 100%;
+  grid-template-columns: 250px 1fr;
+  grid-template-areas: 'sidebar mainmap';
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    grid-template-columns: 0px 1fr;
+  }
+}
+
+.wrapper__sidebar__open{
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  right:auto;
+  display: none; /* Hide it by default */
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper__sidebar__open {
+    display: block; /* Show it on small screens */
+  }
+}
+
+.sidebar{
+  grid-area: sidebar;
+  box-shadow:0px 0px 5px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidebar__header{
+  height: calc(32px + 2rem); /* 32px is the height of the button */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.sidebar__body{
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.sidebar__footer{
+  padding: 0.5rem 1rem;
+}
+
+.mainmap{
+  grid-area: mainmap;
+  height: 100%;
+  overflow: hidden;
+  display:grid;
+  grid-template-rows: 0px 1fr 0px;
+  grid-template-areas: 
+            "mainmap__header"
+            "mainmap__body"
+            "mainmap__footer";
+  position: relative;
+}
+
+#mapid{
+  grid-area: mainmap__body;
+  display: block;
+}
+
+.mainmap__loading{
+  width: 100%;
+  text-align: center;
+  z-index: 99999;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.tocbox{
+  display:grid;
+  width:100%;
+  grid-template-columns: 32px 1fr 32px;
+  grid-template-areas: 'check label expand';
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
+.tocbox__sub{
+  display:none;
+  width:100%;
+  padding: 0.5rem 1rem;
+  background-color: #ccc;
+  font-size: small;
+}
+
+.tocbox__check{
+  grid-area:check;
+  text-align: center;
+}
+
+.tocbox__label{
+  grid-area:label;
+}
+
+.tocbox__expand{
+  grid-area:expand;
+  text-align: center;
+  cursor:pointer;
+}
+
+.form-check-input[type=checkbox] {
+  border-radius: 0px !important;
+  width: 13px;
+  height: 13px;
+  margin-top: 5px;
+}
+
+.form-control {
+  border-radius: 0px !important;
+}
+
+.btn {
+  border-radius: 0px !important;
+}
+
+.btn_sm__icon{
+  width: 32px;
+  height: 32px;
+}
+
+main{
+  position: relative;
+  background: none;
+  width: 100%;
+  height: 300px;
+  z-index: 9999;
+  top: calc(100% - 300px);
+  padding: 1rem;
+}
+
+article{
+  background-color: #fff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  /* z-index: 9999; */
+  /* position: relative; */
+  min-height: 30px;
+  max-height: calc(300px - 2rem);
+  overflow: auto;
+  padding: 0.5rem;
+}
+
+.display-6{
+  font-size: 1.5rem;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.wrapper__topright_space{
+  position: fixed;
+  top: 1rem;
+  left: auto;
+  right:1rem;
+}
+
+.poi_add__btn{
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.poi_add__details{
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%); /* This centers the div */
+  text-align:center;
+  background-color: #fff;
+  width:300px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  min-height: 30px;
+  max-height: calc(300px - 2rem);
+  overflow: auto;
+  padding: 0.5rem 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .poi_add__details{
+    width:100%;
+  }
+}
