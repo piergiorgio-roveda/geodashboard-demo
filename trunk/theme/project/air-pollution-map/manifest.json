@@ -1,0 +1,22 @@
+{
+    "name": "Air Pollution Map",
+    "short_name": "Air Pollution Map",
+    "start_url": "https://cityplanner.biz/geo-dashboard/air-pollution-map/",
+    "display": "standalone",
+    "background_color": "#3367D6",
+    "description": "Air Pollution Map provides current, forecast and historical air pollution data for any coordinates on the globe. The map is created with on Mapbox GL JS.",
+    "scope": "/air-pollution-map/",
+    "theme_color": "#3367D6",
+    "icons": [
+        {
+            "src": "https://cityplanner.biz/source/img/geodashboard_2024/android-chrome-192x192.png?ver=6.4.6",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://cityplanner.biz/source/img/geodashboard_2024/android-chrome-512x512.png?ver=6.4.6",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
