@@ -1,0 +1,22 @@
+{
+    "name": "TelAviv Digital Twin Map",
+    "short_name": "TelAviv Digital Twin Map",
+    "start_url": "https://cityplanner.biz/geo-dashboard/telaviv-digitaltwin-map/",
+    "display": "standalone",
+    "background_color": "#3367D6",
+    "description": "TelAviv Digital Twin - Mapbox GL JS - Overture Maps Data",
+    "scope": "/telaviv-digitaltwin-map/",
+    "theme_color": "#3367D6",
+    "icons": [
+        {
+            "src": "https://cityplanner.biz/source/img/geodashboard_2024/android-chrome-192x192.png?ver=6.4.6",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://cityplanner.biz/source/img/geodashboard_2024/android-chrome-512x512.png?ver=6.4.6",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

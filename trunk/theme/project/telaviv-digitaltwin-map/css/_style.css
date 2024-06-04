@@ -1,0 +1,59 @@
+.in_popup{
+  display: flex;
+  flex-direction: column;
+}
+
+.in_popup__row{
+  display: flex;
+  justify-content: space-between;
+}
+
+.in_popup__row__head{
+    min-width: 120px;
+}
+
+.tocbox__extra {
+  display: grid;
+  width: 100%;
+}
+
+.toc--slider {
+  border-radius: 0;
+  margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.toc--slider .noUi-handle {
+  border-radius: 50%;
+  height: 17px;
+  width: 17px;
+  box-shadow: none;
+}
+
+.toc--slider .noUi-handle-lower {
+  right: -8px;
+}
+
+.toc--slider .noUi-handle-upper {
+  right: -8px;
+}
+
+.toc--slider .noUi-handle:before {
+  content: none;
+}
+.toc--slider .noUi-handle:after {
+  content: none;
+}
+
+.toc--slider .noUi-tooltip {
+  font-size: x-small;
+}
+
+.toc--slider .noUi-connect {
+  background: #fff900;
+}
+
+.noUi-horizontal {
+  height: 7px;
+}
